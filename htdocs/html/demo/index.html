@@ -1,0 +1,96 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+    <!--grunt.css.begin-->
+    <link rel="stylesheet" href="../../lib/font-awesome-3.2.1/css/font-awesome.debug.css" />
+    <link rel="stylesheet" href="../../lib/highlight/highlight.debug.css" />
+    <link rel="stylesheet" href="../../css/global.debug.css" />
+    <!--grunt.css.end-->
+
+</head>
+<body class="iframe">
+    <div class="markdown">
+        <div id="div-readme-header" class="header">
+            <!--
+            <a href="../../data/demo/{name}/readme.md" target="_blank">
+                readme.md
+            </a>
+            -->
+        </div>
+        <div id="div-readme-content" class="content"></div>
+    </div>
+
+    <div class="demo">
+        <div class="header">示例</div>
+        <ul id="ul-demos" class="items">
+            <!--
+            <li  data-index="{index}">
+                <h3 class="title">{title}</h3>
+                <p class="discription">{description}</p>
+
+                <ul id="{tabs.id}" class="tabs" >
+                    #--tabs.item.begin--#
+                    <li class="tab {on}" data-index="{index}">{text}</li>
+                    #--tabs.item.end--#
+                </ul>
+
+                <ul id="{panels.id}">
+
+                    #--panels.result.begin--#
+                    <li class="content result" style="{display}" data-index="{index}">
+                        <div id="div-{type}-{guid}" style="{autorun}">
+                            {content}
+                        </div>
+                    </li>
+                    #--panels.result.end--#
+
+                    #--panels.code.begin--#
+                    <li class="content" style="{display}" data-index="{index}">
+                        <ul class="row-panel">
+                            {line-numbers}
+                        </ul>
+                        <pre style="height: {pre-height}px;"><code class="hljs">{highlight-code}</code></pre>
+                        <div class="bt-panel" style="z-index: 3;">
+                            <input type="button" value="运行" data-action="run" />
+                        </div>
+                        <textarea id="textarea-{type}-{guid}"
+                            spellcheck="false" 
+                            style="display: none; z-index: 2; height: {textarea-height}px; opacity: 0.1; margin-top: -{pre-height}px;" 
+                            class="editor">{textarea-code}</textarea>
+                    </li>
+                    #--panels.code.end--#
+                
+                    {panels.items}
+
+                </ul>
+                <p class="tips" style="{tips-display}">{tips}</p>
+            </li>
+            -->
+        </ul>
+    </div>
+
+
+
+    <script src="../../lib/jquery/jquery-1.11.1.debug.js"></script>
+    <script src="../../lib/miniquery/miniquery.debug.js"></script>
+    <script src="../../lib/kerp/kerp.debug.js"></script>
+    <script src="../../lib/highlight/highlight.debug.js"></script>
+    <script src="../../config.js"></script>
+
+    <!--grunt.js.begin-->
+
+    <script src="modules/Data.js"></script>
+    <script src="modules/Tabs.js"></script>
+    <script src="modules/Panels.js"></script>
+    <script src="modules/Demos.js"></script>
+    <script src="modules/Readme.js"></script>
+
+    <script src="index.js?d"></script>
+
+    <!--grunt.js.end-->
+
+
+</body>
+</html>

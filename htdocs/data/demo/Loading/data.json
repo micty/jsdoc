@@ -1,0 +1,21 @@
+﻿
+{
+    "readme": true,
+    "demos": [
+        {
+            "title": "实例1：默认的加载提示器",
+            "description": "创建一个默认的加载提示器",
+            "tabs": [
+                { "text": "界面效果" },
+                { "text": "HTML 代码" },
+                { "text": "JS 代码" }
+            ],
+            "panels": [
+                { "type": "result", "url": "source/1.html" },
+                { "type": "html", "url": "source/1.html" },
+                { "type": "js", "url": "source/1.js" }
+            ],
+            "autorun": true
+        }
+    ]
+}

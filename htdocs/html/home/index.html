@@ -1,0 +1,111 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>首页</title>
+    <!--grunt.css.begin-->
+    <link rel="stylesheet" href="../../lib/font-awesome-3.2.1/css/font-awesome.debug.css" />
+    <link rel="stylesheet" href="../../css/global.debug.css" />
+    <link rel="stylesheet" href="../../css/home/index.debug.css" />
+    <!--grunt.css.end-->
+
+</head>
+<body class="iframe">
+    <!-- js设定.box类元素的高宽，高宽比为1：2 -->
+    <div id="div-container" class="box container-col">
+        <div class="flex-item bg-blue todo">
+            <div class="top">
+                <span>待办任务</span>
+            </div>
+            <div id="div-todo" class="center container-row">
+                <!--
+                <div class="flex-item container-col">
+                    #--col.begin--#
+                    <div class="row{row-index}-col{col-index}" 
+                        data-row="{row-index}" 
+                        data-col="{col-index}">
+                        <p><span>{count}</span>{name}</p>
+                    </div>
+                    #--col.end--#
+                </div>
+                -->
+            </div>
+            <div id="div-loading-todo" class="loading"></div>
+            <div class="bottom"></div>
+        </div>
+
+        <div class="white-col"></div>
+
+
+        <div class="flex-item container-row">
+            <div class="flex-item bg-green tasks">
+                <div class="top">
+                    <span>任务流</span>
+                </div>
+                <ul id="ul-flow" class="center container-col">
+                    <!--
+                    <li class="flex-item" data-index="{index}">
+                        <img src="../../css/home/imgs/{img}" />
+                        <p>{name}</p>
+                    </li>
+                    -->
+                </ul>
+                <div id="div-loading-flow" class="loading"></div>
+
+                <div class="bottom"></div>
+            </div>
+
+            <div class="white-row"></div>
+
+            <div class="flex-item container-col">
+                <div class="flex-item bg-lightblue links">
+                    <div class="top">
+                        <span>快捷查询</span>
+                    </div>
+                    <div class="center">
+                        <ul id="ul-query">
+                            <!--
+                            <li data-index="{index}">{name}</li>
+                            -->
+                        </ul>
+                    </div>
+                    <div id="div-loading-query" class="loading"></div>
+                    <div class="bottom"></div>
+                </div>
+
+                <div class="white-col"></div>
+
+                <div class="flex-item bg-orange news">
+                    <div class="top">
+                        <span>最新消息</span>
+                    </div>
+                    <div id="div-message" class="center container-row">
+                        <!--
+                        <div class="times"><span>{date}</span> <span>{time}</span></div>
+                        <div class="flex-items" data-index="{index}">{title}</div>
+                        <div class="more">更多消息 <span>{count}</span></div>
+                        -->
+                    </div>
+                    <div id="div-loading-message" class="loading"></div>
+                    <div class="bottom"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../lib/jquery/jquery-1.11.1.debug.js"></script>
+    <script src="../../lib/miniquery/miniquery.debug.js"></script>
+    <script src="../../lib/kerp/kerp.debug.js"></script>
+    <script src="../../config.js"></script>
+
+    <!--grunt.js.begin-->
+    <script src="modules/Container.js"></script>
+    <script src="modules/Todo.js"></script>
+    <script src="modules/Flow.js"></script>
+    <script src="modules/Query.js"></script>
+    <script src="modules/Message.js"></script>
+    <script src="index.js"></script>
+    <!--grunt.js.end-->
+
+</body>
+</html>

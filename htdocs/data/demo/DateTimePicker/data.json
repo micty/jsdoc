@@ -1,0 +1,51 @@
+﻿
+{
+    "readme": true,
+    "demos": [
+        {
+            "title": "实例1：日期选择器",
+            "description": "给文本框绑定一个日期选择器",
+            "tabs": [
+                { "text": "界面效果" },
+                { "text": "HTML 代码" },
+                { "text": "JS 代码" }
+            ],
+            "panels": [
+                { "type": "result", "url": "source/1.html" },
+                { "type": "html", "url": "source/1.html" },
+                { "type": "js", "url": "source/1.js" }
+            ],
+            "autorun": true
+        },
+        {
+            "title": "实例2：时间选择器",
+            "description": "给文本框绑定一个时间选择器",
+            "tabs": [
+                { "text": "界面效果" },
+                { "text": "HTML 代码" },
+                { "text": "JS 代码" }
+            ],
+            "panels": [
+                { "type": "result", "url": "source/2.html" },
+                { "type": "html", "url": "source/2.html" },
+                { "type": "js", "url": "source/2.js" }
+            ],
+            "autorun": true
+        },
+        {
+            "title": "实例3：日期和时间的选择器",
+            "description": "给文本框绑定一个先选择日期，后选择时间的选择器",
+            "tabs": [
+                { "text": "界面效果" },
+                { "text": "HTML 代码" },
+                { "text": "JS 代码" }
+            ],
+            "panels": [
+                { "type": "result", "url": "source/3.html" },
+                { "type": "html", "url": "source/3.html" },
+                { "type": "js", "url": "source/3.js" }
+            ],
+            "autorun": true
+        }
+    ]
+}

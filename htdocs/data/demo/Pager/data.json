@@ -1,0 +1,51 @@
+﻿
+{
+    "readme": true,
+    "demos": [
+        {
+            "title": "实例1：关联的分页器",
+            "description": "创建一个简易和标准的分页器，并产生联动",
+            "tabs": [
+                { "text": "界面效果" },
+                { "text": "HTML 代码" },
+                { "text": "JS 代码" }
+            ],
+            "panels": [
+                { "type": "result", "url": "source/1.html" },
+                { "type": "html", "url": "source/1.html" },
+                { "type": "js", "url": "source/1.js" }
+            ],
+            "autorun": true
+        },
+        {
+            "title": "实例2：简易分页器",
+            "description": "创建一个简易分页器",
+            "tabs": [
+                { "text": "界面效果" },
+                { "text": "HTML 代码" },
+                { "text": "JS 代码" }
+            ],
+            "panels": [
+                { "type": "result", "url": "source/2.html" },
+                { "type": "html", "url": "source/2.html" },
+                { "type": "js", "url": "source/2.js" }
+            ],
+            "autorun": true
+        },
+        {
+            "title": "实例3：标准分页器",
+            "description": "创建一个标准分页器",
+            "tabs": [
+                { "text": "界面效果" },
+                { "text": "HTML 代码" },
+                { "text": "JS 代码" }
+            ],
+            "panels": [
+                { "type": "result", "url": "source/3.html" },
+                { "type": "html", "url": "source/3.html" },
+                { "type": "js", "url": "source/3.js" }
+            ],
+            "autorun": true
+        }
+    ]
+}

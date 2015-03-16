@@ -1,0 +1,80 @@
+﻿{
+    "readme": true,
+    "demos": [
+        {
+            "title": "实例1：创建默认的级联选择器",
+            "description": "使用默认配置创建级联选择器，具体见 htdocs/config.js",
+            "tabs": [
+                { "text": "界面效果" },
+                { "text": "HTML 代码" },
+                { "text": "JS 代码" }
+            ],
+            "panels": [
+                { "type": "result", "url": "source/1.html" },
+                { "type": "html", "url": "source/1.html" },
+                { "type": "js", "url": "source/1.js" }
+            ],
+            "autorun": true
+        },
+        {
+            "title": "实例2：隐藏空数据的节点",
+            "description": "创建一个隐藏空数据的节点的级联选择器",
+            "tabs": [
+                { "text": "界面效果" },
+                { "text": "HTML 代码" },
+                { "text": "JS 代码" }
+            ],
+            "panels": [
+                { "type": "result", "url": "source/2.html" },
+                { "type": "html", "url": "source/2.html" },
+                { "type": "js", "url": "source/2.js" }
+            ],
+            "autorun": true
+        },
+        {
+            "title": "实例3：显示全部节点",
+            "description": "创建一个显示全部节点的级联选择器",
+            "tabs": [
+                { "text": "界面效果" },
+                { "text": "HTML 代码" },
+                { "text": "JS 代码" }
+            ],
+            "panels": [
+                { "type": "result", "url": "source/3.html" },
+                { "type": "html", "url": "source/3.html" },
+                { "type": "js", "url": "source/3.js" }
+            ],
+            "autorun": true
+        },
+        {
+            "title": "实例4：使用具体数据，而不是加载一个数据 js 文件",
+            "description": "创建一个使用具体数据，而不是加载一个数据 js 文件的级联选择器",
+            "tabs": [
+                { "text": "界面效果" },
+                { "text": "HTML 代码" },
+                { "text": "JS 代码" }
+            ],
+            "panels": [
+                { "type": "result", "url": "source/4.html" },
+                { "type": "html", "url": "source/4.html" },
+                { "type": "js", "url": "source/4.js" }
+            ],
+            "autorun": true
+        },
+        {
+            "title": "实例5：根据给定的初始值去选中对应的项",
+            "description": "创建一个级联选择器，然后根据给定的初始值去选中对应的项",
+            "tabs": [
+                { "text": "界面效果" },
+                { "text": "HTML 代码" },
+                { "text": "JS 代码" }
+            ],
+            "panels": [
+                { "type": "result", "url": "source/5.html" },
+                { "type": "html", "url": "source/5.html" },
+                { "type": "js", "url": "source/5.js" }
+            ],
+            "autorun": true
+        }
+    ]
+}
