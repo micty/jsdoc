@@ -7,15 +7,22 @@ define('Readme', function (require, module, exports) {
     var MiniQuery = require('MiniQuery');
     var KERP = require('KERP');
     var HLJS = window.hljs;
+    var marked = window.marked;
 
 
+    var div = document.getElementById('div-readme');
     var header = document.getElementById('div-readme-header');
     var content = document.getElementById('div-readme-content');
 
 
     function render(name, readme) {
 
-        
+        if (!readme) {
+            $(div).hide();
+            return;
+        }
+
+        $(div).show();
 
         KERP.Template.fill(header, {
             name: name
@@ -25,25 +32,20 @@ define('Readme', function (require, module, exports) {
             return;
         }
 
-        var Seajs = KERP.require('Seajs');
+        var html = marked(readme);
+        content.innerHTML = html;
 
-        Seajs.use('marked', function (marked) {
+        $(content).find('code[data-language]').each(function () {
+            var code = this;
+            var type = code.getAttribute('data-language');
 
-            var html = marked(readme);
-            content.innerHTML = html;
+            var html = code.innerHTML;
 
-            $(content).find('code[data-language]').each(function () {
-                var code = this;
-                var type = code.getAttribute('data-language');
-
-                var html = code.innerHTML;
-
-                html = HLJS.highlight(type, html).value; //高亮代码
-                $(code).addClass('hljs').html(html);
-
-            });
+            html = HLJS.highlight(type, html).value; //高亮代码
+            $(code).addClass('hljs').html(html);
 
         });
+
     }
 
 

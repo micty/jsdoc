@@ -581,7 +581,7 @@
   margin-top: 2500px;
 }
 .demo {
-  margin-top: 16px;
+  margin-top: 10px;
 }
 .demo .header {
   padding-left: 10px;
@@ -606,6 +606,7 @@
   border-bottom-left-radius: 3px;
   padding: 15px 15px 15px 15px;
   border: 1px solid #dddddd;
+  border-top: none;
 }
 .demo .items > li {
   padding-left: 15px;

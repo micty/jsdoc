@@ -8,6 +8,9 @@ define('Data', function (require, module, exports) {
 
     var baseUrl = KERP.Url.root() + 'data/demo/';
 
+    var url$json = {};
+    var url$md = {};
+
 
 
     function getUrl(name, url) {
@@ -15,10 +18,6 @@ define('Data', function (require, module, exports) {
         if (!KERP.Url.check(url)) { //相对 url
             url = baseUrl + name + '/' + url;
         }
-
-        //加上随机查询字符串，以确保拿到最新版本。
-        url = $.require('Url').randomQueryString(url);
-
         return url;
     }
 
@@ -51,29 +50,69 @@ define('Data', function (require, module, exports) {
     }
 
 
+
+    function loadJSON(url, fn) {
+
+        var json = url$json[url];
+        if (json) {
+            fn && fn(json);
+            return;
+        }
+
+
+        //加上随机查询字符串，以确保拿到最新版本。
+        var rurl = $.require('Url').randomQueryString(url);
+
+        $.getJSON(rurl, function (json) {
+
+            url$json[url] = json;
+
+            fn && fn(json);
+
+        });
+    }
+
+
+
+    function loadMD(url, fn) {
+
+        if (url in url$md) {
+            fn && fn(url$md[url]);
+            return;
+        }
+
+        //加上随机查询字符串，以确保拿到最新版本。
+        var rurl = $.require('Url').randomQueryString(url);
+
+        $.ajax({
+            type: 'get',
+            url: rurl,
+            success: function (md) {
+                url$md[url] = md;
+                fn && fn(md);
+            },
+            error: function (xhr) {
+                url$md[url] = '';
+                fn && fn(md);
+            }
+        });
+    }
+
+
+
     function load(name, fn) {
 
         var url = getUrl(name, 'data.json');
 
-
-        $.getJSON(url, function (json) {
-
+        loadJSON(url, function (json) {
 
             var readme = json.readme;
 
             if (readme) {
+                loadMD(getUrl(name, 'readme.md'), function (readme) {
 
-                $.ajax({
-                    type: 'get',
-                    url: getUrl(name, 'readme.md'),
-                    success: function (readme) {
-                        json.readme = readme;
-                        checkReady(json, fn);
-                    },
-                    error: function (xhr) {
-                        json.readme = '';
-                        checkReady(json, fn);
-                    }
+                    json.readme = readme;
+                    checkReady(json, fn);
                 });
             }
             else {

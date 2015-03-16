@@ -1,6 +1,4 @@
 ﻿
-
-
 define('Panels', function (require, module, exports) {
 
     var $ = require('$');

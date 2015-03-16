@@ -24,6 +24,13 @@ define('Sidebar', function (require, module, exports) {
 
     function active(item) {
 
+        if (typeof item == 'string') {
+            var name = item;
+            item = $.Array.findItem(list, function (item, index) {
+                return item.name == name;
+            });
+        }
+
         if (!item) { //active()
             item = activedItem;
         }
@@ -34,6 +41,7 @@ define('Sidebar', function (require, module, exports) {
 
         activedItem = item;
         tabs.active(item.index);
+        emitter.fire('active', [item]);
     }
 
 
@@ -46,7 +54,7 @@ define('Sidebar', function (require, module, exports) {
 
             return {
                 'index': index,
-                'name': item.name,
+                'text': item.text,
                 'icon': item.icon,
             };
 
@@ -61,7 +69,7 @@ define('Sidebar', function (require, module, exports) {
             activedClass: 'hover',
             change: function (index) { //这里的，如果当前项是高亮，再次进入时不会触发
                 var item = list[index];
-                emitter.fire('click', 'item', [item, index]);
+                emitter.fire('active', [item,]);
             }
         });
 

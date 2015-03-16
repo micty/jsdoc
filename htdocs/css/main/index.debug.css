@@ -1,5 +1,5 @@
 * {
-  font-family: 'Microsoft YaHei';
+  /*font-family: 'Microsoft YaHei';*/
 }
 .container {
   width: auto;
@@ -43,9 +43,11 @@ body {
   text-align: left;
   font-size: 14px;
   /*color: #c6ced6;*/
+   
 }
 .side-bar .menus .hover {
-  /*background: #506072 !important;*/
+  background: #EFEFEF !important;
+  font-weight: bold;
 }
 .side-bar .menus li {
   line-height: 30px;
@@ -149,7 +151,7 @@ body {
 .content {
   padding-left: 130px;
 }
-.content .header {
+.content>.header {
   line-height: 55px;
 }
 .content .header .search-box {

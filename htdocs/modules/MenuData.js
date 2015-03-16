@@ -14,13 +14,6 @@ define('MenuData', function (require, module, exports) {
     var list = [];
     var ready = false;
 
-    var homeItem = {
-        name: '首页',
-        isHome: true,
-        id: $.String.random(5),
-        url: 'html/home/index.html'
-    };
-
 
 
     //加载数据。
@@ -104,10 +97,6 @@ define('MenuData', function (require, module, exports) {
     return {
 
         load: load,
-
-        getHomeItem: function () {
-            return homeItem;
-        },
 
         getItem: getItem,
         getAutoOpens: getAutoOpens,
