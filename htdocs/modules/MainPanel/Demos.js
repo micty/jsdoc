@@ -2,11 +2,13 @@
 
 
 
-define('Demos', function (require, module, exports) {
+define('MainPanel/Demos', function (require, module, exports) {
 
     var $ = require('$');
     var MiniQuery = require('MiniQuery');
     var KERP = require('KERP');
+    var Tabs = require('/Tabs');
+    var Panels = require('/Panels');
 
 
     var ul = document.getElementById('ul-demos');
@@ -41,7 +43,7 @@ define('Demos', function (require, module, exports) {
 
 
 
-    function render(data, Tabs, Panels) {
+    function render(data) {
 
         list = data;
 

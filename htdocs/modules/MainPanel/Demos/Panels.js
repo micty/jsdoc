@@ -1,5 +1,5 @@
 ﻿
-define('Panels', function (require, module, exports) {
+define('MainPanel/Demos/Panels', function (require, module, exports) {
 
     var $ = require('$');
     var MiniQuery = require('MiniQuery');
@@ -12,6 +12,7 @@ define('Panels', function (require, module, exports) {
 
     var mapper = new Mapper();
     var guidKey = Mapper.getGuidKey();
+
 
     //产生行号的 html
     function getLineNumbers(code) {
@@ -189,7 +190,8 @@ define('Panels', function (require, module, exports) {
 
                 var li = pre.parentNode;
                 $(li).find('textarea')
-                    .css('margin-top', 0 - height + 'px')
+                    .css('margin-top', (2 - height) + 'px')
+                    .css('margin-left', '2px')
                     .show()
                     .focus();
 

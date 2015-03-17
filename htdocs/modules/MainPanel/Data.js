@@ -1,12 +1,12 @@
 ﻿
 
-define('Data', function (require, module, exports) {
+define('MainPanel/Data', function (require, module, exports) {
 
     var $ = require('$');
     var MiniQuery = require('MiniQuery');
-    var KERP = require('KERP');
+    var Url = MiniQuery.require('Url');
 
-    var baseUrl = KERP.Url.root() + 'data/demo/';
+    var baseUrl = 'data/demo/';
 
     var url$json = {};
     var url$md = {};
@@ -15,13 +15,14 @@ define('Data', function (require, module, exports) {
 
     function getUrl(name, url) {
 
-        if (!KERP.Url.check(url)) { //相对 url
-            url = baseUrl + name + '/' + url;
+        if (url.indexOf('http://') == 0 || url.indexOf('https://') == 0) {
+            return url;
         }
-        return url;
+
+        return baseUrl + name + '/' + url;;
     }
 
-
+    //检查是否就绪
     function checkReady(json, fn) {
 
         var readme = json.readme;
@@ -61,7 +62,7 @@ define('Data', function (require, module, exports) {
 
 
         //加上随机查询字符串，以确保拿到最新版本。
-        var rurl = $.require('Url').randomQueryString(url);
+        var rurl = Url.randomQueryString(url);
 
         $.getJSON(rurl, function (json) {
 
@@ -82,7 +83,7 @@ define('Data', function (require, module, exports) {
         }
 
         //加上随机查询字符串，以确保拿到最新版本。
-        var rurl = $.require('Url').randomQueryString(url);
+        var rurl = Url.randomQueryString(url);
 
         $.ajax({
             type: 'get',
@@ -106,44 +107,56 @@ define('Data', function (require, module, exports) {
 
         loadJSON(url, function (json) {
 
+            var isReady = checkReady(json, fn);
+            if (isReady) {
+                return;
+            }
+
             var readme = json.readme;
 
             if (readme) {
-                loadMD(getUrl(name, 'readme.md'), function (readme) {
-
+                var url = getUrl(name, 'readme.md');
+                loadMD(url, function (readme) {
                     json.readme = readme;
-                    checkReady(json, fn);
+                    isReady = checkReady(json, fn);
                 });
             }
             else {
                 json.readme = '';
             }
 
-
+            
             var demos = json.demos;
 
-            $.Array.each(demos, function (item, index) {
+            $.Array.each(demos, function (demo, i) {
 
-                $.Array.each(item.panels, function (item, index) {
+                if (isReady) {
+                    return false; //break
+                }
 
-                    if ('content' in item) { //如果显示指定了 content 字段，则不发起直接 ajax 请求
-                        item.content = String(item.content); //转成 string
+                $.Array.each(demo.panels, function (panel, index) {
 
-                        if (checkReady(json, fn)) {
-                            return;
-                        }
+                    if ('content' in panel) { //如果显示指定了 content 字段，则不发起直接 ajax 请求
+                        panel.content = String(panel.content); //转成 string
+                        isReady = checkReady(json, fn);
                     }
 
-                    var url = getUrl(name, item.url);
+                    if (isReady) {
+                        return false; //break
+                    }
+
+                    var url = getUrl(name, panel.url);
 
                     //这里要作为文本去获取，因为 jQuery 会自动执行 js 代码，这不是我们想要的行为
                     $.get(url, function (content) {
-                        item.content = content;
-                        checkReady(json, fn)
+                        panel.content = content;
+                        isReady = checkReady(json, fn);
 
                     }, 'text'); //强行指定为文本类型
 
                 });
+
+                
             });
 
         });

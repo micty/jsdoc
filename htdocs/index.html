@@ -4,7 +4,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>KISP接口文档</title>
     <!--grunt.css.begin-->
-    <link rel="stylesheet" href="lib/highlight/highlight.debug.css" />
+    <link rel="stylesheet" href="f/highlight/highlight.debug.css" />
     <link rel="stylesheet" href="css/global.debug.css" />
     <link rel="stylesheet" href="css/main/index.debug.css" />
 
@@ -12,7 +12,11 @@
 </head>
 <body>
     <div class="side-bar">
-        <div class="banner"><span class="title">KISP</span> 接口文档</div>
+        <div id="div-sidebar-title" class="banner">
+            <!--
+            <span class="title">{title}</span> {type}
+            -->
+        </div>
         <div class="menu-group">
         </div>
         <ul id="ul-sidebar" class="menus">
@@ -53,11 +57,10 @@
             </div>
         </div>
         <div class="container">
-            <div class="iframes">
                 <div id="div-readme" class="markdown">
                     <div id="div-readme-header" class="header">
                         <!--
-                        <a href="../../data/demo/{name}/readme.md" target="_blank">
+                        <a href="data/demo/{name}/readme.md" target="_blank">
                             readme.md
                         </a>
                         -->
@@ -113,27 +116,31 @@
                         -->
                     </ul>
                 </div>
-            </div>
         </div>
     </div>
 
 
-    <script src="lib/jquery/jquery-1.11.1.debug.js"></script>
-    <script src="lib/miniquery/miniquery.debug.js"></script>
-    <script src="lib/highlight/highlight.debug.js"></script>
-    <script src="lib/marked/marked.mod.debug.js"></script>
-    <script src="lib/kerp/kerp.debug.js"></script>
-    <script src="config.js"></script>
+    <script src="f/jquery/jquery-1.11.1.debug.js"></script>
+    <script src="f/miniquery/miniquery.debug.js"></script>
+    <script src="f/highlight/highlight.debug.js"></script>
+    <script src="f/marked/marked.mod.debug.js"></script>
 
     <!--grunt.js.begin-->
-    <script src="modules/MenuData.js"></script>
+    <script src="config.js"></script>
+    
+    <script src="lib/Tabs.js"></script>
+    <script src="lib/Template.js"></script>
+
+    <script src="modules/Hash.js"></script>
+    <script src="modules/Sidebar/Data.js"></script>
     <script src="modules/Sidebar.js"></script>
 
-    <script src="modules/Data.js"></script>
-    <script src="modules/Tabs.js"></script>
-    <script src="modules/Panels.js"></script>
-    <script src="modules/Demos.js"></script>
-    <script src="modules/Readme.js"></script>
+    <script src="modules/MainPanel/Data.js"></script>
+    <script src="modules/MainPanel/Demos/Tabs.js"></script>
+    <script src="modules/MainPanel/Demos/Panels.js"></script>
+    <script src="modules/MainPanel/Demos.js"></script>
+    <script src="modules/MainPanel/Readme.js"></script>
+    <script src="modules/MainPanel.js"></script>
 
     <script src="index.js"></script>
     <!--grunt.js.end-->

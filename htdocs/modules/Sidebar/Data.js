@@ -4,7 +4,7 @@
 /**
 * 侧边菜单栏的数据模块
 */
-define('MenuData', function (require, module, exports) {
+define('Sidebar/Data', function (require, module, exports) {
 
     var $ = require('$');
     var MiniQuery = require('MiniQuery');
@@ -26,7 +26,7 @@ define('MenuData', function (require, module, exports) {
         }
 
 
-        var base = KERP.Url.root() + 'data/sidebar/';
+        var base = 'data/sidebar/';
 
         var Script = $.require('Script');
         Script.load({
@@ -35,9 +35,8 @@ define('MenuData', function (require, module, exports) {
             ],
 
             onload: function () {
-
-                list = window['__Sidebar__'];
-
+                var json = require('Sidebar.Data');
+                var list = json.items;
 
                 $.Array.each(list, function (item, index) {
                     $.Object.extend(item, {
@@ -47,7 +46,8 @@ define('MenuData', function (require, module, exports) {
                 });
 
                 ready = true;
-                fn(list);
+
+                fn(json);
             }
         });
 

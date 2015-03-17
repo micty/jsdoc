@@ -1,13 +1,12 @@
 ﻿
-
-
-define('Readme', function (require, module, exports) {
+define('MainPanel/Readme', function (require, module, exports) {
 
     var $ = require('$');
     var MiniQuery = require('MiniQuery');
-    var KERP = require('KERP');
-    var HLJS = window.hljs;
-    var marked = window.marked;
+    var Template = require('Template');
+
+    var hljs = require('hljs');
+    var marked = require('marked');
 
 
     var div = document.getElementById('div-readme');
@@ -24,7 +23,7 @@ define('Readme', function (require, module, exports) {
 
         $(div).show();
 
-        KERP.Template.fill(header, {
+       Template.fill(header, {
             name: name
         });
 
@@ -41,7 +40,7 @@ define('Readme', function (require, module, exports) {
 
             var html = code.innerHTML;
 
-            html = HLJS.highlight(type, html).value; //高亮代码
+            html = hljs.highlight(type, html).value; //高亮代码
             $(code).addClass('hljs').html(html);
 
         });

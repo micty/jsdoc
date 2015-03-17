@@ -6,25 +6,27 @@ define('Sidebar', function (require, module, exports) {
 
     var $ = require('$');
     var MiniQuery = require('MiniQuery');
-    var KERP = require('KERP');
 
     var Emitter = MiniQuery.require('Emitter');
+    var Template = require('Template');
+    var Tabs = require('Tabs');
+
+    var Data = require('/Data');
 
 
     var ul = document.getElementById('ul-sidebar');
-    var div = ul.parentNode;
 
     var emitter = new Emitter();
     var tabs = null;
     var list = [];
-    var activedItem = null;
-
+    var currentItem = null;
+    
 
 
 
     function active(item) {
 
-        if (typeof item == 'string') {
+        if (typeof item == 'string') { // 重载 active(name)
             var name = item;
             item = $.Array.findItem(list, function (item, index) {
                 return item.name == name;
@@ -32,46 +34,63 @@ define('Sidebar', function (require, module, exports) {
         }
 
         if (!item) { //active()
-            item = activedItem;
+            item = currentItem;
         }
 
         if (!item) {
             return;
         }
 
-        activedItem = item;
+        var oldItem = currentItem;
+        currentItem = item;
         tabs.active(item.index);
-        emitter.fire('active', [item]);
+
+        emitter.fire('active', [item, oldItem]);
     }
 
 
 
 
-    function render(data) {
-        list = data;
+    function render() {
 
-        KERP.Template.fill(ul, list, function (item, index) {
+        Data.load(function (json) {
 
-            return {
-                'index': index,
-                'text': item.text,
-                'icon': item.icon,
-            };
+            list = json.items;
 
+            Template.fill('#div-sidebar-title', json);
+
+            Template.fill(ul, list, function (item, index) {
+
+                return {
+                    'index': index,
+                    'text': item.text,
+                    'icon': item.icon,
+                };
+
+            });
+
+
+
+
+
+            tabs = Tabs.create({
+                container: ul,
+                selector: '>li',
+                indexKey: 'data-index',
+                current: null,
+                event: 'click',
+                activedClass: 'hover',
+                change: function (index, oldIndex) { //这里的，如果当前项是高亮，再次进入时不会触发
+                    var item = list[index];
+                    var oldItem = list[oldIndex];
+
+                    emitter.fire('active', [item, oldItem]);
+                }
+            });
+
+            emitter.fire('render', [list]);
         });
-        
-        tabs = KERP.Tabs.create({
-            container: ul,
-            selector: '>li',
-            indexKey: 'data-index',
-            current: null,
-            event: 'click',
-            activedClass: 'hover',
-            change: function (index) { //这里的，如果当前项是高亮，再次进入时不会触发
-                var item = list[index];
-                emitter.fire('active', [item,]);
-            }
-        });
+
 
     }
 

@@ -1,51 +1,62 @@
 ﻿
-
-
-
-
 //控制器。 
-//注意：所有模块均对控制器可见。
 ; (function () {
 
     var $ = require('$');
-    var MiniQuery = require('MiniQuery');
 
-    var Url = MiniQuery.require('Url');
-
-    var MenuData = require('MenuData');
     var Sidebar = require('Sidebar');
+    var MainPanel = require('MainPanel');
+    var Hash = require('Hash');
 
-    var Data = require('Data');
-    var Demos = require('Demos');
-    var Tabs = require('Tabs');
-    var Panels = require('Panels');
-    var Readme = require('Readme');
+    var name$hash = {};
 
-    //侧边栏
-    Sidebar.on('active', function (item) {
+
+    Sidebar.on('active', function (item, oldItem) {
+
+        var hash = Hash.get();
+
+        if (oldItem) {
+            name$hash[oldItem.name] = hash;
+        }
+
         var name = item.name;
-        render(name);
-        Url.setHash(window, name);
+        var obj = name$hash[name];
 
+        Hash.set({
+            'name': name,
+            'y': obj ? obj.y :    //第二次(或以上)点击某一项的，取出之前的 hash
+                oldItem ? 0 :   //第一次点击某一项的(此时 obj 为空)，默认为 0
+                hash.y || 0,         //页面第一次加载的，用 url 中的 hash
+        });
+
+        MainPanel.render(name);
+
+    });
+
+    Sidebar.on('render', function (list) {
+        var name = Hash.get('name');
+        if (!name) { // url 中未指定 name，则打开第一个菜单项
+            name = list[0].name;
+            Hash.set('name', name);
+        }
+
+        Sidebar.active(name);
     });
     
-    //加载菜单数据
-    MenuData.load(function (data) {
-        Sidebar.render(data);
 
-        var name = Url.getHash(window, '');
-        if (name) {
-            Sidebar.active(name);
-        }
+    MainPanel.on('render', function () {
+        var y = Hash.get('y');
+        scrollTo(null, y);
     });
 
 
-    function render(name) {
-        Data.load(name, function (json) {
-            Readme.render(name, json.readme);
-            Demos.render(json.demos, Tabs, Panels);
-        });
-    }
+    $(document).on('scroll', function (event) {
+        var y = document.body.scrollTop;
+        Hash.set('y', y);
+    });
+
+
+    Sidebar.render();
 
 
 
