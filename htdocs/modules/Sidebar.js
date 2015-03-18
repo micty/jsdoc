@@ -19,31 +19,24 @@ define('Sidebar', function (require, module, exports) {
     var emitter = new Emitter();
     var tabs = null;
     var list = [];
+
+    var name$item = {};
+    var name$index = {};
+
     var currentItem = null;
     
 
 
 
-    function active(item) {
+    function active(name) {
 
-        if (typeof item == 'string') { // 重载 active(name)
-            var name = item;
-            item = $.Array.findItem(list, function (item, index) {
-                return item.name == name;
-            });
-        }
-
-        if (!item) { //active()
-            item = currentItem;
-        }
-
-        if (!item) {
-            return;
-        }
+        var item = name$item[name];
+        var index = name$index[name];
 
         var oldItem = currentItem;
         currentItem = item;
-        tabs.active(item.index);
+
+        tabs.active(index);
 
         emitter.fire('active', [item, oldItem]);
     }
@@ -57,6 +50,14 @@ define('Sidebar', function (require, module, exports) {
 
             list = json.items;
 
+
+            $.Array.each(list, function (item, index) {
+                var name = item.name;
+                name$item[name] = item;
+                name$index[name] = index;
+            });
+
+
             Template.fill('#div-sidebar-title', json);
 
             Template.fill(ul, list, function (item, index) {
@@ -68,9 +69,6 @@ define('Sidebar', function (require, module, exports) {
                 };
 
             });
-
-
-
 
 
             tabs = Tabs.create({

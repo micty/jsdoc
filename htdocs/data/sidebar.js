@@ -1,6 +1,5 @@
 ﻿
-
-define('Sidebar.Data', {
+define('data/sidebar', {
 
     title: 'KISP',
     type: '接口文档',
