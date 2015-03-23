@@ -11,7 +11,7 @@ define('Sidebar', function (require, module, exports) {
     var Template = require('Template');
     var Tabs = require('Tabs');
 
-    var Data = require('/Data');
+    var Data = require(module, 'Data');
 
 
     var ul = document.getElementById('ul-sidebar');

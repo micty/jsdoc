@@ -1,14 +1,11 @@
 ﻿
-
-
-
 define('MainPanel/Demos', function (require, module, exports) {
 
     var $ = require('$');
     var MiniQuery = require('MiniQuery');
     var KERP = require('KERP');
-    var Tabs = require('/Tabs');
-    var Panels = require('/Panels');
+    var Tabs = require(module, 'Tabs');
+    var Panels = require(module, 'Panels');
 
 
     var ul = document.getElementById('ul-demos');

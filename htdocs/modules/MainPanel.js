@@ -12,9 +12,9 @@ define('MainPanel', function (require, module, exports) {
     var emitter = new Emitter();
     
 
-    var Data = require('/Data');
-    var Readme = require('/Readme');
-    var Demos = require('/Demos');
+    var Data = require(module, 'Data');
+    var Readme = require(module, 'Readme');
+    var Demos = require(module, 'Demos');
 
 
 
