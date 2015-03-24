@@ -49,6 +49,16 @@
         scrollTo(null, y);
     });
 
+    Hash.on('change', function (hash, old) {
+        var y = Hash.get('y');
+        var y1 = document.body.scrollTop;
+        if (y != y1) { //当 y == y1 时，说明是用户在手动滚动页面而导致的 hash 变化，因此不需要再滚动。
+            scrollTo(null, y);
+        }
+
+        
+    });
+
 
     $(document).on('scroll', function (event) {
         var y = document.body.scrollTop;
@@ -57,6 +67,10 @@
 
 
     Sidebar.render();
+
+
+    
+
 
 
 

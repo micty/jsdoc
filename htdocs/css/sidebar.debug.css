@@ -1,0 +1,37 @@
+.side-bar {
+  position: fixed;
+  height: 100%;
+  width: 130px;
+}
+.side-bar .banner {
+  text-align: center;
+  line-height: 55px;
+  height: 55px;
+  font-size: 16px;
+}
+.side-bar .banner .title {
+  font-size: 22px;
+}
+.side-bar .menu-group {
+  width: 100%;
+  height: 30px;
+}
+.side-bar .menus {
+  text-align: left;
+  font-size: 14px;
+}
+.side-bar .menus .hover {
+  background: #EFEFEF !important;
+  font-weight: bold;
+}
+.side-bar .menus li {
+  line-height: 30px;
+  cursor: pointer;
+}
+.side-bar .menus .icons {
+  background-color: transparent;
+  margin-right: 15px;
+  display: inline-block;
+  height: 20px;
+  vertical-align: sub;
+}

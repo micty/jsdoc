@@ -8,6 +8,7 @@ module.exports = (function (grunt, $) {
     'use strict';
 
     var Path = require('path');
+    var Pather = require('./Pather');
 
 
     /**
@@ -37,16 +38,40 @@ module.exports = (function (grunt, $) {
         };
     }
 
+    /**
+    * 从指定的标签中提取指定的属性值。
+    * @param {string} tag 要提取的标签 html。
+    * @param {string} name 要提取的属性名称。
+    * @return {string} 返回指定的属性值。
+        当不存在该属性时，返回 undefined。
+    * @example 
+        getAttribute('<link rel="grunt" href="method/demo.html" data-tab="no" />', 'data-tab'); //得到 'no'
+    */
+    function getAttribute(tag, name) {
 
+        var reg = new RegExp(name + '\\s*=\\s*["\'][\\s\\S]*?["\']', 'gi');
+        var a = tag.match(reg);
+
+        if (!a) {
+            return;
+        }
+
+        var s = a[0];
+        reg = new RegExp('^' + name + '\\s*=\\s*["\']');
+        s = s.replace(reg, '')
+        s = s.replace(/["']$/gi, '');
+        return s;
+    }
 
 
     /**
     * 提取出含有 rel="grunt" 的 link 标签。
     * @param {string} html 要进行提取的 html 模板。
     * @param {string} dir 模板中使用的相对文件路径。
+    * @param {string} subDir 模板中使用的相对文件路径的子目录。
     * @return {Array} 返回一个数组，里面包含每个标签的信息。
     */
-    function parse(html, dir) {
+    function parse(html, dir, subDir) {
 
         //提取出 link 标签
         var reg = /<link.*\/>/ig;
@@ -62,18 +87,11 @@ module.exports = (function (grunt, $) {
         //提取出含有 rel="grunt" 的 link 标签中的 href 中的属性值
         list = $.Array.map(list, function (item, index) {
 
-            var reg = /rel\s*=\s*["']grunt["']/gi;
-
-            if (!item.match(reg)) { //不包含 rel="grunt"
+            var rel = getAttribute(item, 'rel');
+            if (rel != 'grunt') {   //不包含 rel="grunt"
                 return null;        //忽略
             }
 
-            var reg = /href\s*=\s*["'][\s\S]*?["']/gi;
-            var a = item.match(reg);
-
-            var href = a[0];
-            href = href.replace(/^href\s*=\s*["']/, '')
-            href = href.replace(/["']$/gi, '');
 
             var index = getIndex(lines, item, startIndex);
             if (index < 0) {
@@ -83,8 +101,16 @@ module.exports = (function (grunt, $) {
             startIndex = index + 1; //下次搜索的起始行号
 
             var pad = lines[index].indexOf(item);
-            var path = Path.join(dir || '', href); //完整路径
 
+            var href = getAttribute(item, 'href');
+            
+            //完整路径
+            var path = href.indexOf('/') == 0 ?
+                Path.join(dir || '', subDir, href) :
+                Path.join(dir || '', href); 
+
+            var tab = getAttribute(item, 'data-tab');
+            var comment = getAttribute(item, 'data-comment');
   
             return {
                 'html': item,   //标签的 html 内容
@@ -93,6 +119,9 @@ module.exports = (function (grunt, $) {
                 'pad': pad,     //前导空格数
                 'path': path,   //完整路径
                 'dir': Path.dirname(path), //所在目录
+                'tab': tab != 'no',
+                'comment': comment != 'no',
+
             };
         });
 
@@ -130,12 +159,22 @@ module.exports = (function (grunt, $) {
             var path = item.path;
             var html = grunt.file.read(path);
 
-            html = '<!-- ' + Path.relative('../htdocs', path).replace(/\\/g, '/') + ' -->\r\n' + html;
+            //产生文件路径注释
+            if (item.comment) {
+                var comment = '<!-- ' + Path.relative('../htdocs', path).replace(/\\/g, '/') + ' -->\r\n';
+                html = comment + html;
+            }
 
-            var pad = new Array(item.pad + 1).join(' '); //产生指定个数的空格串
-            html = html.split('\r\n').join('\r\n' + pad); //在行的前面加上空格串，以保持原有的缩进
+            //在所有行的前面加上空格串，以保持原有的缩进
+            if (item.tab) {
+                var pad = item.pad + 1;
+                pad = new Array(pad).join(' '); //产生指定个数的空格串
+                html = html.split('\r\n').join('\r\n' + pad); 
+            }
 
-            var list = parse(html, item.dir);
+            var info = Pather.parse(path);
+            var list = parse(html, item.dir, info.basename);
+
             if (list.length > 0) {
                 html = mix(html, list); //递归处理
             }

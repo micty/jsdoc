@@ -1,0 +1,143 @@
+.panel {
+  margin-bottom: 10px;
+}
+.panel .header {
+  padding-left: 10px;
+  line-height: 30px;
+  background: #f5f5f5;
+  font-size: 12px;
+  font-weight: bold;
+  top: 0;
+  left: 0;
+  padding-top: 5px;
+  border: 1px solid #dddddd;
+  -webkit-border-top-right-radius: 3px;
+  border-top-right-radius: 3px;
+  -webkit-border-top-left-radius: 3px;
+  border-top-left-radius: 3px;
+  border-bottom: none;
+}
+.panel .header a {
+  color: #333333;
+}
+.panel .header a:hover {
+  text-decoration: none;
+}
+.panel .content {
+  font: 16px/1.6 "Helvetica Neue", Helvetica, "Segoe UI", Arial, freesans, sans-serif;
+  color: #333333;
+  background: #fff;
+  border: 1px solid #dddddd;
+  -webkit-border-bottom-right-radius: 3px;
+  border-bottom-right-radius: 3px;
+  -webkit-border-bottom-left-radius: 3px;
+  border-bottom-left-radius: 3px;
+  padding: 15px 15px;
+}
+.panel .content.markdown ul {
+  list-style: disc;
+  padding-left: 32px;
+}
+.panel .content:first-child {
+  margin-top: 0 !important;
+}
+.panel .content:last-child {
+  margin-bottom: 0 !important;
+}
+.panel .content h2,
+.panel .content h3,
+.panel .content h4,
+.panel .content h5 {
+  margin-top: 13px;
+  margin-bottom: 16px;
+}
+.panel .content h1,
+.panel .content h2 {
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 10px;
+}
+.panel .content h1 {
+  font-size: 30px;
+}
+.panel .content h2 {
+  font-size: 28px;
+  margin-top: 0 !important;
+}
+.panel .content h3 {
+  font-size: 24px;
+}
+.panel .content h4 {
+  font-size: 20px;
+}
+.panel .content h5 {
+  font-size: 18px;
+}
+.panel .content hr {
+  height: 4px;
+  padding: 0;
+  margin: 16px 0;
+  background-color: #e7e7e7;
+  border: 0 none;
+}
+.panel .content blockquote {
+  margin: 0 0 16px 0;
+  padding: 0 15px;
+  color: #777;
+  border-left: 4px solid #dddddd;
+}
+.panel .content blockquote p {
+  margin-left: 0;
+}
+.panel .content p,
+.panel .content ul {
+  margin-top: 0;
+  margin-bottom: 16px;
+}
+.panel .content a {
+  color: #4183c4;
+  text-decoration: none;
+}
+.panel .content a:hover {
+  text-decoration: underline;
+}
+.panel .content code {
+  padding: 3px 4px;
+  color: #c7254e;
+  background-color: #f9f2f4;
+  font-family: 'Fixedsys Excelsior 3.01' Fixedsys;
+}
+.panel .content pre {
+  margin: 0;
+  margin-left: 15px;
+  padding: 0px 15px;
+  background: #f7f7f7;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
+  -ms-word-break: break-word;
+  word-break: break-word;
+}
+.panel .content pre code {
+  color: #000;
+  background-color: transparent;
+}
+.panel .content table {
+  width: 100%;
+}
+.panel .content table th,
+.panel .content table td {
+  border: 1px solid #dddddd;
+  padding: 5px 5px;
+  text-align: left;
+}
+.panel .content table.params .type {
+  width: 10%;
+  color: blue;
+  font-family: 'Fixedsys Excelsior 3.01' Fixedsys;
+}
+.panel .content table.params .default {
+  width: 10%;
+}
+.panel .content table.params .desc {
+  width: 70%;
+}

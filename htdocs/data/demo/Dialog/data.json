@@ -9,7 +9,7 @@
                 { "text": "JS 代码" }
             ],
             "panels": [
-                { "type": "js", "url": "source/1.js" }
+                { "type": "js", "url": "source/1.js?a" }
             ]
         },
         {

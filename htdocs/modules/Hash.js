@@ -8,6 +8,8 @@ define('Hash', function (require, module, exports) {
     var MiniQuery = require('MiniQuery');
 
     var Url = MiniQuery.require('Url');
+    var Emitter = MiniQuery.require('Emitter');
+    var emitter = new Emitter();
     
 
     function get(name) {
@@ -34,9 +36,16 @@ define('Hash', function (require, module, exports) {
     }
 
 
+    Url.hashchange(window, function (hash, old) {
+        emitter.fire('change', [hash, old]);
+    });
+
+
+
     return {
         get: get,
         set: set,
+        on: emitter.on.bind(emitter),
     };
 
 });
