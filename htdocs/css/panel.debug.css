@@ -44,6 +44,17 @@
 .panel .content:last-child {
   margin-bottom: 0 !important;
 }
+.panel .content .definedInFile {
+  position: absolute;
+  right: 50px;
+  top: 140px;
+  font-size: 0.8em;
+  color: gray;
+}
+.panel .content .summary {
+  font-family: "微软雅黑";
+  font-size: 1.1em;
+}
 .panel .content h2,
 .panel .content h3,
 .panel .content h4,
@@ -108,8 +119,8 @@
 }
 .panel .content pre {
   margin: 0;
-  margin-left: 15px;
-  padding: 0px 15px;
+  margin-left: 30px;
+  padding: 0px 5px;
   background: #f7f7f7;
   -moz-border-radius: 3px;
   -webkit-border-radius: 3px;

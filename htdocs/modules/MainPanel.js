@@ -9,22 +9,47 @@ define('MainPanel', function (require, module, exports) {
     var KERP = require('KERP');
 
     var Emitter = MiniQuery.require('Emitter');
+
+    var Manual = require(module, 'Manual');
+    var Auto = require(module, 'Auto');
+
     var emitter = new Emitter();
-    
-
-    var Data = require(module, 'Data');
-    var Readme = require(module, 'Readme');
-    var Demos = require(module, 'Demos');
+    var hasBind = false;
 
 
 
-    function render(name) {
-        Data.load(name, function (json) {
-            Readme.render(name, json.readme);
-            Demos.render(json.demos);
 
+    function render(item) {
+
+        var name = item.name;
+        if (name) {
+            Manual.render(name);
+        }
+        else {
+            Manual.hide();
+        }
+
+        var alias = item.alias;
+        if (alias) {
+            Auto.render(alias);
+        }
+        else {
+            Auto.hide();
+        }
+
+        if (!hasBind) {
+            bindEvents();
+        }
+
+    }
+
+
+
+    function bindEvents() {
+        Manual.on('render', function () {
             emitter.fire('render');
         });
+
     }
 
 

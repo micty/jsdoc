@@ -1,5 +1,5 @@
 ﻿
-define('MainPanel/Readme', function (require, module, exports) {
+define('MainPanel/Manual/Readme', function (require, module, exports) {
 
     var $ = require('$');
     var MiniQuery = require('MiniQuery');

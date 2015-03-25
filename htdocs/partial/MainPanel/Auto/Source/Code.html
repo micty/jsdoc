@@ -1,0 +1,74 @@
+﻿
+<pre style="height: 1444px;"><code class="hljs">
+<span class="hljs-comment">/**
+* 动态加载模块类。
+* 对 seajs 的进一步封装，以适合本项目的使用。
+* @namespace
+* @name Seajs
+*/</span>
+define(<span class="hljs-string">'Seajs'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(require, module, exports)</span> {</span>
+
+    <span class="hljs-keyword">var</span> $ = <span class="hljs-built_in">require</span>(<span class="hljs-string">'$'</span>);
+    <span class="hljs-keyword">var</span> MiniQuery = <span class="hljs-built_in">require</span>(<span class="hljs-string">'MiniQuery'</span>);
+
+    <span class="hljs-keyword">var</span> Config = <span class="hljs-built_in">require</span>(<span class="hljs-string">'Config'</span>);
+
+    <span class="hljs-keyword">var</span> seajs = window[<span class="hljs-string">'seajs'</span>];
+
+
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">ready</span><span class="hljs-params">(fn)</span> {</span>
+
+        <span class="hljs-keyword">if</span> (seajs) {
+            fn &amp;&amp; fn(seajs);
+            <span class="hljs-keyword">return</span>;
+        }
+
+
+        <span class="hljs-comment">//先加载 seajs 库</span>
+        <span class="hljs-keyword">var</span> defaults = Config.get(module.id); <span class="hljs-comment">//默认配置</span>
+        <span class="hljs-keyword">var</span> url = defaults.url;
+
+        <span class="hljs-keyword">var</span> Script = MiniQuery.require(<span class="hljs-string">'Script'</span>);
+        Script.load({
+            url: url,
+            id: <span class="hljs-string">'seajsnode'</span>, <span class="hljs-comment">//提供 id，提高性能。 详见 https://github.com/seajs/seajs/issues/260</span>
+
+            onload: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> {</span>
+                seajs = window[<span class="hljs-string">'seajs'</span>];
+                seajs.config(defaults);
+
+                fn &amp;&amp; fn(seajs);
+            }
+        });
+
+    }
+
+
+
+    module.exports = exports = <span class="hljs-comment">/**@lends Seajs*/</span> {
+
+        use: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> {</span>
+
+            <span class="hljs-keyword">var</span> args = [].slice.call(<span class="hljs-built_in">arguments</span>, <span class="hljs-number">0</span>);
+
+            ready(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(seajs)</span> {</span>
+                seajs.use.apply(seajs, args);
+            });
+
+        },
+
+        define: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> {</span>
+
+            <span class="hljs-keyword">var</span> args = [].slice.call(<span class="hljs-built_in">arguments</span>, <span class="hljs-number">0</span>);
+
+            ready(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(seajs)</span> {</span>
+                seajs.Module.define.apply(seajs, args);
+            });
+        }
+    };
+
+
+
+
+});</code></pre>
+    

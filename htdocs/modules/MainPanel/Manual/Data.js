@@ -1,6 +1,6 @@
 ﻿
 
-define('MainPanel/Data', function (require, module, exports) {
+define('MainPanel/Manual/Data', function (require, module, exports) {
 
     var $ = require('$');
     var MiniQuery = require('MiniQuery');
@@ -95,7 +95,7 @@ define('MainPanel/Data', function (require, module, exports) {
             error: function (xhr) {
                 url$md[url] = '';
                 fn && fn(md);
-            }
+            },
         });
     }
 
@@ -146,6 +146,7 @@ define('MainPanel/Data', function (require, module, exports) {
                     }
 
                     var url = getUrl(name, panel.url);
+                    url = Url.randomQueryString(url);
 
                     //这里要作为文本去获取，因为 jQuery 会自动执行 js 代码，这不是我们想要的行为
                     $.get(url, function (content) {

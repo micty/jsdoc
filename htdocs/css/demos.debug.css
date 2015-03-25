@@ -48,7 +48,7 @@
   font-size: 16px;
   border: 1px solid #dddddd;
   border-top-color: #eeeeee;
-  padding: 4px 10px 4px 31px;
+  padding: 0px 0px 0px 30px;
   position: relative;
 }
 .demos > li .content .bt-panel {
@@ -67,6 +67,7 @@
 }
 .demos > li .content pre {
   margin: 0;
+  padding-top: 2px;
 }
 .demos > li .content pre code {
   padding: 2px;

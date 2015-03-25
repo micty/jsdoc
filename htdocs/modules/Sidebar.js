@@ -20,18 +20,18 @@ define('Sidebar', function (require, module, exports) {
     var tabs = null;
     var list = [];
 
-    var name$item = {};
-    var name$index = {};
+    var id$item = {};
+    var id$index = {};
 
     var currentItem = null;
     
 
 
 
-    function active(name) {
+    function active(id) {
 
-        var item = name$item[name];
-        var index = name$index[name];
+        var item = id$item[id];
+        var index = id$index[id];
 
         var oldItem = currentItem;
         currentItem = item;
@@ -52,9 +52,9 @@ define('Sidebar', function (require, module, exports) {
 
 
             $.Array.each(list, function (item, index) {
-                var name = item.name;
-                name$item[name] = item;
-                name$index[name] = index;
+                var id = item.id;
+                id$item[id] = item;
+                id$index[id] = index;
             });
 
 

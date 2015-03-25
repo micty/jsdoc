@@ -5,9 +5,9 @@ define('data/sidebar', {
     type: '接口文档',
 
     items: [
-        { text: 'API接口请求', name: 'API', },
-        { text: '弹出对话框', name: 'Dialog', },
-        { text: '登录对话框', name: 'Login', },
+        { text: 'API接口请求', name: 'API', alias: 'API', },
+        { text: '弹出对话框', name: 'Dialog', alias: 'Config' },
+        { text: '登录对话框', alias: 'Login', },
     ]
 
 });

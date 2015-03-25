@@ -10,13 +10,16 @@ module.exports = (function (grunt, $) {
     var Path = require('path');
     var Pather = require('./Pather');
 
+    var rootDir = '';
 
     /**
     * 把 grunt 使用的占位符格式成真实的路径。
     */
     function format(path) {
         var config = grunt.config.get();
-        return grunt.template.process(path, config);
+        path = grunt.template.process(path, config);
+        path = path.replace(/\\/g, '/');
+        return path;
     }
 
     /**
@@ -107,7 +110,7 @@ module.exports = (function (grunt, $) {
             //完整路径
             var path = href.indexOf('/') == 0 ?
                 Path.join(dir || '', subDir, href) :
-                Path.join(dir || '', href); 
+                Path.join(dir || '', href);
 
             var tab = getAttribute(item, 'data-tab');
             var comment = getAttribute(item, 'data-comment');
@@ -121,6 +124,7 @@ module.exports = (function (grunt, $) {
                 'dir': Path.dirname(path), //所在目录
                 'tab': tab != 'no',
                 'comment': comment != 'no',
+                'pather': Pather.parse(path),
 
             };
         });
@@ -156,30 +160,46 @@ module.exports = (function (grunt, $) {
 
         $.Array.each(list, function (item, index) {
 
-            var path = item.path;
-            var html = grunt.file.read(path);
+            //为了更容易发现错误，这里使用 try-catch，并把错误消息打印出来。
+            try {
+                var path = item.path;
+                console.log(item);
+                var html = grunt.file.read(path);
 
-            //产生文件路径注释
-            if (item.comment) {
-                var comment = '<!-- ' + Path.relative('../htdocs', path).replace(/\\/g, '/') + ' -->\r\n';
-                html = comment + html;
+                //产生文件路径注释
+                if (item.comment) {
+                    var comment = '<!-- ' + Path.relative(rootDir, path).replace(/\\/g, '/') + ' -->\r\n';
+                    html = comment + html;
+                }
+
+                //在所有行的前面加上空格串，以保持原有的缩进
+                if (item.tab) {
+                    var pad = item.pad + 1;
+                    pad = new Array(pad).join(' '); //产生指定个数的空格串
+                    html = html.split('\r\n').join('\r\n' + pad); 
+                }
+
+                var info = Pather.parse(path);
+                var list = parse(html, item.dir, info.basename);
+
+                if (list.length > 0) {
+                    html = mix(html, list); //递归处理
+                }
+
+                var tag = item.html;
+                var beginIndex = s.indexOf(tag);
+                var endIndex = beginIndex + tag.length;
+                s = s.slice(0, beginIndex) + html + s.slice(endIndex);
+
+                //这里不要用 replace，因为第二个参数 html 里可能含有 "$'" 符号(不包含双引号)。
+                // 如 "abc-1234".replace("abc-", "ABC$'"); 结果是: "ABC12341234"，而不是期望中的: "ABC$'1234"
+                // 详见 https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/replace#Specifying_a_string_as_a_parameter
+                //s = s.replace(item.html, html); 
+
             }
-
-            //在所有行的前面加上空格串，以保持原有的缩进
-            if (item.tab) {
-                var pad = item.pad + 1;
-                pad = new Array(pad).join(' '); //产生指定个数的空格串
-                html = html.split('\r\n').join('\r\n' + pad); 
+            catch (ex) {
+                console.log(ex);
             }
-
-            var info = Pather.parse(path);
-            var list = parse(html, item.dir, info.basename);
-
-            if (list.length > 0) {
-                html = mix(html, list); //递归处理
-            }
-
-            s = s.replace(item.html, html);
 
         });
 
@@ -197,6 +217,8 @@ module.exports = (function (grunt, $) {
     function compile(html, dir) {
 
         var dir = format(dir);
+        rootDir = dir;
+
         var list = parse(html, dir);
         html = mix(html, list);
 
