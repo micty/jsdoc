@@ -8,8 +8,10 @@ define('MainPanel/Auto/Overview/Summary', function (require, module, exports) {
 
     var div = document.getElementById('div-' + module.id + '-content');
 
-    function render(data) {
 
+
+    function render(data) {
+        
         Template.fill(div, data);
     }
 

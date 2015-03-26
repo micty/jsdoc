@@ -67,10 +67,10 @@
                     </div>
                     <!-- partial/MainPanel/Auto/Overview/MethodList.html -->
                     
-                    
                     <div class="panel">
                         <div class="header">方法列表</div>
-                        <div class="content">
+                        <div id="div-method-list" class="content">
+                        <!--
                             <table class="list">
                                 <thead>
                                     <tr>
@@ -80,140 +80,27 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
+                                    #--tr.begin--#
+                                    <tr data-index="{index}">
                                         <td class="type">
                                             <img src="css/img/method.bmp" alt="公共方法" title="公共方法" />
+                    
+                                            #--icon.static.begin--#
                                             <img src="css/img/static.bmp" alt="静态方法" title="静态方法" />
+                                            #--icon.static.end--#
+                    
                                         </td>
                                         <td class="name">
-                                            <a href="method.html#Date-addDays" target="_blank">addDays</a>
+                                            <a href="javascript:" data-index="{index}">{name}</a>
                                         </td>
                                         <td class="desc">
-                                            将指定的天数加到指定的 Date 实例上。
+                                            {desc}
                                         </td>
                                     </tr>
-                                    <tr>
-                                        <td class="type">
-                                            <img src="css/img/method.bmp" alt="公共方法" title="公共方法" />
-                                            <img src="css/img/static.bmp" alt="静态方法" title="静态方法" />
-                                        </td>
-                                        <td class="name">
-                                            <a href="method.html#Date-addHours" target="_blank">addHours</a>
-                                        </td>
-                                        <td class="desc">
-                                            将指定的小时数加到指定的 Date 实例上。
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="type">
-                                            <img src="css/img/method.bmp" alt="公共方法" title="公共方法" />
-                                            <img src="css/img/static.bmp" alt="静态方法" title="静态方法" />
-                                        </td>
-                                        <td class="name">
-                                            <a href="method.html#Date-addMilliseconds" target="_blank">addMilliseconds</a>
-                                        </td>
-                                        <td class="desc">
-                                            将指定的毫秒数加到指定的 Date 实例上。
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="type">
-                                            <img src="css/img/method.bmp" alt="公共方法" title="公共方法" />
-                                            <img src="css/img/static.bmp" alt="静态方法" title="静态方法" />
-                                        </td>
-                                        <td class="name">
-                                            <a href="method.html#Date-addMinutes" target="_blank">addMinutes</a>
-                                        </td>
-                                        <td class="desc">
-                                            将指定的分钟数加到指定的 Date 实例上。
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="type">
-                                            <img src="css/img/method.bmp" alt="公共方法" title="公共方法" />
-                                            <img src="css/img/static.bmp" alt="静态方法" title="静态方法" />
-                                        </td>
-                                        <td class="name">
-                                            <a href="method.html#Date-addMonths" target="_blank">addMonths</a>
-                                        </td>
-                                        <td class="desc">
-                                            将指定的月份数加到指定的 Date 实例上。
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="type">
-                                            <img src="css/img/method.bmp" alt="公共方法" title="公共方法" />
-                                            <img src="css/img/static.bmp" alt="静态方法" title="静态方法" />
-                                        </td>
-                                        <td class="name">
-                                            <a href="method.html#Date-addSeconds" target="_blank">addSeconds</a>
-                                        </td>
-                                        <td class="desc">
-                                            将指定的秒数加到指定的 Date 实例上。
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="type">
-                                            <img src="css/img/method.bmp" alt="公共方法" title="公共方法" />
-                                            <img src="css/img/static.bmp" alt="静态方法" title="静态方法" />
-                                        </td>
-                                        <td class="name">
-                                            <a href="method.html#Date-addWeeks" target="_blank">addWeeks</a>
-                                        </td>
-                                        <td class="desc">
-                                            将指定的周数加到指定的 Date 实例上。
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="type">
-                                            <img src="css/img/method.bmp" alt="公共方法" title="公共方法" />
-                                            <img src="css/img/static.bmp" alt="静态方法" title="静态方法" />
-                                        </td>
-                                        <td class="name">
-                                            <a href="method.html#Date-addYears" target="_blank">addYears</a>
-                                        </td>
-                                        <td class="desc">
-                                            将指定的年份数加到指定的 Date 实例上。
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="type">
-                                            <img src="css/img/method.bmp" alt="公共方法" title="公共方法" />
-                                            <img src="css/img/static.bmp" alt="静态方法" title="静态方法" />
-                                        </td>
-                                        <td class="name">
-                                            <a href="method.html#Date-format" target="_blank">format</a>
-                                        </td>
-                                        <td class="desc">
-                                            把日期时间格式化指定格式的字符串。
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="type">
-                                            <img src="css/img/method.bmp" alt="公共方法" title="公共方法" />
-                                            <img src="css/img/static.bmp" alt="静态方法" title="静态方法" />
-                                        </td>
-                                        <td class="name">
-                                            <a href="method.html#Date-now" target="_blank">now</a>
-                                        </td>
-                                        <td class="desc">
-                                            获取当前系统时间。
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="type">
-                                            <img src="css/img/method.bmp" alt="公共方法" title="公共方法" />
-                                            <img src="css/img/static.bmp" alt="静态方法" title="静态方法" />
-                                        </td>
-                                        <td class="name">
-                                            <a href="method.html#Date-parse" target="_blank">parse</a>
-                                        </td>
-                                        <td class="desc">
-                                            把参数 value 解析成等价的日期时间实例。
-                                        </td>
-                                    </tr>
+                                    #--tr.end--#
                                 </tbody>
                             </table>
+                        -->
                         </div>
                     </div>
                     
@@ -258,13 +145,13 @@
                         <div class="header">
                             方法概述
                         </div>
-                        <div class="content">
-                            <h2>Emitter .fire 实例方法</h2>
+                        <div id="div-method-summary" class="content">
+                        <!--
+                            <h2>{memberOf}.{name} {typeDesc}方法</h2>
                             <p class="summary">
-                                已重载。 <br />
-                                触发指定名称的事件，并可向事件处理函数传递一些参数。<br />
-                                如果指定了  stop  字段，则当事件处理函数返回指定的值时将停止调用后面的处理函数
+                                {desc}
                             </p>
+                        -->
                         </div>
                     </div>
                     
@@ -274,7 +161,8 @@
                         <div class="header">
                             参数列表
                         </div>
-                        <div class="content">
+                        <div id="div-method-params" class="content">
+                        <!--
                             <table class="params">
                                 <thead>
                                     <tr>
@@ -285,37 +173,18 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    #--tr.begin--#
                                     <tr>
-                                        <td class="name"><code>config</code></td>
-                                        <td class="type">Object</td>
-                                        <td class="default"></td>
-                                        <td class="desc">配置对象。</td>
+                                        <td class="name"><code>{name}</code></td>
+                                        <td class="type">{type}</td>
+                                        <td class="default">{defaultValue}</td>
+                                        <td class="desc">{desc}</td>
                                     </tr>
-                                    <tr>
-                                        <td class="name"><code>config.names</code></td>
-                                        <td class="type">Array</td>
-                                        <td class="default"></td>
-                                        <td class="desc">事件名称列表。</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="name"><code>config.args</code></td>
-                                        <td class="type">Array</td>
-                                        <td class="default"></td>
-                                        <td class="desc">要传递给事件处理函数的参数数据。</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="name"><code>config.stop</code></td>
-                                        <td class="type"></td>
-                                        <td class="default"></td>
-                                        <td class="desc">
-                                            当事件处理函数的返回值满足一定时，将停止调用后面的处理函数。
-                                            当 stop 为函数时，则需要在 stop 函数内明确返回 true 才停止。
-                                            否则，事件处理的返回值跟 stop 完全相等时才停步。
-                                        </td>
-                                    </tr>
-                                    
+                                    #--tr.end--#
                                 </tbody>
                             </table>
+                        -->
+                    
                         </div>
                     </div>
                     
@@ -324,7 +193,8 @@
                         <div class="header">
                             返回值
                         </div>
-                        <div class="content">
+                        <div id="div-method-returns" class="content">
+                        <!--
                             <table class="params">
                                 <thead>
                                     <tr>
@@ -333,27 +203,27 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    #--tr.begin--#
                                     <tr>
-                                        <td class="type">Object</td>
+                                        <td class="type">{type}</td>
                                         <td class="desc">
-                                            当事件处理函数的返回值满足一定时，将停止调用后面的处理函数。
-                                            当 stop 为函数时，则需要在 stop 函数内明确返回 true 才停止。
-                                            否则，事件处理的返回值跟 stop 完全相等时才停步。
+                                            {desc}
                                         </td>
                                     </tr>
-                                    
+                                    #--tr.end--#
                                 </tbody>
                             </table>
+                        -->
                         </div>
                     </div>
                     
-                    <!-- partial/MainPanel/Auto/Method/Demo.html -->
-<div class="panel">
+                    <!-- partial/MainPanel/Auto/Method/Example.html -->
+<div id="panel-method-example" class="panel">
     <div class="header">
         示例代码
     </div>
     <div class="content demo">
-        <ul class="row-panel">
+        <ul id="ul-method-example-lines" class="row-panel">
             <li>1</li>
             <li>2</li>
             <li>3</li>
@@ -364,15 +234,7 @@
             <li>8</li>
             <li>9</li>
         </ul>
-        <pre style="height: 184px;"><code class="hljs">KERP.Dialog.use(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(Dialog)</span> {</span>
-    <span class="hljs-keyword">var</span> dialog = <span class="hljs-keyword">new</span> Dialog({
-    title: <span class="hljs-string">'消息'</span>,
-    content: <span class="hljs-string">'风吹起的青色衣衫，夕阳里的温暖容颜，你比以前更加美丽，像盛开的花'</span>,
-    });
-
-    dialog.showModal(); <span class="hljs-comment">//注意这里</span>
-
-});</code></pre>
+        <pre style="height: 184px;"><code id="code-method-example" class="hljs"></code></pre>
     </div>
 </div>
 
@@ -655,7 +517,7 @@ define(<span class="hljs-string">'Seajs'</span>, <span class="hljs-function"><sp
     <script src="modules/MainPanel/Auto/Method/Summary.js"></script>
     <script src="modules/MainPanel/Auto/Method/Params.js"></script>
     <script src="modules/MainPanel/Auto/Method/Returns.js"></script>
-    <script src="modules/MainPanel/Auto/Method/Demo.js"></script>
+    <script src="modules/MainPanel/Auto/Method/Example.js"></script>
     <script src="modules/MainPanel/Auto/Method.js"></script>
 
     <script src="modules/MainPanel/Auto/Source/Data.js"></script>

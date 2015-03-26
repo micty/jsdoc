@@ -1,10 +1,10 @@
 /*
 * MiniQuery - MiniQuery JavaScript Library
-* for: default 
-* version: 3.3.1
-* build: 2015-03-23 09:52:39
-* files: 24(22)
-*    partial/default/begin.js
+* for: jsdoc 
+* version: 3.3.2
+* build: 2015-03-26 13:50:59
+* files: 25(23)
+*    partial/jsdoc/begin.js
 *    compatible/Function.prototype.js
 *    core/Module.js
 *    core/$.js
@@ -12,6 +12,7 @@
 *    core/Boolean.js
 *    core/Date.js
 *    core/Math.js
+*    core/MiniQuery.js
 *    core/Object.js
 *    core/String.js
 *    excore/Emitter/Tree.js
@@ -23,11 +24,11 @@
 *    browser/Cookie.js
 *    browser/LocalStorage.js
 *    browser/SessionStorage.js
+*    browser/String.js
 *    browser/Script.js
 *    browser/Url.js
-*    partial/default/MiniQuery.js
-*    partial/default/expose.js
-*    partial/default/end.js
+*    partial/jsdoc/expose.js
+*    partial/jsdoc/end.js
 */
 ;( function (
     global, 
@@ -66,24 +67,6 @@
 ) {
 
 
-//兼容
-if (!Function.prototype.bind) {
-    Function.prototype.bind = function (thisArg) {
-        // this 指向的是要绑定的函数。
-        if (typeof this !== "function") {
-            throw new TypeError("Function.prototype.bind - 要绑定的对象只能是函数。");
-        }
-
-        var params = [].slice.call(arguments, 1);
-        var self = this;
-
-        return function () {
-            var args = [].slice.call(arguments, 0);
-            args = params.concat(args);
-            return self.apply(thisArg, args);
-        };
-    };
-}
 
 //兼容
 if (!Function.prototype.bind) {
@@ -161,7 +144,7 @@ var Module = (function () {
                 exports: null,      //这个值在 require 后可能会给改写
                 required: false,    //指示是否已经 require 过
                 exposed: false,     //默认对外不可见
-                module: null,       
+                module: null,       //用于检测在 define 中加载下级模块，即 require(module, id) 时用到
             };
 
 
@@ -202,6 +185,7 @@ var Module = (function () {
 
                 id = arguments[1];
             }
+
 
             var crossover = meta.crossover;
             var seperator = meta.seperator;
@@ -2248,6 +2232,71 @@ define('Math', function (require, module, exports) {
     };
 
 });
+
+
+/**
+* MiniQuery
+* @namespace
+* @name MiniQuery
+*/
+define('MiniQuery', function (require, module, exports) {
+
+    var $ = require('$');
+
+    module.exports = exports = /**@lends MiniQuery*/ {
+
+        /**
+        * 版本号
+        */
+        version: '3.3.2',
+
+        'Array': require('Array'),
+        'Boolean': require('Boolean'),
+        'Date': require('Date'),
+        'Math': require('Math'),
+        'Object': require('Object'),
+        'String': require('String'),
+
+        /**
+        * 加载内部公开的模块。
+        * @function
+        * @param {string} id 模块的名称(id)
+        * @return {Object} 返回模块的导出对象。
+        * @example
+        *   var Mapper = MiniQuery.require('Mapper');    
+        */
+        require: $.require,
+
+        /**
+        * 以安全的方式给 MiniQuery 使用一个新的命名空间。
+        * 比如 MiniQuery.use('$')，则 global.$ 基本上等同于 global.MiniQuery；
+        * 当 global 中未存在指定的命名空间或参数中指定了要全量覆盖时，则使用全量覆盖的方式，
+        * 该方式会覆盖原来的命名空间，可能会造成成一些错误，不推荐使用；
+        * 当 global 中已存在指定的命名空间时，则只拷贝不冲突的部分到该命名空间，
+        * 该方式是最安全的方式，也是默认和推荐的方式。
+        */
+        use: function (namespace, overwrite) {
+
+            if (!(namespace in global) || overwrite) { //未存在或明确指定了覆盖
+                global[namespace] = exports; //全量覆盖
+                return;
+            }
+
+            //已经存在，则拷贝不冲突的成员部分
+            var obj = global[namespace];
+
+            for (var key in exports) {
+
+                if (!(key in obj)) { //只拷贝不冲突的部分
+                    obj[key] = exports[key];
+                }
+            }
+
+        },
+
+    };
+});
+
 
 
 /**
@@ -6497,6 +6546,117 @@ define('SessionStorage', function (require, module, exports) {
 
 
 /**
+* 字符串工具类
+* @namespace
+* @name String
+*/
+define('browser/String', function (require, module, exports) {
+
+    module.exports = exports = /**@lends String*/ {
+        /**
+        * 用做过滤直接放到HTML里的
+        * @return {String}
+        */
+        escapeHtml: function (string) {
+            var s = String(string);
+
+            var reg = /[&'"<>\/\\\-\x00-\x09\x0b-\x0c\x1f\x80-\xff]/g;
+            s = s.replace(reg, function (r) {
+                return "&#" + r.charCodeAt(0) + ";"
+            });
+            s = s.replace(/ /g, "&nbsp;");
+            s = s.replace(/\r\n/g, "<br />");
+            s = s.replace(/\n/g, "<br />");
+            s = s.replace(/\r/g, "<br />");
+
+            return s;
+        },
+
+        /**
+        * 用做过滤HTML标签里面的东东 比如这个例子里的<input value="XXX"> XXX就是要过滤的
+        * @return {String}
+        */
+        escapeElementAttribute: function (string) {
+            var s = String(string);
+            var reg = /[&'"<>\/\\\-\x00-\x1f\x80-\xff]/g;
+
+            return s.replace(reg, function (r) {
+                return "&#" + r.charCodeAt(0) + ";"
+            });
+        },
+
+        /**
+        * 用做过滤直接放到HTML里js中的
+        * @return {String}
+        */
+        escapeScript: function (string) {
+            var s = String(string);
+            var reg = /[\\"']/g;
+
+            s = s.replace(reg, function (r) {
+                return "\\" + r;
+            });
+
+            s = s.replace(/%/g, "\\x25");
+            s = s.replace(/\n/g, "\\n");
+            s = s.replace(/\r/g, "\\r");
+            s = s.replace(/\x01/g, "\\x01");
+
+            return s;
+        },
+
+        /**
+        * 用做过滤直接 Url 参数里的 比如 http://www.baidu.com/?a=XXX XXX就是要过滤的
+        * @return {String}
+        */
+        escapeQueryString: function (string) {
+            var s = String(string);
+            return escape(s).replace(/\+/g, "%2B");
+        },
+
+        /**
+        * 用做过滤直接放到<a href="javascript:alert('XXX')">中的XXX
+        * @return {String}
+        */
+        escapeHrefScript: function (string) {
+            var s = exports.escapeScript(string);
+            s = s.replace(/%/g, "%25"); //escMiniUrl
+            s = exports.escapeElementAttribute(s);
+            return s;
+
+        },
+
+        /**
+        * 用做过滤直接放到正则表达式中的
+        * @return {String}
+        */
+        escapeRegExp: function (string) {
+            var s = String(string);
+            var reg = /[\\\^\$\*\+\?\{\}\.\(\)\[\]]/g;
+            return s.replace(reg, function (a, b) {
+                return "\\" + a;
+            });
+        }
+    };
+
+
+});
+
+
+define('String', function (require, module, exports) {
+    var $ = require('$');
+    var coreString = require('core/String');
+    var browserString = require('browser/String');
+    module.exports = $.extend({}, coreString, browserString);
+
+});
+
+
+
+
+
+
+/**
 * Script 脚本工具
 * @namespace
 * @name Script
@@ -7122,71 +7282,6 @@ define('Url', function (require, module, exports) {
 });
 
 
-/**
-* MiniQuery
-* @namespace
-* @name MiniQuery
-*/
-define('MiniQuery', function (require, module, exports) {
-
-    var $ = require('$');
-
-    module.exports = exports = /**@lends MiniQuery*/ {
-
-        /**
-        * 版本号
-        */
-        version: '3.2.1',
-
-        'Array': require('Array'),
-        'Boolean': require('Boolean'),
-        'Date': require('Date'),
-        'Math': require('Math'),
-        'Object': require('Object'),
-        'String': require('String'),
-
-        /**
-        * 加载内部公开的模块。
-        * @function
-        * @param {string} id 模块的名称(id)
-        * @return {Object} 返回模块的导出对象。
-        * @example
-        *   var Mapper = MiniQuery.require('Mapper');    
-        */
-        require: $.require,
-
-        /**
-        * 以安全的方式给 MiniQuery 使用一个新的命名空间。
-        * 比如 MiniQuery.use('$')，则 global.$ 基本上等同于 global.MiniQuery；
-        * 当 global 中未存在指定的命名空间或参数中指定了要全量覆盖时，则使用全量覆盖的方式，
-        * 该方式会覆盖原来的命名空间，可能会造成成一些错误，不推荐使用；
-        * 当 global 中已存在指定的命名空间时，则只拷贝不冲突的部分到该命名空间，
-        * 该方式是最安全的方式，也是默认和推荐的方式。
-        */
-        use: function (namespace, overwrite) {
-
-            if (!(namespace in global) || overwrite) { //未存在或明确指定了覆盖
-                global[namespace] = exports; //全量覆盖
-                return;
-            }
-
-            //已经存在，则拷贝不冲突的成员部分
-            var obj = global[namespace];
-
-            for (var key in exports) {
-
-                if (!(key in obj)) { //只拷贝不冲突的部分
-                    obj[key] = exports[key];
-                }
-            }
-
-        },
-
-        
-
-    };
-});
-
 
 //设置对外暴露的模块
 expose({
@@ -7211,22 +7306,7 @@ expose({
 
 
 
-
-
-(function (define) {
-
-    if (typeof define == 'function' && (define.amd || define.cmd)) { //amd|cmd
-        define(function (require) {
-            return require('MiniQuery');
-        });
-    }
-    else { //browser 普通方式
-        global.MiniQuery = require('MiniQuery');
-    }
-
-
-})(global.define);
-
+global.MiniQuery = require('MiniQuery');
 
 })(
     window,  // 在浏览器环境中，全局对象是 this

@@ -116,7 +116,7 @@ var __classes__ = [
                 "example": [
                     {
                         "title": "example",
-                        "desc": "\n            var api = new API('test');\n            api.get({ name: 'micty' });",
+                        "desc": "\n            var api = new API('test');\n            api.get({ name: 'micty' });\n            var obj = {\n                a: 1,\n                b: 2\n            }",
                         "type": "",
                         "name": "",
                         "isOptional": false,

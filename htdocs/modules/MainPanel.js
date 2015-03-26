@@ -37,18 +37,27 @@ define('MainPanel', function (require, module, exports) {
             Auto.hide();
         }
 
-        if (!hasBind) {
-            bindEvents();
-        }
+
+        bindEvents();
 
     }
 
 
 
     function bindEvents() {
+        if (hasBind) {
+            return;
+        }
+
         Manual.on('render', function () {
             emitter.fire('render');
         });
+
+        Auto.on('click', 'method', function () {
+            Manual.hide();
+        });
+
+        hasBind = true;
 
     }
 

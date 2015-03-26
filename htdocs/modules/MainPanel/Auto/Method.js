@@ -7,7 +7,7 @@ define('MainPanel/Auto/Method', function (require, module, exports) {
     var Summary = require(module, 'Summary');
     var Params = require(module, 'Params');
     var Returns = require(module, 'Returns');
-    var Demo = require(module, 'Demo');
+    var Example = require(module, 'Example');
 
     var view = document.getElementById('view-Method');
 
@@ -17,7 +17,7 @@ define('MainPanel/Auto/Method', function (require, module, exports) {
         Summary.render(data);
         Params.render(data);
         Returns.render(data);
-        Demo.render(data);
+        Example.render(data);
 
         show();
 

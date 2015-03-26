@@ -52,6 +52,9 @@ define('MainPanel/Auto/Data/Helper', function (require, module, exports) {
             var methods = [];
 
             $.Array.each(item.methods, function (item) {
+
+                item['typeDesc'] = item.isStatic ? '静态' : '实例';
+
                 if (item.isEvent) {
                     events.push(item);
                 }
@@ -60,32 +63,34 @@ define('MainPanel/Auto/Data/Helper', function (require, module, exports) {
                 }
             })
 
+            var isClass = item.isa.toLowerCase() == 'constructor';
+
+            var typeDesc = '';
+            if (isClass) {
+                typeDesc += '类';
+            }
+
+            if (item.isNamespace) {
+                typeDesc += '命名空间';
+            }
+
 
             var obj = $.Object.extend({}, item, {
 
-                superClass: item.inheritsFrom[0],
-                supers: [],
-                derives: [],
-                events: events,
-                methods: methods,
-                properties: item.properties.sort(function (x, y) {
+                'superClass': item.inheritsFrom[0],
+                'supers': [],
+                'derives': [],
+                'events': events,
+                'methods': methods,
+                'properties': item.properties.sort(function (x, y) {
                     return x.name < y.name ? -1 :
                         x.name > y.name ? 1 : 0;
                 }),
 
-                isClass: item.isa.toLowerCase() == 'constructor',
-                srcPageName: paths.join('_') + '.html',
-                srcFileName: paths.slice(1).join('/')
+                'isClass': isClass,
+                'srcFileName': paths.slice(1).join('/'),
+                'typeDesc': typeDesc,
             });
-
-            obj.typeDesc = '';
-            if (obj.isClass) {
-                obj.typeDesc += '类';
-            }
-
-            if (obj.isNamespace) {
-                obj.typeDesc += '命名空间';
-            }
 
             name$item[item.alias] = obj;
         });
