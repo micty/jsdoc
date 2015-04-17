@@ -7,6 +7,7 @@ define('MainPanel/Auto/Overview/MethodList', function (require, module, exports)
     var Emitter = MiniQuery.require('Emitter');
     
     var emitter = new Emitter();
+    var panel = document.getElementById('panel-method-list');
     var div = document.getElementById('div-method-list');
     var list = [];
 
@@ -36,7 +37,14 @@ define('MainPanel/Auto/Overview/MethodList', function (require, module, exports)
 
     function render(data) {
 
-        list = data.methods;
+        list = data.methods || [];
+        if (list.length == 0) {
+            hide();
+            return;
+        }
+
+        show();
+
         console.dir(list);
 
         div.innerHTML = $.String.format(samples['table'], {
@@ -57,6 +65,14 @@ define('MainPanel/Auto/Overview/MethodList', function (require, module, exports)
         bindEvents();
     }
 
+    function show() {
+
+        $(panel).show();
+    }
+
+    function hide() {
+        $(panel).hide();
+    }
 
     function bindEvents() {
 

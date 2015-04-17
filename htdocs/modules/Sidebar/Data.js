@@ -10,6 +10,7 @@ define('Sidebar/Data', function (require, module, exports) {
 
 
     var json = null;
+    var key = '__sidebar__';
 
 
     //加载数据。
@@ -21,6 +22,13 @@ define('Sidebar/Data', function (require, module, exports) {
             return;
         }
 
+        var data = window[key];
+        if (data) {
+            json = normalize(data);
+            fn && fn(json);
+            return;
+        }
+
 
         Script.load({
             url: [
@@ -28,27 +36,32 @@ define('Sidebar/Data', function (require, module, exports) {
             ],
 
             onload: function () {
-
-                json = require('data/sidebar');
-
-                var id = 0;
-                var list = $.Array.map(json.items, function (item, index) {
-
-                    if (item.hidden) {
-                        return null;
-                    }
-
-                    item.id = id;
-                    id++;
-
-                    return item;
-                });
-
-                json.item = list;
+                var data = window[key];
+                json = normalize(data);
                 fn(json);
             }
         });
 
+    }
+
+    function normalize(data) {
+
+        var id = 0;
+
+        var list = $.Array.map(data.items, function (item, index) {
+
+            if (item.hidden) {
+                return null;
+            }
+
+            item.id = id++;
+
+            return item;
+        });
+
+        data.items = list;
+
+        return data;
     }
 
 

@@ -9,6 +9,7 @@ define('MainPanel/Auto', function (require, module, exports) {
     var Data = require(module, 'Data');
     var Overview = require(module, 'Overview');
     var Method = require(module, 'Method');
+    var Source = require(module, 'Source');
 
     var emitter = new Emitter();
     var view = document.getElementById('view-Auto');
@@ -17,7 +18,7 @@ define('MainPanel/Auto', function (require, module, exports) {
     function render(name) {
 
         Data.load(function (json) {
-            
+
             var data = json[name];
             Overview.render(data);
 
@@ -35,6 +36,7 @@ define('MainPanel/Auto', function (require, module, exports) {
         $(view).hide();
     }
 
+
     function bindEvents() {
 
         if (hasBind) {
@@ -45,6 +47,38 @@ define('MainPanel/Auto', function (require, module, exports) {
             Method.render(item);
             emitter.fire('click', 'method');
         });
+
+        Overview.on('click', 'source', function (name, fileName) {
+            Source.render(fileName);
+            emitter.fire('click', 'source');
+
+        });
+
+        Method.on({
+            'show': function () {
+                Overview.hide();
+                Source.hide();
+            },
+            'hide': function () { },
+        });
+
+
+        Overview.on({
+            'show': function () {
+                Source.hide();
+                Method.hide();
+            },
+            'hide': function () { },
+        });
+
+        Source.on({
+            'show': function () {
+                Overview.hide();
+                Method.hide();
+            },
+            'hide': function () { },
+        });
+
 
         hasBind = true;
     }

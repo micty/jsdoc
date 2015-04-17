@@ -53,6 +53,10 @@ define('MainPanel', function (require, module, exports) {
             emitter.fire('render');
         });
 
+        Auto.on('click', 'source', function () {
+            Manual.hide();
+        });
+
         Auto.on('click', 'method', function () {
             Manual.hide();
         });

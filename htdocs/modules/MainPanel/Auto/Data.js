@@ -9,13 +9,22 @@ define('MainPanel/Auto/Data', function (require, module, exports) {
     var Helper = require(module, 'Helper');
 
     var json = null;
+    var key = '__classes__';
 
 
     //加载数据。
-    //这里采用异步方式，方便以后从服务器端加载。
+    //这里既可采用异步方式，方便以后从服务器端加载，
+    //也可以采用直接引入的方式
     function load(fn) {
 
         if (json) {
+            fn && fn(json);
+            return;
+        }
+
+        var list = window[key];
+        if (list) {
+            json = Helper.normalize(list);
             fn && fn(json);
             return;
         }
@@ -27,10 +36,8 @@ define('MainPanel/Auto/Data', function (require, module, exports) {
             ],
 
             onload: function () {
-
-                var list = window['__classes__'];
+                var list = window[key];
                 json = Helper.normalize(list);
-
                 fn && fn(json);
             }
         });

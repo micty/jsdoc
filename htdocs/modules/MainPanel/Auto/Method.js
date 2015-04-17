@@ -4,13 +4,15 @@ define('MainPanel/Auto/Method', function (require, module, exports) {
     var $ = require('$');
     var MiniQuery = require('MiniQuery');
 
+    var Emitter = MiniQuery.require('Emitter');
+
     var Summary = require(module, 'Summary');
     var Params = require(module, 'Params');
     var Returns = require(module, 'Returns');
     var Example = require(module, 'Example');
 
     var view = document.getElementById('view-Method');
-
+    var emitter = new Emitter();
 
     function render(data) {
 
@@ -25,10 +27,12 @@ define('MainPanel/Auto/Method', function (require, module, exports) {
 
     function show() {
         $(view).show();
+        emitter.fire('show');
     }
 
     function hide() {
         $(view).hide();
+        emitter.fire('hide');
     }
 
 
@@ -37,6 +41,7 @@ define('MainPanel/Auto/Method', function (require, module, exports) {
         render: render,
         show: show,
         hide: hide,
+        on: emitter.on.bind(emitter),
     };
 
 

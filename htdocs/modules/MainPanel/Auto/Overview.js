@@ -18,10 +18,13 @@ define('MainPanel/Auto/Overview', function (require, module, exports) {
 
     function show() {
         $(view).show();
+        emitter.fire('show');
     }
 
     function hide() {
         $(view).hide();
+        emitter.fire('hide');
+
     }
 
     function bindEvents() {
@@ -33,6 +36,11 @@ define('MainPanel/Auto/Overview', function (require, module, exports) {
         MethodList.on('click', 'name', function (item, index) {
             hide();
             emitter.fire('click', 'method', [item, index]);
+        });
+
+        Summary.on('click', 'source', function (name, fileName) {
+            hide();
+            emitter.fire('click', 'source', [name, fileName]);
         });
 
         hasBind = true;

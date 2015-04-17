@@ -1,7 +1,8 @@
 ﻿
-<div class="panel">
+<div id="panel-property-list" class="panel">
     <div class="header">属性列表</div>
-    <div class="content">
+    <div id="div-property-list" class="content">
+    <!--
         <table class="list">
             <thead>
                 <tr>
@@ -11,19 +12,23 @@
                 </tr>
             </thead>
             <tbody>
-                <tr>
+
+                #--tr.begin--#
+                <tr data-index="{index}">
                     <td class="type">
                         <img src="css/img/property.bmp" alt="公共属性" title="公共属性" />
                     </td>
                     <td class="name">
-                        <a href="method.html#Date-addDays" target="_blank">version</a>
+                        <a href="javascript:" data-index="{index}">{name}</a>
                     </td>
                     <td class="desc">
-                        版本号。
+                        {desc}
                     </td>
                 </tr>
-                
+                #--tr.end--#
+
             </tbody>
         </table>
+    -->
     </div>
 </div>

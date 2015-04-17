@@ -59,7 +59,7 @@
                         <!--
                             <h2>{name} {typeDesc}</h2>
                             <p class="definedInFile">
-                    			定义在：<a href="#" target="_blank">{srcFileName}</a>
+                    			定义在：<a data-cmd="source" href="javascript:">{srcFileName}</a>
                             </p>
                             <p class="summary">{desc}</p>
                         -->
@@ -67,7 +67,7 @@
                     </div>
                     <!-- partial/MainPanel/Auto/Overview/MethodList.html -->
                     
-                    <div class="panel">
+                    <div id="panel-method-list" class="panel">
                         <div class="header">方法列表</div>
                         <div id="div-method-list" class="content">
                         <!--
@@ -107,9 +107,10 @@
                     
                     <!-- partial/MainPanel/Auto/Overview/PropertyList.html -->
                     
-                    <div class="panel">
+                    <div id="panel-property-list" class="panel">
                         <div class="header">属性列表</div>
-                        <div class="content">
+                        <div id="div-property-list" class="content">
+                        <!--
                             <table class="list">
                                 <thead>
                                     <tr>
@@ -119,20 +120,24 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
+                    
+                                    #--tr.begin--#
+                                    <tr data-index="{index}">
                                         <td class="type">
                                             <img src="css/img/property.bmp" alt="公共属性" title="公共属性" />
                                         </td>
                                         <td class="name">
-                                            <a href="method.html#Date-addDays" target="_blank">version</a>
+                                            <a href="javascript:" data-index="{index}">{name}</a>
                                         </td>
                                         <td class="desc">
-                                            版本号。
+                                            {desc}
                                         </td>
                                     </tr>
-                                    
+                                    #--tr.end--#
+                    
                                 </tbody>
                             </table>
+                        -->
                         </div>
                     </div>
                 </div>
@@ -255,155 +260,15 @@
                         <div class="content demo">
                             <!-- partial/MainPanel/Auto/Source/Lines.html -->
                             
-                            <ul class="row-panel">
-                                <li>1</li>
-                                <li>2</li>
-                                <li>3</li>
-                                <li>4</li>
-                                <li>5</li>
-                                <li>6</li>
-                                <li>7</li>
-                                <li>8</li>
-                                <li>9</li>
-                                <li>10</li>
-                                <li>11</li>
-                                <li>12</li>
-                                <li>13</li>
-                                <li>14</li>
-                                <li>15</li>
-                                <li>16</li>
-                                <li>17</li>
-                                <li>18</li>
-                                <li>19</li>
-                                <li>20</li>
-                                <li>21</li>
-                                <li>22</li>
-                                <li>23</li>
-                                <li>24</li>
-                                <li>25</li>
-                                <li>26</li>
-                                <li>27</li>
-                                <li>28</li>
-                                <li>29</li>
-                                <li>30</li>
-                                <li>31</li>
-                                <li>32</li>
-                                <li>33</li>
-                                <li>34</li>
-                                <li>35</li>
-                                <li>36</li>
-                                <li>37</li>
-                                <li>38</li>
-                                <li>39</li>
-                                <li>40</li>
-                                <li>41</li>
-                                <li>42</li>
-                                <li>43</li>
-                                <li>44</li>
-                                <li>45</li>
-                                <li>46</li>
-                                <li>47</li>
-                                <li>48</li>
-                                <li>49</li>
-                                <li>50</li>
-                                <li>51</li>
-                                <li>52</li>
-                                <li>53</li>
-                                <li>54</li>
-                                <li>55</li>
-                                <li>56</li>
-                                <li>57</li>
-                                <li>58</li>
-                                <li>59</li>
-                                <li>60</li>
-                                <li>61</li>
-                                <li>62</li>
-                                <li>63</li>
-                                <li>64</li>
-                                <li>65</li>
-                                <li>66</li>
-                                <li>67</li>
-                                <li>68</li>
-                                <li>69</li>
-                                <li>70</li>
-                                <li>71</li>
-                                <li>72</li>
+                            <ul id="ul-source-lines" class="row-panel">
+                            <!--
+                                <li>{no}</li>
+                            -->
                             </ul>
                                     
                             <!-- partial/MainPanel/Auto/Source/Code.html -->
 
-<pre style="height: 1444px;"><code class="hljs">
-<span class="hljs-comment">/**
-* 动态加载模块类。
-* 对 seajs 的进一步封装，以适合本项目的使用。
-* @namespace
-* @name Seajs
-*/</span>
-define(<span class="hljs-string">'Seajs'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(require, module, exports)</span> {</span>
-
-    <span class="hljs-keyword">var</span> $ = <span class="hljs-built_in">require</span>(<span class="hljs-string">'$'</span>);
-    <span class="hljs-keyword">var</span> MiniQuery = <span class="hljs-built_in">require</span>(<span class="hljs-string">'MiniQuery'</span>);
-
-    <span class="hljs-keyword">var</span> Config = <span class="hljs-built_in">require</span>(<span class="hljs-string">'Config'</span>);
-
-    <span class="hljs-keyword">var</span> seajs = window[<span class="hljs-string">'seajs'</span>];
-
-
-    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">ready</span><span class="hljs-params">(fn)</span> {</span>
-
-        <span class="hljs-keyword">if</span> (seajs) {
-            fn &amp;&amp; fn(seajs);
-            <span class="hljs-keyword">return</span>;
-        }
-
-
-        <span class="hljs-comment">//先加载 seajs 库</span>
-        <span class="hljs-keyword">var</span> defaults = Config.get(module.id); <span class="hljs-comment">//默认配置</span>
-        <span class="hljs-keyword">var</span> url = defaults.url;
-
-        <span class="hljs-keyword">var</span> Script = MiniQuery.require(<span class="hljs-string">'Script'</span>);
-        Script.load({
-            url: url,
-            id: <span class="hljs-string">'seajsnode'</span>, <span class="hljs-comment">//提供 id，提高性能。 详见 https://github.com/seajs/seajs/issues/260</span>
-
-            onload: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> {</span>
-                seajs = window[<span class="hljs-string">'seajs'</span>];
-                seajs.config(defaults);
-
-                fn &amp;&amp; fn(seajs);
-            }
-        });
-
-    }
-
-
-
-    module.exports = exports = <span class="hljs-comment">/**@lends Seajs*/</span> {
-
-        use: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> {</span>
-
-            <span class="hljs-keyword">var</span> args = [].slice.call(<span class="hljs-built_in">arguments</span>, <span class="hljs-number">0</span>);
-
-            ready(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(seajs)</span> {</span>
-                seajs.use.apply(seajs, args);
-            });
-
-        },
-
-        define: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> {</span>
-
-            <span class="hljs-keyword">var</span> args = [].slice.call(<span class="hljs-built_in">arguments</span>, <span class="hljs-number">0</span>);
-
-            ready(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(seajs)</span> {</span>
-                seajs.Module.define.apply(seajs, args);
-            });
-        }
-    };
-
-
-
-
-});</code></pre>
+<pre><code id="code-source" class="hljs"></code></pre>
     
                         </div>
                     </div>
@@ -492,8 +357,11 @@ define(<span class="hljs-string">'Seajs'</span>, <span class="hljs-function"><sp
 
 
 
+    <script src='test/jquery-1.10.2.min.js'></script>
+	<script src='test/jquery.ztree.all-3.5.min.js'></script>
+	<script src='test/jquery.ztree_toc.min.js'></script>
 
-    <script src="f/jquery/jquery-1.11.1.debug.js"></script>
+    <!--<script src="f/jquery/jquery-1.11.1.debug.js"></script>-->
     <script src="f/miniquery/miniquery.debug.js"></script>
     <script src="f/highlight/highlight.debug.js"></script>
     <script src="f/marked/marked.mod.debug.js"></script>
@@ -503,6 +371,8 @@ define(<span class="hljs-string">'Seajs'</span>, <span class="hljs-function"><sp
 
     <script src="lib/Tabs.js"></script>
     <script src="lib/Template.js"></script>
+
+    <script src="data/classes.js"></script>
 
     <script src="modules/Hash.js"></script>
     <script src="modules/Sidebar/Data.js"></script>
@@ -520,7 +390,9 @@ define(<span class="hljs-string">'Seajs'</span>, <span class="hljs-function"><sp
     <script src="modules/MainPanel/Auto/Method/Example.js"></script>
     <script src="modules/MainPanel/Auto/Method.js"></script>
 
+    <script src="modules/MainPanel/Auto/Source/Code.js"></script>
     <script src="modules/MainPanel/Auto/Source/Data.js"></script>
+    <script src="modules/MainPanel/Auto/Source/Lines.js"></script>
     <script src="modules/MainPanel/Auto/Source.js"></script>
 
     <script src="modules/MainPanel/Auto/Data/Helper.js"></script>
@@ -540,9 +412,12 @@ define(<span class="hljs-string">'Seajs'</span>, <span class="hljs-function"><sp
     <script src="modules/MainPanel.js"></script>
 
     <script src="index.js"></script>
+
+
     <!--grunt.js.end-->
 
 
+  
 
 </body>
 </html>
