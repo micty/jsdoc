@@ -25,10 +25,9 @@
                 text-decoration: none;
             }
         }
-
     }
 
-    
+
     .content {
         font: 16px/1.6 "Helvetica Neue", Helvetica, "Segoe UI", Arial, freesans, sans-serif;
         color: #333333;
@@ -39,7 +38,7 @@
         -webkit-border-bottom-left-radius: 3px;
         border-bottom-left-radius: 3px;
         padding: 15px 15px;
-    
+
         &.markdown ul {
             list-style: disc;
             padding-left: 32px;
@@ -53,7 +52,7 @@
             margin-bottom: 0 !important;
         }
 
-        .definedInFile{
+        .definedInFile {
             position: absolute;
             right: 50px;
             top: 140px;
@@ -61,17 +60,17 @@
             color: gray;
         }
 
-        .summary{
+        .summary {
             font-family: "微软雅黑";
             font-size: 1.1em;
         }
-    
-        h2,h3,h4,h5 {
+
+        h2, h3, h4, h5 {
             margin-top: 13px;
             margin-bottom: 16px;
         }
 
-    
+
 
         h1, h2 {
             border-bottom: 1px solid #ddd;
@@ -116,7 +115,6 @@
             p {
                 margin-left: 0;
             }
-
         }
 
         p, ul {
@@ -127,14 +125,13 @@
         a {
             color: #4183c4;
             text-decoration: none;
- 
+
             &:hover {
                 text-decoration: underline;
             }
-
         }
 
-        
+
 
         code {
             padding: 3px 4px 21px 4px;
@@ -158,36 +155,49 @@
                 color: #000;
                 background-color: transparent;
             }
-
         }
 
         table {
             width: 100%;
+            font-family: 'Fixedsys Excelsior 3.01' Fixedsys;
+
             th, td {
                 border: 1px solid #dddddd;
                 padding: 5px 5px;
                 text-align: left;
             }
 
-            &.params{
-                .type{
+            &.params {
+                .name {
+                    code {
+                        padding: 3px 4px 3px 4px;
+                        color: #c7254e;
+                        background-color: #f9f2f4;
+                        font-family: 'Fixedsys Excelsior 3.01' Fixedsys;
+
+                    }
+                }
+
+                .type {
                     width: 10%;
                     color: blue;
                     font-family: 'Fixedsys Excelsior 3.01' Fixedsys;
                 }
 
-                .default{
+                .default {
                     width: 10%;
                 }
 
-                .desc{
+                .desc {
                     width: 70%;
+
+                    pre {
+                        margin-left: 0px;
+                        background: none;
+
+                    }
                 }
             }
-
         }
-
-
-
     }
 }

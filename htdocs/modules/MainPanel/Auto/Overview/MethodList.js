@@ -5,6 +5,7 @@ define('MainPanel/Auto/Overview/MethodList', function (require, module, exports)
     var MiniQuery = require('MiniQuery');
 
     var Emitter = MiniQuery.require('Emitter');
+    var Highlight = require('Highlight');
     
     var emitter = new Emitter();
     var panel = document.getElementById('panel-method-list');
@@ -54,7 +55,7 @@ define('MainPanel/Auto/Overview/MethodList', function (require, module, exports)
                 return $.String.format(samples['tr'], {
                     'index': index,
                     'name': item.name,
-                    'desc': item.desc,
+                    'desc': Highlight.get(item.desc),
                     'alias': item.alias.split('#').join('-'), //把 '#' 换成 '-'
                     'static-icon': item.isStatic ? samples['static-icon'] : '',
                 });

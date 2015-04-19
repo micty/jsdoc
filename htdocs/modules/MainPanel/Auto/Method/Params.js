@@ -4,8 +4,9 @@ define('MainPanel/Auto/Method/Params', function (require, module, exports) {
     var $ = require('$');
     var MiniQuery = require('MiniQuery');
     
+    var Highlight = require('Highlight');
 
-
+    var panel = document.getElementById('panel-method-params');
     var div = document.getElementById('div-method-params');
 
     var samples = $.String.getTemplates(div.innerHTML, [
@@ -29,7 +30,12 @@ define('MainPanel/Auto/Method/Params', function (require, module, exports) {
 
     function render(data) {
 
-        list = data.params;
+        list = data.params || [];
+
+        if (list.length == 0) {
+            hide();
+            return;
+        }
 
         div.innerHTML = $.String.format(samples['table'], {
             'rows': $.Array.keep(list, function (item, index) {
@@ -38,13 +44,23 @@ define('MainPanel/Auto/Method/Params', function (require, module, exports) {
                     'name': item.name,
                     'type': item.type,
                     'defaultValue': item.defaultValue,
-                    'desc': $.String.escapeHtml(item.desc),
+                    'desc': Highlight.get(item.desc), //$.String.escapeHtml(item.desc),
 
                 });
 
             }).join(''),
 
         });
+
+        show();
+    }
+
+    function show() {
+        $(panel).show();
+    }
+
+    function hide() {
+        $(panel).hide();
     }
 
     return {

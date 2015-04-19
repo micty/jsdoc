@@ -53,7 +53,8 @@
 
     MainPanel.on('render', function () {
         var y = Hash.get('y');
-        setTimeout(function () { //这里需要延迟一下，不然由于DOM解析比较慢，会导致内容高度还没出来就先滚过去，结果是滚不到
+        //这里需要延迟一下，不然由于DOM解析比较慢，会导致内容高度还没出来就先滚过去，结果是滚不到
+        setTimeout(function () { 
             Scroller.to(y);
         }, 100);
 

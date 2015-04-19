@@ -26,7 +26,7 @@
         <div class="menu-group"></div>
         <ul id="ul-sidebar" class="menus">
             <!--
-            <li data-index="{index}" draggable="true">
+            <li data-index="{index}">
                 <i class="icons" ></i>
                 {text}
             </li>
@@ -94,7 +94,7 @@
                                             <a href="javascript:" data-index="{index}">{name}</a>
                                         </td>
                                         <td class="desc">
-                                            {desc}
+                                            <pre class="hljs">{desc}</pre>
                                         </td>
                                     </tr>
                                     #--tr.end--#
@@ -162,7 +162,7 @@
                     
                     
                     
-                    <div class="panel">
+                    <div id="panel-method-params" class="panel">
                         <div class="header">
                             参数列表
                         </div>
@@ -183,7 +183,7 @@
                                         <td class="name"><code>{name}</code></td>
                                         <td class="type">{type}</td>
                                         <td class="default">{defaultValue}</td>
-                                        <td class="desc">{desc}</td>
+                                        <td class="desc"><pre class="hljs">{desc}</pre></td>
                                     </tr>
                                     #--tr.end--#
                                 </tbody>
@@ -194,7 +194,7 @@
                     </div>
                     
                     
-                    <div class="panel">
+                    <div id="panel-method-returns" class="panel">
                         <div class="header">
                             返回值
                         </div>
@@ -369,6 +369,7 @@
     <!--grunt.js.begin-->
     <script src="config.js"></script>
 
+    <script src="lib/Highlight.js"></script>
     <script src="lib/Tabs.js"></script>
     <script src="lib/Template.js"></script>
 

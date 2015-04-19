@@ -134,12 +134,19 @@
 }
 .panel .content table {
   width: 100%;
+  font-family: 'Fixedsys Excelsior 3.01' Fixedsys;
 }
 .panel .content table th,
 .panel .content table td {
   border: 1px solid #dddddd;
   padding: 5px 5px;
   text-align: left;
+}
+.panel .content table.params .name code {
+  padding: 3px 4px 3px 4px;
+  color: #c7254e;
+  background-color: #f9f2f4;
+  font-family: 'Fixedsys Excelsior 3.01' Fixedsys;
 }
 .panel .content table.params .type {
   width: 10%;
@@ -151,4 +158,8 @@
 }
 .panel .content table.params .desc {
   width: 70%;
+}
+.panel .content table.params .desc pre {
+  margin-left: 0px;
+  background: none;
 }
