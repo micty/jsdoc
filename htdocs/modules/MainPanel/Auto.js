@@ -15,15 +15,37 @@ define('MainPanel/Auto', function (require, module, exports) {
     var view = document.getElementById('view-Auto');
     var hasBind = false;
 
-    function render(name) {
+    function render(name, view) {
+
+        bindEvents();
 
         Data.load(function (json) {
-
+       
             var data = json[name];
-            Overview.render(data);
+
+            if (view) {
+                var type = view.type;
+                if (type == 'source') {
+                    var fileName = data.srcFileName;
+                    Source.render(fileName);
+                    emitter.fire('view', 'source', [name]);
+                }
+                else if (type == 'method') {
+                    var item = $.Array.findItem(data.methods, function (item, index) {
+                        return item.name == view.name;
+                    });
+
+                    Method.render(item);
+                    emitter.fire('view', 'method', [item.name]);
+                }
+            }
+            else {
+                Overview.render(data);
+                emitter.fire('render');
+
+            }
 
             show();
-            bindEvents();
 
         });
     }
@@ -43,15 +65,18 @@ define('MainPanel/Auto', function (require, module, exports) {
             return;
         }
 
-        Overview.on('click', 'method', function (item, index) {
-            Method.render(item);
-            emitter.fire('click', 'method');
-        });
 
-        Overview.on('click', 'source', function (name, fileName) {
-            Source.render(fileName);
-            emitter.fire('click', 'source');
+        Overview.on('click', {
+            'method': function (item, index) {
+                Method.render(item);
+                emitter.fire('view', 'method', [item.name]);
+            },
 
+            'source': function (name, fileName) {
+                Source.render(fileName);
+                emitter.fire('view', 'source', [name]);
+
+            }
         });
 
         Method.on({
@@ -77,6 +102,16 @@ define('MainPanel/Auto', function (require, module, exports) {
                 Method.hide();
             },
             'hide': function () { },
+        });
+
+        Source.on('render', function () {
+            emitter.fire('render');
+
+        });
+
+        Method.on('render', function () {
+            emitter.fire('render');
+
         });
 
 

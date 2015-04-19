@@ -82,7 +82,7 @@ define('Sidebar', function (require, module, exports) {
                     var item = list[index];
                     var oldItem = list[oldIndex];
 
-                    emitter.fire('active', [item, oldItem]);
+                    emitter.fire('active', [item, oldItem, true]);
                 }
             });
 

@@ -47,6 +47,8 @@ define('MainPanel/Auto/Source', function (require, module, exports) {
 
             show();
 
+            emitter.fire('render');
+
         });
         
         bindEvents();

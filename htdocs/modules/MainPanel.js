@@ -19,7 +19,10 @@ define('MainPanel', function (require, module, exports) {
 
 
 
-    function render(item) {
+    function render(item, view) {
+
+
+        bindEvents();
 
         var name = item.name;
         if (name) {
@@ -31,14 +34,14 @@ define('MainPanel', function (require, module, exports) {
 
         var alias = item.alias;
         if (alias) {
-            Auto.render(alias);
+            Auto.render(alias, view);
         }
         else {
             Auto.hide();
         }
 
 
-        bindEvents();
+        
 
     }
 
@@ -53,12 +56,22 @@ define('MainPanel', function (require, module, exports) {
             emitter.fire('render');
         });
 
-        Auto.on('click', 'source', function () {
-            Manual.hide();
+        Auto.on('render', function () {
+            //debugger;
+            emitter.fire('render');
         });
 
-        Auto.on('click', 'method', function () {
-            Manual.hide();
+
+        Auto.on('view', {
+            'source': function (name) {
+                Manual.hide();
+                emitter.fire('view', ['source', name]);
+            },
+            'method': function (name) {
+                Manual.hide();
+                emitter.fire('view', ['method', name]);
+
+            },
         });
 
         hasBind = true;

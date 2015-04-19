@@ -23,6 +23,8 @@ define('MainPanel/Auto/Method', function (require, module, exports) {
 
         show();
 
+        emitter.fire('render');
+
     }
 
     function show() {

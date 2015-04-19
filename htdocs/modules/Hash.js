@@ -35,6 +35,16 @@ define('Hash', function (require, module, exports) {
         
     }
 
+    function remove(key) {
+        var hash = Url.getHash(window);
+        if (!hash || !(key in hash)) {
+            return;
+        }
+
+        delete hash[key];
+        Url.setHash(window, hash);
+    }
+
 
     Url.hashchange(window, function (hash, old) {
         emitter.fire('change', [hash, old]);
@@ -45,6 +55,7 @@ define('Hash', function (require, module, exports) {
     return {
         get: get,
         set: set,
+        remove: remove,
         on: emitter.on.bind(emitter),
     };
 
