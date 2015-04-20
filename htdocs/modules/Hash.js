@@ -46,17 +46,38 @@ define('Hash', function (require, module, exports) {
     }
 
 
-    Url.hashchange(window, function (hash, old) {
-        emitter.fire('change', [hash, old]);
-    });
+    
+    var hasBind = false;
 
+    function bindEvents() {
+        if (hasBind) {
+            return;
+        }
 
+        hasBind = true;
+
+        Url.hashchange(window, function (hash, old) {
+            hash = $.Object.parseQueryString(hash);
+            old = $.Object.parseQueryString(old);
+            emitter.fire('change', [hash, old]);
+
+        }, true);
+
+    }
 
     return {
         get: get,
         set: set,
         remove: remove,
-        on: emitter.on.bind(emitter),
+
+        on: function () { //首次调用即绑定
+
+            var args = [].slice.call(arguments, 0);
+            emitter.on.apply(emitter, args);
+
+            bindEvents();
+
+        },
     };
 
 });

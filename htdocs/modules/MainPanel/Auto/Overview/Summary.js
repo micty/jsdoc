@@ -9,6 +9,7 @@ define('MainPanel/Auto/Overview/Summary', function (require, module, exports) {
 
     var emitter = new Emitter();
     var div = document.getElementById('div-' + module.id + '-content');
+  
     var hasBind = false;
 
     var current = {};
@@ -38,6 +39,7 @@ define('MainPanel/Auto/Overview/Summary', function (require, module, exports) {
         };
 
         Template.fill(div, current);
+
 
         bindEvents();
     }

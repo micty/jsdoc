@@ -16,8 +16,9 @@
 </head>
 <body>
 
+    <div>
     <!-- partial/Sidebar.html -->
-    <div class="side-bar">
+    <nav class="side-bar">
         <div id="div-sidebar-title" class="banner">
             <!--
             <span class="title">{title}</span> {type}
@@ -26,13 +27,13 @@
         <div class="menu-group"></div>
         <ul id="ul-sidebar" class="menus">
             <!--
-            <li data-index="{index}">
+            <li class="leave" data-index="{index}">
                 <i class="icons" ></i>
-                {text}
+                <span>{text}</span>
             </li>
             -->
         </ul>
-    </div>
+    </nav>
     <!-- partial/MainPanel.html -->
     <div class="main">
         <div class="header">
@@ -53,13 +54,13 @@
                     
                     <div class="panel">
                         <div class="header">
-                            概述
+                            <span>概述</span>
                         </div>
                         <div id="div-MainPanel/Auto/Overview/Summary-content" class="content">
                         <!--
                             <h2>{name} {typeDesc}</h2>
                             <p class="definedInFile">
-                    			定义在：<a data-cmd="source" href="javascript:">{srcFileName}</a>
+                    			定义在：<a data-cmd="source" href="javascript:" title="点击查看源代码">{srcFileName}</a>
                             </p>
                             <p class="summary">{desc}</p>
                         -->
@@ -68,7 +69,9 @@
                     <!-- partial/MainPanel/Auto/Overview/MethodList.html -->
                     
                     <div id="panel-method-list" class="panel">
-                        <div class="header">方法列表</div>
+                        <div class="header">
+                            <span>方法列表</span>
+                        </div>
                         <div id="div-method-list" class="content">
                         <!--
                             <table class="list">
@@ -108,7 +111,9 @@
                     <!-- partial/MainPanel/Auto/Overview/PropertyList.html -->
                     
                     <div id="panel-property-list" class="panel">
-                        <div class="header">属性列表</div>
+                        <div class="header">
+                            <span>属性列表</span>
+                        </div>
                         <div id="div-property-list" class="content">
                         <!--
                             <table class="list">
@@ -150,9 +155,12 @@
                         <div class="header">
                             方法概述
                         </div>
-                        <div id="div-method-summary" class="content">
+                        <div id="div-method-summary" class="content method-summary">
                         <!--
                             <h2>{memberOf}.{name} {typeDesc}方法</h2>
+                            <blockquote class="syntax">
+                                <span class="hljs-built_in">{memberOf}</span><span class="symbol">.</span><span class="name">{name}</span><span class="params"><span class="symbol">(</span>#--param.begin--#{name}<span class="symbol">,</span> #--param.end--#<span class="symbol">)</span></span></span>
+                            </blockquote>
                             <p class="summary">
                                 {desc}
                             </p>
@@ -173,6 +181,7 @@
                                     <tr>
                                         <th>名称</th>
                                         <th>类型</th>
+                                        <th>必选</th>
                                         <th>默认值</th>
                                         <th>描述</th>
                                     </tr>
@@ -182,8 +191,9 @@
                                     <tr>
                                         <td class="name"><code>{name}</code></td>
                                         <td class="type">{type}</td>
+                                        <td class="optional">{optional}</td>
                                         <td class="default">{defaultValue}</td>
-                                        <td class="desc"><pre class="hljs">{desc}</pre></td>
+                                        <td class="desc "hljs">{desc}</td>
                                     </tr>
                                     #--tr.end--#
                                 </tbody>
@@ -251,11 +261,12 @@
                 <!-- partial/MainPanel/Auto/Source.html -->
                 
                 <div  id="view-Source" style="display: none;">
-                    源文件 src/api/API.js
-                
                     <div class="panel">
-                        <div class="header">
-                            源代码
+                        <div id="div-source-header" class="header source">
+                        <!--
+                            <span>源代码</span>
+                            <a href="data/source/{href}" target="_blank">打开</a>
+                         -->
                         </div>
                         <div class="content demo">
                             <!-- partial/MainPanel/Auto/Source/Lines.html -->
@@ -283,11 +294,10 @@
                 <!-- partial/MainPanel/Manual/Readme.html -->
                 
                 <div id="div-readme" class="panel">
-                    <div id="div-readme-header" class="header">
+                    <div id="div-readme-header" class="header readme">
                         <!--
-                        <a href="data/demo/{name}/readme.md" target="_blank">
-                            readme.md
-                        </a>
+                        <span>readme.md</span>
+                        <a class="" href="data/demo/{name}/readme.md" target="_blank">打开</a>
                         -->
                     </div>
                     <div id="div-readme-content" class="content markdown">
@@ -297,8 +307,10 @@
                 
                 <!-- partial/MainPanel/Manual/Demos.html -->
                 
-                <div class="panel">
-                    <div class="header">示例</div>
+                <div id="panel-demos" class="panel">
+                    <div class="header">
+                        <span>示例</span>
+                    </div>
                     <div class="content">
                         <ul id="ul-demos" class="demos">
                             <!--
@@ -353,15 +365,15 @@
         </div>
     </div>
     
+    </div>
 
 
 
-
-    <script src='test/jquery-1.10.2.min.js'></script>
+    <!--<script src='test/jquery-1.10.2.min.js'></script>
 	<script src='test/jquery.ztree.all-3.5.min.js'></script>
-	<script src='test/jquery.ztree_toc.min.js'></script>
+	<script src='test/jquery.ztree_toc.min.js'></script>-->
 
-    <!--<script src="f/jquery/jquery-1.11.1.debug.js"></script>-->
+    <script src="f/jquery/jquery-1.11.1.debug.js"></script>
     <script src="f/miniquery/miniquery.debug.js"></script>
     <script src="f/highlight/highlight.debug.js"></script>
     <script src="f/marked/marked.mod.debug.js"></script>
@@ -374,6 +386,7 @@
     <script src="lib/Template.js"></script>
 
     <script src="data/classes.js"></script>
+    <script src="data/sidebar.js"></script>
 
     <script src="modules/Hash.js"></script>
     <script src="modules/Scroller.js"></script>
@@ -394,6 +407,7 @@
 
     <script src="modules/MainPanel/Auto/Source/Code.js"></script>
     <script src="modules/MainPanel/Auto/Source/Data.js"></script>
+    <script src="modules/MainPanel/Auto/Source/Header.js"></script>
     <script src="modules/MainPanel/Auto/Source/Lines.js"></script>
     <script src="modules/MainPanel/Auto/Source.js"></script>
 

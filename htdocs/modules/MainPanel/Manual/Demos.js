@@ -7,7 +7,7 @@ define('MainPanel/Manual/Demos', function (require, module, exports) {
     var Tabs = require(module, 'Tabs');
     var Panels = require(module, 'Panels');
 
-
+    var panel = document.getElementById('panel-demos');
     var ul = document.getElementById('ul-demos');
     var samples = $.String.getTemplates(ul.innerHTML, [
         {
@@ -41,8 +41,14 @@ define('MainPanel/Manual/Demos', function (require, module, exports) {
 
 
     function render(data) {
+        
+        list = data || [];
 
-        list = data;
+        if (list.length == 0) {
+            hide();
+            return;
+        }
+
 
         var tabsList = [];
         var panelsList = [];
@@ -101,6 +107,8 @@ define('MainPanel/Manual/Demos', function (require, module, exports) {
 
         }).join('');
 
+        show();
+
 
         $.Array.each(tabsList, function (item, index) {
             item.bindEvents();
@@ -114,6 +122,14 @@ define('MainPanel/Manual/Demos', function (require, module, exports) {
             }
         });
 
+    }
+
+    function show() {
+        $(panel).show();
+    }
+
+    function hide() {
+        $(panel).hide();
     }
 
 

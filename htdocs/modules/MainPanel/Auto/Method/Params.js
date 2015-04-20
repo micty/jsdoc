@@ -43,8 +43,11 @@ define('MainPanel/Auto/Method/Params', function (require, module, exports) {
                 return $.String.format(samples['tr'], {
                     'name': item.name,
                     'type': item.type,
+                    'optional': item.isOptional ? '' : '是', //这里用相反的描述
                     'defaultValue': item.defaultValue,
-                    'desc': Highlight.get(item.desc), //$.String.escapeHtml(item.desc),
+                    //'desc': $.String.escapeHtml(item.desc),
+                    //'desc': Highlight.get(item.desc),
+                    'desc': Highlight.get(item.desc),
 
                 });
 

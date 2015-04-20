@@ -38,10 +38,13 @@ define('Sidebar', function (require, module, exports) {
 
         tabs.active(index);
 
-        emitter.fire('active', [item, oldItem]);
+        //emitter.fire('active', [item, oldItem]);
     }
 
-
+    function get(id) {
+        var item = id$item[id];
+        return item;
+    }
 
 
     function render() {
@@ -77,12 +80,12 @@ define('Sidebar', function (require, module, exports) {
                 indexKey: 'data-index',
                 current: null,
                 event: 'click',
-                activedClass: 'hover',
+                activedClass: 'on',
                 change: function (index, oldIndex) { //这里的，如果当前项是高亮，再次进入时不会触发
                     var item = list[index];
                     var oldItem = list[oldIndex];
 
-                    emitter.fire('active', [item, oldItem, true]);
+                    emitter.fire('active', [item, oldItem]);
                 }
             });
 
@@ -99,6 +102,7 @@ define('Sidebar', function (require, module, exports) {
     return {
         render: render,
         active: active,
+        get: get,
         on: emitter.on.bind(emitter),
     };
 

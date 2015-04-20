@@ -25,6 +25,54 @@
                 text-decoration: none;
             }
         }
+
+        &:before {
+            content: '';
+            background: url(img/collapse0.bmp) no-repeat left 5px;
+            width: 14px;
+            display: inline-block;
+            height: 14px;
+            cursor: pointer;
+        }
+
+        &.off {
+            border-bottom: 1px solid #dddddd;
+            -moz-border-radius: 3px;
+            -webkit-border-radius: 3px;
+            border-radius: 3px;
+            color: #8B9EDE;
+
+            &:before {
+                background: url(img/collapse1.bmp) no-repeat left 5px;
+            }
+        }
+
+        span {
+            cursor: pointer;
+            padding: 12px 20px 7px 25px;
+            margin-left: -26px;
+            /*background: rgba(155, 172, 215, 0.29);*/
+        }
+
+        &.source {
+            a {
+                float: right;
+                margin-right: 10px;
+                text-decoration: underline;
+                /* font-weight: normal; */
+                color: #596CD2;
+            }
+        }
+
+        &.readme {
+            a {
+                float: right;
+                margin-right: 10px;
+                text-decoration: underline;
+                /* font-weight: normal; */
+                color: #596CD2;
+            }
+        }
     }
 
 
@@ -38,6 +86,28 @@
         -webkit-border-bottom-left-radius: 3px;
         border-bottom-left-radius: 3px;
         padding: 15px 15px;
+
+        &.method-summary {
+            .syntax {
+                font-size: 1.15em;
+            }
+
+            .symbol {
+                color: #AB0080;
+                margin: auto 2px;
+            }
+
+            .params {
+                font-style: italic;
+                color: rgb(206, 50, 222);
+            }
+
+            .name {
+                font-weight: bold;
+            }
+        }
+
+
 
         &.markdown ul {
             list-style: disc;
@@ -54,9 +124,9 @@
 
         .definedInFile {
             position: absolute;
-            right: 50px;
+            right: 17px;
             top: 140px;
-            font-size: 0.8em;
+            font-size: 0.85em;
             color: gray;
         }
 
@@ -174,7 +244,6 @@
                         color: #c7254e;
                         background-color: #f9f2f4;
                         font-family: 'Fixedsys Excelsior 3.01' Fixedsys;
-
                     }
                 }
 
@@ -189,14 +258,17 @@
                 }
 
                 .desc {
-                    width: 70%;
+                    width: 65%;
 
                     pre {
                         margin-left: 0px;
                         background: none;
-
                     }
                 }
+            }
+
+            code {
+                padding: 3px 4px 3px 4px;
             }
         }
     }

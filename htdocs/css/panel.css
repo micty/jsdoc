@@ -23,6 +23,44 @@
 .panel .header a:hover {
   text-decoration: none;
 }
+.panel .header:before {
+  content: '';
+  background: url(img/collapse0.bmp) no-repeat left 5px;
+  width: 14px;
+  display: inline-block;
+  height: 14px;
+  cursor: pointer;
+}
+.panel .header.off {
+  border-bottom: 1px solid #dddddd;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
+  color: #8B9EDE;
+}
+.panel .header.off:before {
+  background: url(img/collapse1.bmp) no-repeat left 5px;
+}
+.panel .header span {
+  cursor: pointer;
+  padding: 12px 20px 7px 25px;
+  margin-left: -26px;
+  /*background: rgba(155, 172, 215, 0.29);*/
+}
+.panel .header.source a {
+  float: right;
+  margin-right: 10px;
+  text-decoration: underline;
+  /* font-weight: normal; */
+  color: #596CD2;
+}
+.panel .header.readme a {
+  float: right;
+  margin-right: 10px;
+  text-decoration: underline;
+  /* font-weight: normal; */
+  color: #596CD2;
+}
 .panel .content {
   font: 16px/1.6 "Helvetica Neue", Helvetica, "Segoe UI", Arial, freesans, sans-serif;
   color: #333333;
@@ -33,6 +71,20 @@
   -webkit-border-bottom-left-radius: 3px;
   border-bottom-left-radius: 3px;
   padding: 15px 15px;
+}
+.panel .content.method-summary .syntax {
+  font-size: 1.15em;
+}
+.panel .content.method-summary .symbol {
+  color: #AB0080;
+  margin: auto 2px;
+}
+.panel .content.method-summary .params {
+  font-style: italic;
+  color: #ce32de;
+}
+.panel .content.method-summary .name {
+  font-weight: bold;
 }
 .panel .content.markdown ul {
   list-style: disc;
@@ -46,13 +98,13 @@
 }
 .panel .content .definedInFile {
   position: absolute;
-  right: 50px;
+  right: 17px;
   top: 140px;
-  font-size: 0.8em;
+  font-size: 0.85em;
   color: gray;
 }
 .panel .content .summary {
-  font-family: "΢���ź�";
+  font-family: "微软雅黑";
   font-size: 1.1em;
 }
 .panel .content h2,
@@ -102,7 +154,7 @@
 .panel .content p,
 .panel .content ul {
   margin-top: 0;
-  margin-bottom: 16px;
+  /*margin-bottom: 16px;*/
 }
 .panel .content a {
   color: #4183c4;
@@ -112,7 +164,7 @@
   text-decoration: underline;
 }
 .panel .content code {
-  padding: 3px 4px;
+  padding: 3px 4px 21px 4px;
   color: #c7254e;
   background-color: #f9f2f4;
   font-family: 'Fixedsys Excelsior 3.01' Fixedsys;
@@ -134,12 +186,19 @@
 }
 .panel .content table {
   width: 100%;
+  font-family: 'Fixedsys Excelsior 3.01' Fixedsys;
 }
 .panel .content table th,
 .panel .content table td {
   border: 1px solid #dddddd;
   padding: 5px 5px;
   text-align: left;
+}
+.panel .content table.params .name code {
+  padding: 3px 4px 3px 4px;
+  color: #c7254e;
+  background-color: #f9f2f4;
+  font-family: 'Fixedsys Excelsior 3.01' Fixedsys;
 }
 .panel .content table.params .type {
   width: 10%;
@@ -150,5 +209,12 @@
   width: 10%;
 }
 .panel .content table.params .desc {
-  width: 70%;
+  width: 65%;
+}
+.panel .content table.params .desc pre {
+  margin-left: 0px;
+  background: none;
+}
+.panel .content table code {
+  padding: 3px 4px 3px 4px;
 }

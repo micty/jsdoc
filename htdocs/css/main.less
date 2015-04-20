@@ -2,14 +2,16 @@
 
 
 .main {
-    margin-left: 170px;
+
+    float: right;
+    width: 85%;
 
 
     > .header {
         line-height: 55px;
 
         .search-box {
-            margin-left: 35px;
+            /*margin-left: 35px;*/
             border-bottom: 1px solid #d9dcdf;
             height: 43px;
             display: inline-block;
@@ -22,17 +24,18 @@
             }
 
             > input {
-                color: #929da7;
+                color: #000;
                 line-height: 30px;
                 font-family: italic;
                 width: 170px;
                 border: none;
-                border-bottom: 1px solid #d9dcdf;
+                /*border-bottom: 1px solid #d9dcdf;*/
                 outline: none;
-        
+                font-weight: bold;
 
                 &::-webkit-input-placeholder {
                     color: #b6babd;
+                    font-weight: normal;
                 }
             }
 
@@ -41,8 +44,7 @@
 
 
     .container {
-        width: auto;
-        padding: 0px 32px 0 32px;
+        
     }
 
 

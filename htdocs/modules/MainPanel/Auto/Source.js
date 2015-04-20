@@ -8,6 +8,7 @@ define('MainPanel/Auto/Source', function (require, module, exports) {
 
     var Code = require(module, 'Code');
     var Data = require(module, 'Data');
+    var Header = require(module, 'Header');
     var Lines = require(module, 'Lines');
 
     var view = document.getElementById('view-Source');
@@ -41,7 +42,7 @@ define('MainPanel/Auto/Source', function (require, module, exports) {
 
         Data.load(fileName, function (content) {
 
-
+            Header.render(fileName);
             Code.render(content);
             Lines.render(content);
 

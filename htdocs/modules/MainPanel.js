@@ -24,14 +24,6 @@ define('MainPanel', function (require, module, exports) {
 
         bindEvents();
 
-        var name = item.name;
-        if (name) {
-            Manual.render(name);
-        }
-        else {
-            Manual.hide();
-        }
-
         var alias = item.alias;
         if (alias) {
             Auto.render(alias, view);
@@ -40,6 +32,21 @@ define('MainPanel', function (require, module, exports) {
             Auto.hide();
         }
 
+        if (view) {
+            Manual.hide();
+            return;
+        }
+
+
+        var name = item.name;
+        if (name) {
+            Manual.render(name);
+        }
+        else {
+            Manual.hide();
+        }
+
+       
 
         
 
