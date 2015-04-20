@@ -107,6 +107,19 @@
             }
         }
 
+        mark {
+            width: 96%;
+            height: 16px;
+            border: solid 2px #EAEAF2;
+            display: block;
+            position: absolute;
+            top: 19px;
+            left: 19px;
+            background: none;
+            cursor: text;
+            pointer-events: none;
+            border-radius: 3px;
+        }
 
 
         &.markdown ul {
@@ -201,8 +214,6 @@
             }
         }
 
-
-
         code {
             padding: 3px 4px 21px 4px;
             color: #c7254e;
@@ -214,7 +225,7 @@
             margin: 0;
             margin-left: 30px;
             padding: 0px 5px;
-            background: #f7f7f7;
+            /*background: #f7f7f7;*/
             -moz-border-radius: 3px;
             -webkit-border-radius: 3px;
             border-radius: 3px;
@@ -224,6 +235,7 @@
             code {
                 color: #000;
                 background-color: transparent;
+                cursor: text;
             }
         }
 

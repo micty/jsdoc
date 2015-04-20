@@ -33,10 +33,10 @@
     MiniQuery.use('$');
 
 
-    delete window['$'];
-    delete window['MiniQuery'];
-    delete window['hljs'];
-    delete window['marked'];
+    //delete window['$'];
+    //delete window['MiniQuery'];
+    //delete window['hljs'];
+    //delete window['marked'];
     
 
 })(jQuery, MiniQuery, hljs, marked);

@@ -35,11 +35,11 @@
 .side-bar .menus .on {
   /*background: #EFEFEF !important;*/
   font-weight: bold;
-  border-right: solid 4px #B093E3;
+  border-right: solid 6px #6CE26C;
   background: #fff;
 }
 .side-bar .menus .on span {
-  margin-right: 5px;
+  margin-right: 6px;
 }
 .side-bar .menus li {
   line-height: 30px;

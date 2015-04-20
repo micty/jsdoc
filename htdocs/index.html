@@ -27,7 +27,7 @@
         <div class="menu-group"></div>
         <ul id="ul-sidebar" class="menus">
             <!--
-            <li class="leave" data-index="{index}">
+            <li data-index="{index}">
                 <i class="icons" ></i>
                 <span>{text}</span>
             </li>
@@ -153,7 +153,7 @@
                     <!-- partial/MainPanel/Auto/Method/Summary.html -->
                     <div class="panel">
                         <div class="header">
-                            方法概述
+                            <span>方法概述</span>
                         </div>
                         <div id="div-method-summary" class="content method-summary">
                         <!--
@@ -172,7 +172,7 @@
                     
                     <div id="panel-method-params" class="panel">
                         <div class="header">
-                            参数列表
+                            <span>参数列表</span>
                         </div>
                         <div id="div-method-params" class="content">
                         <!--
@@ -206,7 +206,7 @@
                     
                     <div id="panel-method-returns" class="panel">
                         <div class="header">
-                            返回值
+                            <span>返回值</span>
                         </div>
                         <div id="div-method-returns" class="content">
                         <!--
@@ -235,7 +235,7 @@
                     <!-- partial/MainPanel/Auto/Method/Example.html -->
 <div id="panel-method-example" class="panel">
     <div class="header">
-        示例代码
+        <span>示例代码</span>
     </div>
     <div class="content demo">
         <ul id="ul-method-example-lines" class="row-panel">
@@ -269,6 +269,7 @@
                          -->
                         </div>
                         <div class="content demo">
+                            <mark id="mark-line"></mark>
                             <!-- partial/MainPanel/Auto/Source/Lines.html -->
                             
                             <ul id="ul-source-lines" class="row-panel">

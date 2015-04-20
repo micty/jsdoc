@@ -24,6 +24,15 @@ define('MainPanel/Auto/Source/Lines', function (require, module, exports) {
             };
         });
 
+        setTimeout(function () {
+
+            $(ul).find('li').each(function (index) {
+                var li = this;
+                var p = $(li).position();
+                console.log(index, p.top, p.top == index * 20 +4);
+            });;
+        }, 1500);
+
     }
 
 

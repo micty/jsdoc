@@ -86,6 +86,19 @@
 .panel .content.method-summary .name {
   font-weight: bold;
 }
+.panel .content mark {
+  width: 96%;
+  height: 16px;
+  border: solid 2px #EAEAF2;
+  display: block;
+  position: absolute;
+  top: 19px;
+  left: 19px;
+  background: none;
+  cursor: text;
+  pointer-events: none;
+  border-radius: 3px;
+}
 .panel .content.markdown ul {
   list-style: disc;
   padding-left: 32px;
@@ -173,7 +186,7 @@
   margin: 0;
   margin-left: 30px;
   padding: 0px 5px;
-  background: #f7f7f7;
+  /*background: #f7f7f7;*/
   -moz-border-radius: 3px;
   -webkit-border-radius: 3px;
   border-radius: 3px;
@@ -183,6 +196,7 @@
 .panel .content pre code {
   color: #000;
   background-color: transparent;
+  cursor: text;
 }
 .panel .content table {
   width: 100%;
