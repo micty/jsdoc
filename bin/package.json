@@ -29,6 +29,7 @@
         "build": "../build/",
         "htdocs": "../htdocs/",
         "css": "../htdocs/css/",
+        "style": "../htdocs/style/",
         "lib": "../htdocs/lib/",
         "html": "../htdocs/html/",
         "demo": "../demo/",

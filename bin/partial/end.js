@@ -20,8 +20,6 @@
     setTimeout,
     setInterval,
 
-    KISP,
-
     Array, 
     Boolean,
     Date,

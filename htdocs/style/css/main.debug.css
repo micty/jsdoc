@@ -1,0 +1,33 @@
+.main {
+  float: right;
+  width: 85%;
+}
+.main > .header {
+  line-height: 55px;
+}
+.main > .header .search-box {
+  /*margin-left: 35px;*/
+  border-bottom: 1px solid #d9dcdf;
+  height: 43px;
+  display: inline-block;
+}
+.main > .header .search-box .icon-search {
+  height: 15px;
+  padding-left: 17px;
+  display: inline-block;
+  background: url(../img/icons.png) no-repeat 0px -53px;
+}
+.main > .header .search-box > input {
+  color: #000;
+  line-height: 30px;
+  font-family: italic;
+  width: 170px;
+  border: none;
+  /*border-bottom: 1px solid #d9dcdf;*/
+  outline: none;
+  font-weight: bold;
+}
+.main > .header .search-box > input::-webkit-input-placeholder {
+  color: #b6babd;
+  font-weight: normal;
+}

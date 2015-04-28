@@ -1,11 +1,11 @@
 ﻿
-/**
-* 监控 htdocs/css/ 目录下的所有 less 文件。
-* 当发生变化了，执行编译操作。
-*/
+
 module.exports = function (grunt, Tasks) {
 
+    var Path = require('path');
+
     var list = []; //该属性值会由代码动态修改
+
 
     //找出被修改的 less 文件的最小集合
     grunt.event.on('watch', function (action, file) {
@@ -14,6 +14,7 @@ module.exports = function (grunt, Tasks) {
         if (s != ext) { //只处理指定后缀名的文件
             return;
         }
+        console.log(file);
         list.push(file);
     });
 
@@ -25,6 +26,18 @@ module.exports = function (grunt, Tasks) {
         expand: true,
         ext: '.debug.css',
         src: list,
+
+        //生成 .css 到 /css/ 目录
+        rename: function (src, dest) {
+            var basename = Path.basename(dest);
+
+            //取到父目录
+            dest = Path.dirname(dest);
+            dest = Path.dirname(dest);
+
+            return Path.join(dest, 'css', basename);
+
+        },
     });
 
     Tasks.add('less', 'watch-min', {
@@ -33,7 +46,19 @@ module.exports = function (grunt, Tasks) {
         },
         expand: true,
         ext: '.min.css',
-        src: list,
+        src: list, //这里引用了 list 的指针
+
+        //生成 .css 到 /css/ 目录
+        rename: function (src, dest) {
+            var basename = Path.basename(dest);
+
+            //取到父目录
+            dest = Path.dirname(dest);
+            dest = Path.dirname(dest);
+
+            return Path.join(dest, 'css', basename);
+
+        },
     });
 
     //执行清理操作
@@ -45,6 +70,8 @@ module.exports = function (grunt, Tasks) {
     Tasks.add('watch', 'less', {
         files: [
             '<%=dir.css%>/**/*.less',
+            '<%=dir.style%>/**/*.less',
+            '<%=dir.refactor%>/**/*.less',
         ],
         tasks: [
             'less:watch-debug',

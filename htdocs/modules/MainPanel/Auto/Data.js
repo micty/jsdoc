@@ -29,19 +29,6 @@ define('MainPanel/Auto/Data', function (require, module, exports) {
             return;
         }
 
-
-        Script.load({
-            url: [
-                'data/classes.js',
-            ],
-
-            onload: function () {
-                var list = window[key];
-                json = Helper.normalize(list);
-                fn && fn(json);
-            }
-        });
-
     }
 
 

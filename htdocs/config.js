@@ -2,6 +2,7 @@
 
 ; (function ($, MiniQuery, hljs, marked) {
  
+    /**grunt.debug.begin*/
 
     var Module = MiniQuery.require('Module');
     var define = Module.define;
@@ -37,7 +38,9 @@
     //delete window['MiniQuery'];
     //delete window['hljs'];
     //delete window['marked'];
-    
+
+    /**grunt.debug.end*/
+
 
 })(jQuery, MiniQuery, hljs, marked);
 

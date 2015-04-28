@@ -12,8 +12,8 @@ module.exports = (function (grunt, $) {
 
     var between = $.String.between;
 
-    var beginTag = '<!--grunt.js.modules.begin-->';
-    var endTag = '<!--grunt.js.modules.end-->';
+    var beginTag = '<!--grunt.js.begin-->';
+    var endTag = '<!--grunt.js.end-->';
 
 
     /**
@@ -48,11 +48,19 @@ module.exports = (function (grunt, $) {
             var src = a[0];
             src = src.replace(/^src\s*=\s*["']/, '').replace(/["']$/gi, '');
 
-            var ext = Path.extname(src); //后缀里可能包含查询字符串
-            src = src.slice(0, 0 - ext.length);
-            return src + '.js';
+            if (src.indexOf('?') > 0) { //处理文件名中带有查询字符串的
+                src = src.split('?')[0];
+            }
+
+            if (src.indexOf('#') > 0) { //处理文件名中带有 hash 的
+                src = src.split('#')[0];
+            }
+
+            return src;
 
         });
+
+        //console.dir(list);
 
 
         return list;
@@ -76,7 +84,7 @@ module.exports = (function (grunt, $) {
 
     //把 html 页面中 <!--grunt.js.begin--> 和 <!--grunt.js.end--> 
     //之间的 <script> 标签替换成一个合并/压缩后的引用
-    function concat(html, src) {
+    function apply(html, src) {
         var script = '<script src="' + src + '"></script>';
         html = $.String.replaceBetween(html, beginTag, endTag, script);
 
@@ -117,7 +125,7 @@ module.exports = (function (grunt, $) {
 
     return {
         read: read,
-        concat: concat,
+        apply: apply,
         minify: minify
     };
     

@@ -30,15 +30,7 @@ define('MainPanel/Auto/Data/Helper', function (require, module, exports) {
 
         $.Array.each(list, function (item, index) {
 
-            var srcFile = item.srcFile.split('\\');
 
-            var paths = $.Array.map(srcFile, function (item, index) {
-                if (item == '..') {
-                    return null;
-                }
-
-                return item;
-            });
 
 
             //先整体排序
@@ -88,7 +80,7 @@ define('MainPanel/Auto/Data/Helper', function (require, module, exports) {
                 }),
 
                 'isClass': isClass,
-                'srcFileName': paths.slice(1).join('/'),
+                'srcFileName': item.srcFile,
                 'typeDesc': typeDesc,
             });
 

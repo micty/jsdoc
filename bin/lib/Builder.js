@@ -147,6 +147,7 @@ module.exports = (function () {
             Tasks.run('concat', target, config);
         },
 
+        
         /**
         * 精简 js 文件。
         */
@@ -181,6 +182,71 @@ module.exports = (function () {
 
         },
 
+
+        /**
+        * 合并 css
+        */
+        concatCss: function (useMin) {
+
+            var meta = mapper.get(this);
+
+            var list = CssLinks.read(meta.src.fullname); //从 html 文件中分析出 css 引用
+            if (list.length == 0) { //没有需要合并的文件
+                return;
+            }
+
+
+            var ext = useMin ? '.all.min.css' : '.all.debug.css';
+            var dest = meta.dest.dir + 'style/css/' + meta.dest.basename + ext;
+
+            //增加元数据
+            meta.concatCss = {
+                'dest': dest,
+                'filename': 'style/css/' + meta.dest.basename + ext,
+            };
+
+
+
+            list = LinearPath.linearize({
+                dir: meta.src.dir,
+                files: list
+            });
+
+
+            if (useMin) {
+                list = $.Array.keep(list, function (item, index) {
+                    return item.replace('.debug.css', '.min.css');
+                });
+            }
+
+            var config = {
+                src: list,
+                dest: dest,
+                options: {
+                    //process: function (content, path) {
+                    //    path = getRelaivePath(path);
+                    //    return '\n/* ' + path + '*/\n' + content;
+                    //}
+                }
+            };
+
+            //输出文件 x.all.debug.css
+            var target = $.String.random();
+            Tasks.run('concat', target, config);
+
+        },
+
+
+        /**
+        * 精简 css 文件。
+        */
+        uglifyCss: function () {
+            var meta = mapper.get(this);
+
+            this.concatCss(true);
+
+        },
+
         /**
         * 复制 html 页面，并对 css 和 js 的引用作版本和路径的修正。
         */
@@ -195,12 +261,16 @@ module.exports = (function () {
                     process: function (html) {
                         var level = meta.level;
 
+                        if (meta.concatCss) { //把 css 分文件替换成合并后的  css 文件引用
+                            html = CssLinks.apply(html, meta.concatCss.filename);
+                        }
+
                         if (level >= 2) { //把所有 css 文件引用的 debug 版换成 min 版
                             html = CssLinks.minify(html, '.debug.css', '.min.css');
                         }
 
                         if (meta.concat) { //把 js 分文件替换成合并后的  js 文件引用
-                            html = JsScripts.concat(html, meta.concat.filename);
+                            html = JsScripts.apply(html, meta.concat.filename);
                         }
 
                         if (level >= 2) { //把所有 js 文件引用的 debug 版换成 min 版
@@ -269,6 +339,14 @@ module.exports = (function () {
         build: function () {
             var meta = mapper.get(this);
             var level = meta.level;
+
+
+            if (level >= 3) {
+                this.uglifyCss();
+            }
+            else {
+                this.concatCss();
+            }
 
             this.concat();
             this.uglify();

@@ -123,7 +123,7 @@ module.exports = (function (grunt, $) {
                 'path': path,   //完整路径
                 'dir': Path.dirname(path), //所在目录
                 'tab': tab != 'no',
-                'comment': comment != 'no',
+                'comment': comment == 'true',
                 'pather': Pather.parse(path),
 
             };
@@ -163,7 +163,6 @@ module.exports = (function (grunt, $) {
             //为了更容易发现错误，这里使用 try-catch，并把错误消息打印出来。
             try {
                 var path = item.path;
-                console.log(item);
                 var html = grunt.file.read(path);
 
                 //产生文件路径注释
@@ -190,6 +189,9 @@ module.exports = (function (grunt, $) {
                 var beginIndex = s.indexOf(tag);
                 var endIndex = beginIndex + tag.length;
                 s = s.slice(0, beginIndex) + html + s.slice(endIndex);
+
+                s = s.split('.js"></script>').join('.js?' + $.String.random(8).toLowerCase() + '"></script>');
+
 
                 //这里不要用 replace，因为第二个参数 html 里可能含有 "$'" 符号(不包含双引号)。
                 // 如 "abc-1234".replace("abc-", "ABC$'"); 结果是: "ABC12341234"，而不是期望中的: "ABC$'1234"

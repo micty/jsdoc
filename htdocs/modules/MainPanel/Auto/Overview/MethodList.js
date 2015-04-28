@@ -46,7 +46,6 @@ define('MainPanel/Auto/Overview/MethodList', function (require, module, exports)
 
         show();
 
-        console.dir(list);
 
         div.innerHTML = $.String.format(samples['table'], {
 

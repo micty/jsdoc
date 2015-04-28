@@ -12,8 +12,6 @@
     setTimeout,
     setInterval,
 
-    KISP,
-
     Array, 
     Boolean,
     Date,
@@ -26,29 +24,33 @@
     String,
     undefined
 ) {
-    var Module = (function () {
 
-        var $ = KISP.require('$');
-        var MiniQuery = KISP.require('MiniQuery');
-        var Module = KISP.require('Module');
+    var MiniQuery = window.MiniQuery;
+    MiniQuery.use('$');
 
-        var define = Module.define;
-        var require = Module.require;
-
-        define('$', function () {
-            return $;
-        });
-        define('MiniQuery', function () {
-            return MiniQuery;
-        });
-
-        define('KISP', function () {
-            return KISP;
-        });
-
-        return Module;
-
-    })();
-
+    var Module = MiniQuery.require('Module');
     var define = Module.define;
     var require = Module.require;
+
+
+    var $ = window.$;
+    define('$', function () {
+        return $;
+    });
+
+    
+    define('MiniQuery', function () {
+        return MiniQuery;
+    });
+
+    var hljs = window.hljs;
+    define('hljs', function () {
+        return hljs;
+    });
+
+    var marked = window.marked;
+    define('marked', function () {
+        return marked;
+    });
+
+    

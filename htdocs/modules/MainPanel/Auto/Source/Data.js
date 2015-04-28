@@ -19,7 +19,7 @@ define('MainPanel/Auto/Source/Data', function (require, module, exports) {
         }
 
 
-        var path = 'data/source/' + url;
+        var path = 'data/jsdoc/' + url;
 
         //这里要作为文本去获取，因为 jQuery 会自动执行 js 代码，这不是我们想要的行为
         $.get(path, function (file) {

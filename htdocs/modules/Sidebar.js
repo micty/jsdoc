@@ -38,7 +38,6 @@ define('Sidebar', function (require, module, exports) {
 
         tabs.active(index);
 
-        //emitter.fire('active', [item, oldItem]);
     }
 
     function get(id) {

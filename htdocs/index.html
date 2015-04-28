@@ -5,19 +5,18 @@
     <title>KISP接口文档</title>
     <!--grunt.css.begin-->
     <link rel="stylesheet" href="f/highlight/highlight.debug.css" />
-    <link rel="stylesheet" href="css/sidebar.debug.css" />
-    <link rel="stylesheet" href="css/main.debug.css" />
-    <link rel="stylesheet" href="css/panel.debug.css" />
-    <link rel="stylesheet" href="css/demos.debug.css" />
-    <link rel="stylesheet" href="css/list.debug.css" />
-    <link rel="stylesheet" href="css/index.debug.css" />
+    <link rel="stylesheet" href="style/css/sidebar.debug.css" />
+    <link rel="stylesheet" href="style/css/main.debug.css" />
+    <link rel="stylesheet" href="style/css/panel.debug.css" />
+    <link rel="stylesheet" href="style/css/demos.debug.css" />
+    <link rel="stylesheet" href="style/css/list.debug.css" />
+    <link rel="stylesheet" href="style/css/index.debug.css" />
 
     <!--grunt.css.end-->
 </head>
 <body>
 
     <div>
-    <!-- partial/Sidebar.html -->
     <nav class="side-bar">
         <div id="div-sidebar-title" class="banner">
             <!--
@@ -34,7 +33,6 @@
             -->
         </ul>
     </nav>
-    <!-- partial/MainPanel.html -->
     <div class="main">
         <div class="header">
             <span class="search-box">
@@ -44,13 +42,10 @@
                 
         </div>
         <div class="container">
-            <!-- partial/MainPanel/Auto.html -->
             
             <div id="view-Auto" style="display: none;">
-                <!-- partial/MainPanel/Auto/Overview.html -->
                 
                 <div id="view-Overview" style="display: none;">
-                    <!-- partial/MainPanel/Auto/Overview/Summary.html -->
                     
                     <div class="panel">
                         <div class="header">
@@ -66,7 +61,6 @@
                         -->
                         </div>
                     </div>
-                    <!-- partial/MainPanel/Auto/Overview/MethodList.html -->
                     
                     <div id="panel-method-list" class="panel">
                         <div class="header">
@@ -86,10 +80,10 @@
                                     #--tr.begin--#
                                     <tr data-index="{index}">
                                         <td class="type">
-                                            <img src="css/img/method.bmp" alt="公共方法" title="公共方法" />
+                                            <img src="style/img/method.bmp" alt="公共方法" title="公共方法" />
                     
                                             #--icon.static.begin--#
-                                            <img src="css/img/static.bmp" alt="静态方法" title="静态方法" />
+                                            <img src="style/img/static.bmp" alt="静态方法" title="静态方法" />
                                             #--icon.static.end--#
                     
                                         </td>
@@ -108,7 +102,6 @@
                     </div>
                     
                     
-                    <!-- partial/MainPanel/Auto/Overview/PropertyList.html -->
                     
                     <div id="panel-property-list" class="panel">
                         <div class="header">
@@ -129,7 +122,7 @@
                                     #--tr.begin--#
                                     <tr data-index="{index}">
                                         <td class="type">
-                                            <img src="css/img/property.bmp" alt="公共属性" title="公共属性" />
+                                            <img src="style/img/property.bmp" alt="公共属性" title="公共属性" />
                                         </td>
                                         <td class="name">
                                             <a href="javascript:" data-index="{index}">{name}</a>
@@ -147,10 +140,8 @@
                     </div>
                 </div>
                 
-                <!-- partial/MainPanel/Auto/Method.html -->
                 
                 <div id="view-Method" style="display: none;">
-                    <!-- partial/MainPanel/Auto/Method/Summary.html -->
                     <div class="panel">
                         <div class="header">
                             <span>方法概述</span>
@@ -232,8 +223,7 @@
                         </div>
                     </div>
                     
-                    <!-- partial/MainPanel/Auto/Method/Example.html -->
-<div id="panel-method-example" class="panel">
+                    <div id="panel-method-example" class="panel">
     <div class="header">
         <span>示例代码</span>
     </div>
@@ -258,7 +248,6 @@
 
                 </div>
                 
-                <!-- partial/MainPanel/Auto/Source.html -->
                 
                 <div  id="view-Source" style="display: none;">
                     <div class="panel">
@@ -270,7 +259,6 @@
                         </div>
                         <div class="content demo">
                             <mark id="mark-line"></mark>
-                            <!-- partial/MainPanel/Auto/Source/Lines.html -->
                             
                             <ul id="ul-source-lines" class="row-panel">
                             <!--
@@ -278,8 +266,7 @@
                             -->
                             </ul>
                                     
-                            <!-- partial/MainPanel/Auto/Source/Code.html -->
-
+                            
 <pre><code id="code-source" class="hljs"></code></pre>
     
                         </div>
@@ -289,10 +276,8 @@
                 
             </div>
             
-            <!-- partial/MainPanel/Manual.html -->
             
             <div id="view-Manual" style="display: none;">
-                <!-- partial/MainPanel/Manual/Readme.html -->
                 
                 <div id="div-readme" class="panel">
                     <div id="div-readme-header" class="header readme">
@@ -306,7 +291,6 @@
                     </div>
                 </div>
                 
-                <!-- partial/MainPanel/Manual/Demos.html -->
                 
                 <div id="panel-demos" class="panel">
                     <div class="header">
@@ -370,65 +354,63 @@
 
 
 
-    <!--<script src='test/jquery-1.10.2.min.js'></script>
-	<script src='test/jquery.ztree.all-3.5.min.js'></script>
-	<script src='test/jquery.ztree_toc.min.js'></script>-->
+    <script src="f/jquery/jquery-1.11.1.debug.js?ad88d721"></script>
+    <script src="f/miniquery/miniquery.debug.js?ad88d721"></script>
+    <script src="f/highlight/highlight.debug.js?ad88d721"></script>
+    <script src="f/marked/marked.mod.debug.js?ad88d721"></script>
 
-    <script src="f/jquery/jquery-1.11.1.debug.js"></script>
-    <script src="f/miniquery/miniquery.debug.js"></script>
-    <script src="f/highlight/highlight.debug.js"></script>
-    <script src="f/marked/marked.mod.debug.js"></script>
+
+    <script src="data/sidebar.js?ad88d721"></script>
+
+    <script src="config.js?ad88d721"></script>
 
     <!--grunt.js.begin-->
-    <script src="config.js"></script>
+    <script src="lib/Highlight.js?ad88d721"></script>
+    <script src="lib/Tabs.js?ad88d721"></script>
+    <script src="lib/Template.js?ad88d721"></script>
 
-    <script src="lib/Highlight.js"></script>
-    <script src="lib/Tabs.js"></script>
-    <script src="lib/Template.js"></script>
+    
 
-    <script src="data/jsdoc/jsdoc.debug.js"></script>
-    <script src="data/sidebar.js"></script>
-
-    <script src="modules/Hash.js"></script>
-    <script src="modules/Scroller.js"></script>
-    <script src="modules/Sidebar/Data.js"></script>
-    <script src="modules/Sidebar.js"></script>
+    <script src="modules/Hash.js?ad88d721"></script>
+    <script src="modules/Scroller.js?ad88d721"></script>
+    <script src="modules/Sidebar/Data.js?ad88d721"></script>
+    <script src="modules/Sidebar.js?ad88d721"></script>
 
 
-    <script src="modules/MainPanel/Auto/Overview/Summary.js"></script>
-    <script src="modules/MainPanel/Auto/Overview/MethodList.js"></script>
-    <script src="modules/MainPanel/Auto/Overview/PropertyList.js"></script>
-    <script src="modules/MainPanel/Auto/Overview.js"></script>
+    <script src="modules/MainPanel/Auto/Overview/Summary.js?ad88d721"></script>
+    <script src="modules/MainPanel/Auto/Overview/MethodList.js?ad88d721"></script>
+    <script src="modules/MainPanel/Auto/Overview/PropertyList.js?ad88d721"></script>
+    <script src="modules/MainPanel/Auto/Overview.js?ad88d721"></script>
 
-    <script src="modules/MainPanel/Auto/Method/Summary.js"></script>
-    <script src="modules/MainPanel/Auto/Method/Params.js"></script>
-    <script src="modules/MainPanel/Auto/Method/Returns.js"></script>
-    <script src="modules/MainPanel/Auto/Method/Example.js"></script>
-    <script src="modules/MainPanel/Auto/Method.js"></script>
+    <script src="modules/MainPanel/Auto/Method/Summary.js?ad88d721"></script>
+    <script src="modules/MainPanel/Auto/Method/Params.js?ad88d721"></script>
+    <script src="modules/MainPanel/Auto/Method/Returns.js?ad88d721"></script>
+    <script src="modules/MainPanel/Auto/Method/Example.js?ad88d721"></script>
+    <script src="modules/MainPanel/Auto/Method.js?ad88d721"></script>
 
-    <script src="modules/MainPanel/Auto/Source/Code.js"></script>
-    <script src="modules/MainPanel/Auto/Source/Data.js"></script>
-    <script src="modules/MainPanel/Auto/Source/Header.js"></script>
-    <script src="modules/MainPanel/Auto/Source/Lines.js"></script>
-    <script src="modules/MainPanel/Auto/Source.js"></script>
+    <script src="modules/MainPanel/Auto/Source/Code.js?ad88d721"></script>
+    <script src="modules/MainPanel/Auto/Source/Data.js?ad88d721"></script>
+    <script src="modules/MainPanel/Auto/Source/Header.js?ad88d721"></script>
+    <script src="modules/MainPanel/Auto/Source/Lines.js?ad88d721"></script>
+    <script src="modules/MainPanel/Auto/Source.js?ad88d721"></script>
 
-    <script src="modules/MainPanel/Auto/Data/Helper.js"></script>
-    <script src="modules/MainPanel/Auto/Data.js"></script>
+    <script src="modules/MainPanel/Auto/Data/Helper.js?ad88d721"></script>
+    <script src="modules/MainPanel/Auto/Data.js?ad88d721"></script>
 
-    <script src="modules/MainPanel/Auto.js"></script>
-
-
-    <script src="modules/MainPanel/Manual/Data.js"></script>
-    <script src="modules/MainPanel/Manual/Demos/Tabs.js"></script>
-    <script src="modules/MainPanel/Manual/Demos/Panels.js"></script>
-    <script src="modules/MainPanel/Manual/Demos.js"></script>
-    <script src="modules/MainPanel/Manual/Readme.js"></script>
-    <script src="modules/MainPanel/Manual.js"></script>
+    <script src="modules/MainPanel/Auto.js?ad88d721"></script>
 
 
-    <script src="modules/MainPanel.js"></script>
+    <script src="modules/MainPanel/Manual/Data.js?ad88d721"></script>
+    <script src="modules/MainPanel/Manual/Demos/Tabs.js?ad88d721"></script>
+    <script src="modules/MainPanel/Manual/Demos/Panels.js?ad88d721"></script>
+    <script src="modules/MainPanel/Manual/Demos.js?ad88d721"></script>
+    <script src="modules/MainPanel/Manual/Readme.js?ad88d721"></script>
+    <script src="modules/MainPanel/Manual.js?ad88d721"></script>
 
-    <script src="index.js"></script>
+
+    <script src="modules/MainPanel.js?ad88d721"></script>
+
+    <script src="index.js?ad88d721"></script>
 
 
     <!--grunt.js.end-->

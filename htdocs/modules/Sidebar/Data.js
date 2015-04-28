@@ -23,51 +23,39 @@ define('Sidebar/Data', function (require, module, exports) {
         }
 
         var data = window[key];
-        if (data) {
-            
+        var items = data.items;
 
-
-            var items = data.items;
-
-
-            var list = $.Array.map(window['__classes__'], function (obj, index) {
-
-                var name = obj.name;
-
-                var item = $.Array.findItem(items, function (item, i) {
-                    return item.alias == name;
-                });
-             
-                return item ? null : {
-                    'text': name,
-                    'alias': name,
-                };
-
-            });
-
-            data.items = items.concat(list);
-
-
-            json = normalize(data);
-            console.dir(json);
-
-
-            fn && fn(json);
-            return;
-        }
-
+        var jsdoc = data.jsdoc;
+        var url = 'data/jsdoc/{type}/{version}/doc/classes.min.js';
+        url = $.String.format(url, jsdoc)
 
         Script.load({
-            url: [
-                'data/sidebar.js',
-            ],
+
+            'url': url,
 
             onload: function () {
-                var data = window[key];
+
+                var list = $.Array.map(window['__classes__'], function (obj, index) {
+
+                    var name = obj.name;
+
+                    var item = $.Array.findItem(items, function (item, i) {
+                        return item.alias == name;
+                    });
+
+                    return item ? null : {
+                        'text': name,
+                        'alias': name,
+                    };
+
+                });
+
+                data.items = items.concat(list);
                 json = normalize(data);
-                fn(json);
+                fn && fn(json);
             }
         });
+
 
     }
 

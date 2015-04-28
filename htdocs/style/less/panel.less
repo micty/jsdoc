@@ -1,0 +1,287 @@
+
+.panel {
+    margin-bottom: 10px;
+
+    .header {
+        padding-left: 10px;
+        line-height: 30px;
+        background: #f5f5f5;
+        font-size: 12px;
+        font-weight: bold;
+        top: 0;
+        left: 0;
+        padding-top: 5px;
+        border: 1px solid #dddddd;
+        -webkit-border-top-right-radius: 3px;
+        border-top-right-radius: 3px;
+        -webkit-border-top-left-radius: 3px;
+        border-top-left-radius: 3px;
+        border-bottom: none;
+
+        a {
+            color: #333333;
+
+            &:hover {
+                text-decoration: none;
+            }
+        }
+
+        &:before {
+            content: '';
+            background: url(../img/collapse0.bmp) no-repeat left 5px;
+            width: 14px;
+            display: inline-block;
+            height: 14px;
+            cursor: pointer;
+        }
+
+        &.off {
+            border-bottom: 1px solid #dddddd;
+            -moz-border-radius: 3px;
+            -webkit-border-radius: 3px;
+            border-radius: 3px;
+            color: #8B9EDE;
+
+            &:before {
+                background: url(../img/collapse1.bmp) no-repeat left 5px;
+            }
+        }
+
+        span {
+            cursor: pointer;
+            padding: 12px 20px 7px 25px;
+            margin-left: -26px;
+            /*background: rgba(155, 172, 215, 0.29);*/
+        }
+
+        &.source {
+            a {
+                float: right;
+                margin-right: 10px;
+                text-decoration: underline;
+                /* font-weight: normal; */
+                color: #596CD2;
+            }
+        }
+
+        &.readme {
+            a {
+                float: right;
+                margin-right: 10px;
+                text-decoration: underline;
+                /* font-weight: normal; */
+                color: #596CD2;
+            }
+        }
+    }
+
+
+    .content {
+        font: 16px/1.6 "Helvetica Neue", Helvetica, "Segoe UI", Arial, freesans, sans-serif;
+        color: #333333;
+        background: #fff;
+        border: 1px solid #dddddd;
+        -webkit-border-bottom-right-radius: 3px;
+        border-bottom-right-radius: 3px;
+        -webkit-border-bottom-left-radius: 3px;
+        border-bottom-left-radius: 3px;
+        padding: 15px 15px;
+
+        &.method-summary {
+            .syntax {
+                font-size: 1.15em;
+            }
+
+            .symbol {
+                color: #AB0080;
+                margin: auto 2px;
+            }
+
+            .params {
+                font-style: italic;
+                color: rgb(206, 50, 222);
+            }
+
+            .name {
+                font-weight: bold;
+            }
+        }
+
+        mark {
+            width: 96%;
+            height: 16px;
+            border: solid 2px #EAEAF2;
+            display: block;
+            position: absolute;
+            top: 19px;
+            left: 19px;
+            background: none;
+            cursor: text;
+            pointer-events: none;
+            border-radius: 3px;
+        }
+
+
+        &.markdown ul {
+            list-style: disc;
+            padding-left: 32px;
+        }
+
+        &:first-child {
+            margin-top: 0 !important;
+        }
+
+        &:last-child {
+            margin-bottom: 0 !important;
+        }
+
+        .definedInFile {
+            position: absolute;
+            right: 17px;
+            top: 140px;
+            font-size: 0.85em;
+            color: gray;
+        }
+
+        .summary {
+            font-family: "微软雅黑";
+            font-size: 1.1em;
+        }
+
+        h2, h3, h4, h5 {
+            margin-top: 13px;
+            margin-bottom: 16px;
+        }
+
+
+
+        h1, h2 {
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 10px;
+        }
+
+        h1 {
+            font-size: 30px;
+        }
+
+        h2 {
+            font-size: 28px;
+            margin-top: 0 !important;
+        }
+
+        h3 {
+            font-size: 24px;
+        }
+
+        h4 {
+            font-size: 20px;
+        }
+
+        h5 {
+            font-size: 18px;
+        }
+
+        hr {
+            height: 4px;
+            padding: 0;
+            margin: 16px 0;
+            background-color: #e7e7e7;
+            border: 0 none;
+        }
+
+        blockquote {
+            margin: 0 0 16px 0;
+            padding: 0 15px;
+            color: #777;
+            border-left: 4px solid #dddddd;
+
+            p {
+                margin-left: 0;
+            }
+        }
+
+        p, ul {
+            margin-top: 0;
+            /*margin-bottom: 16px;*/
+        }
+
+        a {
+            color: #4183c4;
+            text-decoration: none;
+
+            &:hover {
+                text-decoration: underline;
+            }
+        }
+
+        code {
+            padding: 3px 4px 21px 4px;
+            color: #c7254e;
+            background-color: #f9f2f4;
+            font-family: 'Fixedsys Excelsior 3.01' Fixedsys;
+        }
+
+        pre {
+            margin: 0;
+            margin-left: 30px;
+            padding: 0px 5px;
+            /*background: #f7f7f7;*/
+            -moz-border-radius: 3px;
+            -webkit-border-radius: 3px;
+            border-radius: 3px;
+            -ms-word-break: break-word;
+            word-break: break-word;
+
+            code {
+                color: #000;
+                background-color: transparent;
+                cursor: text;
+            }
+        }
+
+        table {
+            width: 100%;
+            font-family: 'Fixedsys Excelsior 3.01' Fixedsys;
+
+            th, td {
+                border: 1px solid #dddddd;
+                padding: 5px 5px;
+                text-align: left;
+            }
+
+            &.params {
+                .name {
+                    code {
+                        padding: 3px 4px 3px 4px;
+                        color: #c7254e;
+                        background-color: #f9f2f4;
+                        font-family: 'Fixedsys Excelsior 3.01' Fixedsys;
+                    }
+                }
+
+                .type {
+                    width: 10%;
+                    color: blue;
+                    font-family: 'Fixedsys Excelsior 3.01' Fixedsys;
+                }
+
+                .default {
+                    width: 10%;
+                }
+
+                .desc {
+                    width: 65%;
+
+                    pre {
+                        margin-left: 0px;
+                        background: none;
+                    }
+                }
+            }
+
+            code {
+                padding: 3px 4px 3px 4px;
+            }
+        }
+    }
+}
