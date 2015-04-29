@@ -4,30 +4,23 @@ define('MainPanel/Auto/Data', function (require, module, exports) {
     var $ = require('$');
     var MiniQuery = require('MiniQuery');
 
-    var Script = MiniQuery.require('Script');
+    var JSON = require('JSON');
+    var Path = require('Path');
 
     var Helper = require(module, 'Helper');
 
-    var json = null;
-    var key = '__classes__';
-
 
     //加载数据。
-    //这里既可采用异步方式，方便以后从服务器端加载，
-    //也可以采用直接引入的方式
     function load(fn) {
 
-        if (json) {
-            fn && fn(json);
-            return;
-        }
+        var url = Path.get('jsdoc/classes.min.json');
 
-        var list = window[key];
-        if (list) {
-            json = Helper.normalize(list);
+        JSON.load(url, function (json) {
+
+            json = Helper.normalize(json);
             fn && fn(json);
-            return;
-        }
+
+        });
 
     }
 

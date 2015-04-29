@@ -26,7 +26,6 @@ define('MainPanel/Auto/Method/Summary', function (require, module, exports) {
 
     function render(data) {
 
-        console.dir(data);
 
         var params = data.params;
         var count = params.length;

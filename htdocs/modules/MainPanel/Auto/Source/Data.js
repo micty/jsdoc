@@ -8,8 +8,6 @@ define('MainPanel/Auto/Source/Data', function (require, module, exports) {
 
 
     //加载数据。
-    //这里既可采用异步方式，方便以后从服务器端加载，
-    //也可以采用直接引入的方式
     function load(url, fn) {
 
         var file = url$file[url];
@@ -18,8 +16,7 @@ define('MainPanel/Auto/Source/Data', function (require, module, exports) {
             return;
         }
 
-
-        var path = 'data/jsdoc/' + url;
+        var path = 'data/' + url;
 
         //这里要作为文本去获取，因为 jQuery 会自动执行 js 代码，这不是我们想要的行为
         $.get(path, function (file) {

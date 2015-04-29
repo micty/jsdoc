@@ -25,7 +25,6 @@
             name: name,
         });
 
-        console.dir(Hash.get());
     });
 
 
@@ -73,6 +72,10 @@
 
 
     Sidebar.render();
+
+
+    
+
 
 
     $(document.body).delegate('.panel .header>span', 'click', function (event) {

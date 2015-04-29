@@ -8,34 +8,23 @@ define('Sidebar/Data', function (require, module, exports) {
     var MiniQuery = require('MiniQuery');
     var Script = MiniQuery.require('Script');
 
+    var JSON = require('JSON');
+    var Path = require('Path');
 
-    var json = null;
-    var key = '__sidebar__';
 
 
     //加载数据。
-    //这里采用异步方式，方便以后从服务器端加载。
     function load(fn) {
 
-        if (json) {
-            fn && fn(json);
-            return;
-        }
+        var url = Path.get('sidebar.json');
 
-        var data = window[key];
-        var items = data.items;
+        JSON.load(url, function (json) {
 
-        var jsdoc = data.jsdoc;
-        var url = 'data/jsdoc/{type}/{version}/doc/classes.min.js';
-        url = $.String.format(url, jsdoc)
+            var items = json.items;
 
-        Script.load({
+            loadClasses(function (classes) {
 
-            'url': url,
-
-            onload: function () {
-
-                var list = $.Array.map(window['__classes__'], function (obj, index) {
+                var list = $.Array.map(classes, function (obj, index) {
 
                     var name = obj.name;
 
@@ -50,20 +39,33 @@ define('Sidebar/Data', function (require, module, exports) {
 
                 });
 
-                data.items = items.concat(list);
-                json = normalize(data);
+                json.items = items.concat(list);
+
+                json = normalize(json);
                 fn && fn(json);
-            }
+
+            });
         });
 
 
     }
 
-    function normalize(data) {
+
+    function loadClasses(fn) {
+
+        var url = 'data/{0}/{1}/jsdoc/classes.min.json';
+        url = $.String.format(url, 'default', '2.4.0');
+
+        JSON.load(url, fn);
+    }
+
+
+
+    function normalize(json) {
 
         var id = 0;
 
-        var list = $.Array.map(data.items, function (item, index) {
+        var list = $.Array.map(json.items, function (item, index) {
 
             if (item.hidden) {
                 return null;
@@ -74,9 +76,9 @@ define('Sidebar/Data', function (require, module, exports) {
             return item;
         });
 
-        data.items = list;
+        json.items = list;
 
-        return data;
+        return json;
     }
 
 

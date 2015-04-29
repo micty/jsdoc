@@ -9,10 +9,6 @@
     global.KISP = KISP;
 
 
-    KISP.modules = Module.modules(); //获取定义的模块 id 数组。
-    KISP.exposes = Module.exposes(); //获取暴露的模块 id 数组。
-
-
     delete global['$'];
     delete global['MiniQuery'];
 

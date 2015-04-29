@@ -16,7 +16,6 @@ var Module = (function () {
         define: mod.define.bind(mod),
         require: mod.require.bind(mod), //该方法仅用于 end.js 中
         expose: mod.expose.bind(mod),
-        exposes: mod.exposes.bind(mod),
         modules: mod.modules.bind(mod),
 
         /**

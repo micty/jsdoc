@@ -42,14 +42,11 @@
                 margin-right: 6px;
             }
         }
-
         /*li:hover {
             border-right: solid 4px #ddd;
             background: #fff;
 
         }*/
-
-
         li {
             line-height: 30px;
             cursor: pointer;
@@ -68,6 +65,11 @@
             width: 16px;
             vertical-align: sub;
             background: url(../img/class.bmp) no-repeat;
+
+            &.hidden {
+                background-image: none;
+            }
+
         }
     }
 }

@@ -15,6 +15,7 @@ define('MainPanel/Auto', function (require, module, exports) {
     var view = document.getElementById('view-Auto');
     var hasBind = false;
 
+
     function render(name, view) {
 
         bindEvents();

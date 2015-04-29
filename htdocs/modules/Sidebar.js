@@ -48,6 +48,7 @@ define('Sidebar', function (require, module, exports) {
 
     function render() {
 
+
         Data.load(function (json) {
 
             list = json.items;
@@ -64,10 +65,13 @@ define('Sidebar', function (require, module, exports) {
 
             Template.fill(ul, list, function (item, index) {
 
+                var icon = item.icon;
+
                 return {
                     'index': index,
                     'text': item.text,
-                    'icon': item.icon,
+                    'icon': icon,
+                    'icon-hidden': icon === false ? 'hidden' : '',
                 };
 
             });
@@ -94,6 +98,11 @@ define('Sidebar', function (require, module, exports) {
 
     }
 
+
+    function add(list) {
+
+
+    }
 
 
 

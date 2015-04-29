@@ -6,11 +6,11 @@ define('MainPanel/Manual/Data', function (require, module, exports) {
     var MiniQuery = require('MiniQuery');
     var Url = MiniQuery.require('Url');
 
-    var baseUrl = 'data/demo/';
+    var JSON = require('JSON');
+    var Path = require('Path');
 
-    var url$json = {};
+    var baseUrl = Path.get('demo') + '/';
     var url$md = {};
-
 
 
     function getUrl(name, url) {
@@ -19,6 +19,7 @@ define('MainPanel/Manual/Data', function (require, module, exports) {
             return url;
         }
 
+       
         return baseUrl + name + '/' + url;;
     }
 
@@ -52,28 +53,6 @@ define('MainPanel/Manual/Data', function (require, module, exports) {
 
 
 
-    function loadJSON(url, fn) {
-
-        var json = url$json[url];
-        if (json) {
-            fn && fn(json);
-            return;
-        }
-
-
-        //加上随机查询字符串，以确保拿到最新版本。
-        var rurl = Url.randomQueryString(url);
-
-        $.getJSON(rurl, function (json) {
-
-            url$json[url] = json;
-
-            fn && fn(json);
-
-        });
-    }
-
-
 
     function loadMD(url, fn) {
 
@@ -105,7 +84,7 @@ define('MainPanel/Manual/Data', function (require, module, exports) {
 
         var url = getUrl(name, 'data.json');
 
-        loadJSON(url, function (json) {
+        JSON.load(url, function (json) {
 
             var isReady = checkReady(json, fn);
             if (isReady) {

@@ -27,7 +27,7 @@
         <ul id="ul-sidebar" class="menus">
             <!--
             <li data-index="{index}">
-                <i class="icons" ></i>
+                <i class="icons {icon-hidden}"></i>
                 <span>{text}</span>
             </li>
             -->
@@ -249,12 +249,13 @@
                 </div>
                 
                 
+                
                 <div  id="view-Source" style="display: none;">
                     <div class="panel">
                         <div id="div-source-header" class="header source">
                         <!--
                             <span>源代码</span>
-                            <a href="data/source/{href}" target="_blank">打开</a>
+                            <a href="data/jsdoc/{href}" target="_blank">打开</a>
                          -->
                         </div>
                         <div class="content demo">
@@ -354,63 +355,62 @@
 
 
 
-    <script src="f/jquery/jquery-1.11.1.debug.js?ad88d721"></script>
-    <script src="f/miniquery/miniquery.debug.js?ad88d721"></script>
-    <script src="f/highlight/highlight.debug.js?ad88d721"></script>
-    <script src="f/marked/marked.mod.debug.js?ad88d721"></script>
+    <script src="f/jquery/jquery-1.11.1.debug.js?15c7973b"></script>
+    <script src="f/miniquery/miniquery.debug.js?15c7973b"></script>
+    <script src="f/highlight/highlight.debug.js?15c7973b"></script>
+    <script src="f/marked/marked.mod.debug.js?15c7973b"></script>
 
-
-    <script src="data/sidebar.js?ad88d721"></script>
-
-    <script src="config.js?ad88d721"></script>
+    <script src="config.js?15c7973b"></script>
 
     <!--grunt.js.begin-->
-    <script src="lib/Highlight.js?ad88d721"></script>
-    <script src="lib/Tabs.js?ad88d721"></script>
-    <script src="lib/Template.js?ad88d721"></script>
+    <script src="lib/Highlight.js?15c7973b"></script>
+    <script src="lib/JSON.js?15c7973b"></script>
+    <script src="lib/Path.js?15c7973b"></script>
+    <script src="lib/Tabs.js?15c7973b"></script>
+    <script src="lib/Template.js?15c7973b"></script>
 
     
 
-    <script src="modules/Hash.js?ad88d721"></script>
-    <script src="modules/Scroller.js?ad88d721"></script>
-    <script src="modules/Sidebar/Data.js?ad88d721"></script>
-    <script src="modules/Sidebar.js?ad88d721"></script>
+    <script src="modules/Hash.js?15c7973b"></script>
+    <script src="modules/Scroller.js?15c7973b"></script>
+    <script src="modules/Sidebar/Data.js?15c7973b"></script>
+    <script src="modules/Sidebar.js?15c7973b"></script>
 
 
-    <script src="modules/MainPanel/Auto/Overview/Summary.js?ad88d721"></script>
-    <script src="modules/MainPanel/Auto/Overview/MethodList.js?ad88d721"></script>
-    <script src="modules/MainPanel/Auto/Overview/PropertyList.js?ad88d721"></script>
-    <script src="modules/MainPanel/Auto/Overview.js?ad88d721"></script>
+    <script src="modules/MainPanel/Auto/Overview/Summary.js?15c7973b"></script>
+    <script src="modules/MainPanel/Auto/Overview/MethodList.js?15c7973b"></script>
+    <script src="modules/MainPanel/Auto/Overview/PropertyList.js?15c7973b"></script>
+    <script src="modules/MainPanel/Auto/Overview.js?15c7973b"></script>
 
-    <script src="modules/MainPanel/Auto/Method/Summary.js?ad88d721"></script>
-    <script src="modules/MainPanel/Auto/Method/Params.js?ad88d721"></script>
-    <script src="modules/MainPanel/Auto/Method/Returns.js?ad88d721"></script>
-    <script src="modules/MainPanel/Auto/Method/Example.js?ad88d721"></script>
-    <script src="modules/MainPanel/Auto/Method.js?ad88d721"></script>
+    <script src="modules/MainPanel/Auto/Method/Summary.js?15c7973b"></script>
+    <script src="modules/MainPanel/Auto/Method/Params.js?15c7973b"></script>
+    <script src="modules/MainPanel/Auto/Method/Returns.js?15c7973b"></script>
+    <script src="modules/MainPanel/Auto/Method/Example.js?15c7973b"></script>
+    <script src="modules/MainPanel/Auto/Method.js?15c7973b"></script>
 
-    <script src="modules/MainPanel/Auto/Source/Code.js?ad88d721"></script>
-    <script src="modules/MainPanel/Auto/Source/Data.js?ad88d721"></script>
-    <script src="modules/MainPanel/Auto/Source/Header.js?ad88d721"></script>
-    <script src="modules/MainPanel/Auto/Source/Lines.js?ad88d721"></script>
-    <script src="modules/MainPanel/Auto/Source.js?ad88d721"></script>
+    <script src="modules/MainPanel/Auto/Source/Code.js?15c7973b"></script>
+    <script src="modules/MainPanel/Auto/Source/Data.js?15c7973b"></script>
+    <script src="modules/MainPanel/Auto/Source/Header.js?15c7973b"></script>
+    <script src="modules/MainPanel/Auto/Source/Lines.js?15c7973b"></script>
+    <script src="modules/MainPanel/Auto/Source.js?15c7973b"></script>
 
-    <script src="modules/MainPanel/Auto/Data/Helper.js?ad88d721"></script>
-    <script src="modules/MainPanel/Auto/Data.js?ad88d721"></script>
+    <script src="modules/MainPanel/Auto/Data/Helper.js?15c7973b"></script>
+    <script src="modules/MainPanel/Auto/Data.js?15c7973b"></script>
 
-    <script src="modules/MainPanel/Auto.js?ad88d721"></script>
-
-
-    <script src="modules/MainPanel/Manual/Data.js?ad88d721"></script>
-    <script src="modules/MainPanel/Manual/Demos/Tabs.js?ad88d721"></script>
-    <script src="modules/MainPanel/Manual/Demos/Panels.js?ad88d721"></script>
-    <script src="modules/MainPanel/Manual/Demos.js?ad88d721"></script>
-    <script src="modules/MainPanel/Manual/Readme.js?ad88d721"></script>
-    <script src="modules/MainPanel/Manual.js?ad88d721"></script>
+    <script src="modules/MainPanel/Auto.js?15c7973b"></script>
 
 
-    <script src="modules/MainPanel.js?ad88d721"></script>
+    <script src="modules/MainPanel/Manual/Data.js?15c7973b"></script>
+    <script src="modules/MainPanel/Manual/Demos/Tabs.js?15c7973b"></script>
+    <script src="modules/MainPanel/Manual/Demos/Panels.js?15c7973b"></script>
+    <script src="modules/MainPanel/Manual/Demos.js?15c7973b"></script>
+    <script src="modules/MainPanel/Manual/Readme.js?15c7973b"></script>
+    <script src="modules/MainPanel/Manual.js?15c7973b"></script>
 
-    <script src="index.js?ad88d721"></script>
+
+    <script src="modules/MainPanel.js?15c7973b"></script>
+
+    <script src="index.js?15c7973b"></script>
 
 
     <!--grunt.js.end-->
