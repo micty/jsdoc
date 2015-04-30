@@ -4,6 +4,7 @@ define('MainPanel/Manual/Readme', function (require, module, exports) {
     var $ = require('$');
     var MiniQuery = require('MiniQuery');
     var Template = require('Template');
+    var Path = require('Path');
 
     var hljs = require('hljs');
     var marked = require('marked');
@@ -23,8 +24,9 @@ define('MainPanel/Manual/Readme', function (require, module, exports) {
 
         $(div).show();
 
-       Template.fill(header, {
-            name: name
+        Template.fill(header, {
+            'path': Path.get('demo'),
+            'name': name,
         });
 
         if (!readme) {
@@ -46,6 +48,7 @@ define('MainPanel/Manual/Readme', function (require, module, exports) {
         });
 
     }
+
 
 
     return {

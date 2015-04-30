@@ -2,7 +2,7 @@
 * KISP - KISP JavaScript Library
 * name: default 
 * version: 2.4.0
-* build: 2015-04-28 17:42:04
+* build: 2015-04-29 15:00:34
 * files: 39(37)
 *    partial/default/begin.js
 *    core/Module.js
@@ -100,7 +100,6 @@ var Module = (function () {
         define: mod.define.bind(mod),
         require: mod.require.bind(mod), //该方法仅用于 end.js 中
         expose: mod.expose.bind(mod),
-        exposes: mod.exposes.bind(mod),
         modules: mod.modules.bind(mod),
 
         /**
@@ -210,9 +209,11 @@ define('KISP', function (require, module, exports) {
             'partial/default/end.js'
         ], //由 grunt 自动插入
 
-        modules: [],
-
-        exposes: [],
+        /**
+        * 获取已经定义的所有模块的描述信息。
+        * @function
+        */
+        modules: Module.modules,
 
         /**
         * 加载 KISP 框架内公开的模块。
@@ -4128,10 +4129,6 @@ define('defaults', /**@lends defaults*/ {
 
     KISP.config(defaults);
     global.KISP = KISP;
-
-
-    KISP.modules = Module.modules(); //获取定义的模块 id 数组。
-    KISP.exposes = Module.exposes(); //获取暴露的模块 id 数组。
 
 
     delete global['$'];

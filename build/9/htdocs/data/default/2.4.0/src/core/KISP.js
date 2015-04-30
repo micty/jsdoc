@@ -66,9 +66,11 @@ define('KISP', function (require, module, exports) {
             'partial/default/end.js'
         ], //由 grunt 自动插入
 
-        modules: [],
-
-        exposes: [],
+        /**
+        * 获取已经定义的所有模块的描述信息。
+        * @function
+        */
+        modules: Module.modules,
 
         /**
         * 加载 KISP 框架内公开的模块。
