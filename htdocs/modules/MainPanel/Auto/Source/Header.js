@@ -1,5 +1,5 @@
 ﻿
-define('MainPanel/Auto/Source/Header', function (require, module, exports) {
+define('/MainPanel/Auto/Source/Header', function (require, module, exports) {
 
     var $ = require('$');
     var Template = require('Template');

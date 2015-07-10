@@ -1,5 +1,5 @@
 ﻿
-define('MainPanel/Auto/Overview/PropertyList', function (require, module, exports) {
+define('/MainPanel/Auto/Overview/PropertyList', function (require, module, exports) {
 
 
     var $ = require('$');

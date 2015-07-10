@@ -1,10 +1,11 @@
 ﻿
-define('MainPanel/Manual/Readme', function (require, module, exports) {
+define('/MainPanel/Manual/Readme', function (require, module, exports) {
 
     var $ = require('$');
     var MiniQuery = require('MiniQuery');
     var Template = require('Template');
     var Path = require('Path');
+    var JSON = require('JSON');
 
     var hljs = require('hljs');
     var marked = require('marked');
@@ -34,15 +35,25 @@ define('MainPanel/Manual/Readme', function (require, module, exports) {
         }
 
         var html = marked(readme);
+        
         content.innerHTML = html;
 
         $(content).find('code[data-language]').each(function () {
+
             var code = this;
             var type = code.getAttribute('data-language');
 
             var html = code.innerHTML;
+            
+
+            var json = JSON.parse(html);
+            if (json) {
+                html = JSON.stringify(json, 4);
+            }
+
 
             html = hljs.highlight(type, html).value; //高亮代码
+
             $(code).addClass('hljs').html(html);
 
         });

@@ -2,7 +2,7 @@
 /**
 * 主面板模块
 */
-define('MainPanel', function (require, module, exports) {
+define('/MainPanel', function (require, module, exports) {
 
     var $ = require('$');
     var MiniQuery = require('MiniQuery');

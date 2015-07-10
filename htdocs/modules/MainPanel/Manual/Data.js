@@ -1,6 +1,6 @@
 ﻿
 
-define('MainPanel/Manual/Data', function (require, module, exports) {
+define('/MainPanel/Manual/Data', function (require, module, exports) {
 
     var $ = require('$');
     var MiniQuery = require('MiniQuery');
@@ -9,7 +9,7 @@ define('MainPanel/Manual/Data', function (require, module, exports) {
     var JSON = require('JSON');
     var Path = require('Path');
 
-    var baseUrl = Path.get('demo') + '/';
+    var baseUrl = Path.get('demo/');
     var url$md = {};
 
 

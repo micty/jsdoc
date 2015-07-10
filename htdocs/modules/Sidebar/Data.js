@@ -2,7 +2,7 @@
 /**
 * 侧边菜单栏的数据模块
 */
-define('Sidebar/Data', function (require, module, exports) {
+define('/Sidebar/Data', function (require, module, exports) {
 
     var $ = require('$');
     var MiniQuery = require('MiniQuery');
@@ -22,19 +22,20 @@ define('Sidebar/Data', function (require, module, exports) {
 
             var items = json.items;
 
-            loadClasses(function (classes) {
+
+            loadClasses(json, function (classes) {
 
                 var list = $.Array.map(classes, function (obj, index) {
 
-                    var name = obj.name;
+                    var alias = obj.alias;
 
                     var item = $.Array.findItem(items, function (item, i) {
-                        return item.alias == name;
+                        return item.alias == alias;
                     });
 
                     return item ? null : {
-                        'text': name,
-                        'alias': name,
+                        'text': alias,
+                        'alias': alias,
                     };
 
                 });
@@ -51,11 +52,15 @@ define('Sidebar/Data', function (require, module, exports) {
     }
 
 
-    function loadClasses(fn) {
+    function loadClasses(json, fn) {
 
-        var url = 'data/{0}/{1}/jsdoc/classes.min.json';
-        url = $.String.format(url, 'default', '2.4.0');
+        if (!json.jsdoc) { //没有 jsdoc
+            fn && fn([]);
+            return;
+        }
 
+
+        var url = Path.get('jsdoc/classes.min.json');
         JSON.load(url, fn);
     }
 
@@ -75,6 +80,14 @@ define('Sidebar/Data', function (require, module, exports) {
 
             return item;
         });
+
+
+
+        //先整体排序
+        list.sort(function (x, y) {
+            return x.alias < y.alias ? -1 :
+                x.alias > y.alias ? 1 : 0;
+        })
 
         json.items = list;
 

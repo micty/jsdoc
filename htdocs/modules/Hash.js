@@ -2,7 +2,7 @@
 /**
 * Url地址栏的 hash 工具模块
 */
-define('Hash', function (require, module, exports) {
+define('/Hash', function (require, module, exports) {
 
     var $ = require('$');
     var MiniQuery = require('MiniQuery');

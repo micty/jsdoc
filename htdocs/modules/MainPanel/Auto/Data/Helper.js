@@ -1,6 +1,6 @@
 ﻿
 
-define('MainPanel/Auto/Data/Helper', function (require, module, exports) {
+define('/MainPanel/Auto/Data/Helper', function (require, module, exports) {
 
     var $ = require('$');
     var MiniQuery = require('MiniQuery');

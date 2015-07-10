@@ -1,5 +1,5 @@
 ﻿
-define('MainPanel/Auto/Method/Example', function (require, module, exports) {
+define('/MainPanel/Auto/Method/Example', function (require, module, exports) {
 
     var $ = require('$');
     var MiniQuery = require('MiniQuery');

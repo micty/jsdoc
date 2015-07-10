@@ -1,25 +1,40 @@
 ﻿
-//控制器。 
-; (function () {
+
+define('', function (require, module, exports) {
 
     var $ = require('$');
+    var MiniQuery = require('MiniQuery');
+    var Url = MiniQuery.require('Url');
 
-    var Sidebar = require('Sidebar');
-    var MainPanel = require('MainPanel');
-    var Hash = require('Hash');
-    var Scroller = require('Scroller');
+    var qs = Url.getQueryString(window) || {
+        type: 'default',
+        version: '1.0.0',
+    };
+
+
+    var Path = require('Path');
+    Path.set(qs.type, qs.version);
+
+    
+    
+
+
+    var Sidebar = require(module, 'Sidebar');
+    var MainPanel = require(module, 'MainPanel');
+    var Hash = require(module, 'Hash');
+    var Scroller = require(module, 'Scroller');
 
 
     MainPanel.on('render', function () {
         var y = Hash.get('y');
         //这里需要延迟一下，不然由于DOM解析比较慢，会导致内容高度还没出来就先滚过去，结果是滚不到
-        setTimeout(function () { 
+        setTimeout(function () {
             Scroller.to(y);
         }, 100);
 
     });
 
-    MainPanel.on('view',  function (type, name) {
+    MainPanel.on('view', function (type, name) {
         Hash.set('view', {
             type: type,
             name: name,
@@ -74,7 +89,7 @@
     Sidebar.render();
 
 
-    
+
 
 
 
@@ -93,6 +108,8 @@
     });
 
 
-    
 
-})();
+
+});
+
+require('');

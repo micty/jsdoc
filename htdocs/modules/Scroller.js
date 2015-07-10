@@ -2,7 +2,7 @@
 /**
 * 
 */
-define('Scroller', function (require, module, exports) {
+define('/Scroller', function (require, module, exports) {
 
     var $ = require('$');
     var MiniQuery = require('MiniQuery');

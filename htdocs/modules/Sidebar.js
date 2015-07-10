@@ -2,7 +2,7 @@
 /**
 * 侧边菜单栏模块
 */
-define('Sidebar', function (require, module, exports) {
+define('/Sidebar', function (require, module, exports) {
 
     var $ = require('$');
     var MiniQuery = require('MiniQuery');
@@ -50,6 +50,8 @@ define('Sidebar', function (require, module, exports) {
 
 
         Data.load(function (json) {
+
+            document.title = json.title + ' ' + json.type;
 
             list = json.items;
 

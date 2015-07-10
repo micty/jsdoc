@@ -8,7 +8,7 @@ define('Path', function (require, module, exports) {
     var Url = MiniQuery.require('Url');
 
 
-    var root = 'data/default/2.4.0/';
+    var root = '';
 
 
     function get(name) {
@@ -16,9 +16,13 @@ define('Path', function (require, module, exports) {
         return root + name;
     }
 
+    function set(type, version) {
+        root = 'data/' + type + '/' + version + '/';
+    }
 
     return {
         get: get,
+        set: set,
     };
 
 
