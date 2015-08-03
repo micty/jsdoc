@@ -7,7 +7,7 @@ define('/MainPanel/Manual/Readme', function (require, module, exports) {
     var Path = require('Path');
     var JSON = require('JSON');
 
-    var hljs = require('hljs');
+    var Highlight = require('Highlight');
     var marked = require('marked');
 
 
@@ -52,7 +52,7 @@ define('/MainPanel/Manual/Readme', function (require, module, exports) {
             }
 
 
-            html = hljs.highlight(type, html).value; //高亮代码
+            html = Highlight.get(type, html); //高亮代码
 
             $(code).addClass('hljs').html(html);
 

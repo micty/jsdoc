@@ -18,7 +18,12 @@ define('Highlight', function (require, module, exports) {
             return '';
         }
         
-        return HLJS.highlight(type, code).value;
+        try {
+            return HLJS.highlight(type, code).value;
+        }
+        catch (ex) { //不支持某种语法高亮时，直接原样返回
+            return code;
+        }
 
     }
 
