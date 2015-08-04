@@ -1,40 +1,43 @@
 /*
-* approve - Kingdee 移动审批
+* vCRM - 微客户
 * version: 0.1.0
-* build: 2015-04-28 09:56:33
-* files: 34(32)
+* build: 2015-08-04 17:21:54
+* files: 37(35)
 *    ../bin/partial/begin.js
 *    lib/Highlight.js
+*    lib/JSON.js
+*    lib/Path.js
 *    lib/Tabs.js
 *    lib/Template.js
 *    modules/Hash.js
+*    modules/main-panel/MainPanel/Auto/Data/Helper.js
+*    modules/main-panel/MainPanel/Auto/Data.js
+*    modules/main-panel/MainPanel/Auto/Method/Example.js
+*    modules/main-panel/MainPanel/Auto/Method/Params.js
+*    modules/main-panel/MainPanel/Auto/Method/Returns.js
+*    modules/main-panel/MainPanel/Auto/Method/Summary.js
+*    modules/main-panel/MainPanel/Auto/Method.js
+*    modules/main-panel/MainPanel/Auto/Overview/MethodList.js
+*    modules/main-panel/MainPanel/Auto/Overview/PropertyList.js
+*    modules/main-panel/MainPanel/Auto/Overview/Summary.js
+*    modules/main-panel/MainPanel/Auto/Overview.js
+*    modules/main-panel/MainPanel/Auto/Source/Code.js
+*    modules/main-panel/MainPanel/Auto/Source/Data.js
+*    modules/main-panel/MainPanel/Auto/Source/Header.js
+*    modules/main-panel/MainPanel/Auto/Source/Lines.js
+*    modules/main-panel/MainPanel/Auto/Source.js
+*    modules/main-panel/MainPanel/Auto.js
+*    modules/main-panel/MainPanel/Manual/Data.js
+*    modules/main-panel/MainPanel/Manual/Demos/Panels.js
+*    modules/main-panel/MainPanel/Manual/Demos/Tabs.js
+*    modules/main-panel/MainPanel/Manual/Demos.js
+*    modules/main-panel/MainPanel/Manual/Readme.js
+*    modules/main-panel/MainPanel/Manual.js
+*    modules/main-panel/MainPanel.js
 *    modules/Scroller.js
-*    modules/Sidebar/Data.js
-*    modules/Sidebar.js
-*    modules/MainPanel/Auto/Overview/Summary.js
-*    modules/MainPanel/Auto/Overview/MethodList.js
-*    modules/MainPanel/Auto/Overview/PropertyList.js
-*    modules/MainPanel/Auto/Overview.js
-*    modules/MainPanel/Auto/Method/Summary.js
-*    modules/MainPanel/Auto/Method/Params.js
-*    modules/MainPanel/Auto/Method/Returns.js
-*    modules/MainPanel/Auto/Method/Example.js
-*    modules/MainPanel/Auto/Method.js
-*    modules/MainPanel/Auto/Source/Code.js
-*    modules/MainPanel/Auto/Source/Data.js
-*    modules/MainPanel/Auto/Source/Header.js
-*    modules/MainPanel/Auto/Source/Lines.js
-*    modules/MainPanel/Auto/Source.js
-*    modules/MainPanel/Auto/Data/Helper.js
-*    modules/MainPanel/Auto/Data.js
-*    modules/MainPanel/Auto.js
-*    modules/MainPanel/Manual/Data.js
-*    modules/MainPanel/Manual/Demos/Tabs.js
-*    modules/MainPanel/Manual/Demos/Panels.js
-*    modules/MainPanel/Manual/Demos.js
-*    modules/MainPanel/Manual/Readme.js
-*    modules/MainPanel/Manual.js
-*    modules/MainPanel.js
+*    modules/sidebar/Sidebar/Data.js
+*    modules/sidebar/Sidebar/Scroller.js
+*    modules/sidebar/Sidebar.js
 *    index.js
 *    ../bin/partial/end.js
 */
@@ -54,6 +57,8 @@
     setTimeout,
     setInterval,
 
+
+
     Array, 
     Boolean,
     Date,
@@ -67,35 +72,6 @@
     undefined
 ) {
 
-    var MiniQuery = window.MiniQuery;
-    MiniQuery.use('$');
-
-    var Module = MiniQuery.require('Module');
-    var define = Module.define;
-    var require = Module.require;
-
-
-    var $ = window.$;
-    define('$', function () {
-        return $;
-    });
-
-    
-    define('MiniQuery', function () {
-        return MiniQuery;
-    });
-
-    var hljs = window.hljs;
-    define('hljs', function () {
-        return hljs;
-    });
-
-    var marked = window.marked;
-    define('marked', function () {
-        return marked;
-    });
-
-    
 
 // lib/Highlight.js
 
@@ -118,7 +94,12 @@ define('Highlight', function (require, module, exports) {
             return '';
         }
         
-        return HLJS.highlight(type, code).value;
+        try {
+            return HLJS.highlight(type, code).value;
+        }
+        catch (ex) { //不支持某种语法高亮时，直接原样返回
+            return code;
+        }
 
     }
 
@@ -138,6 +119,124 @@ define('Highlight', function (require, module, exports) {
         get: get,
         fill: fill,
 
+    };
+
+
+});
+
+
+// lib/JSON.js
+
+/**
+*/
+define('JSON', function (require, module, exports) {
+
+    var $ = require('$');
+    var MiniQuery = require('MiniQuery');
+    var Url = MiniQuery.require('Url');
+
+
+    var url$json = {};
+
+
+
+    function load(url, fn) {
+
+        var json = url$json[url];
+        if (json) {
+            fn && fn(json);
+            return;
+        }
+
+
+        //加上随机查询字符串，以确保拿到最新版本。
+        var rurl = Url.randomQueryString(url);
+
+        $.getJSON(rurl, function (json) {
+
+            url$json[url] = json;
+
+            fn && fn(json);
+
+        });
+    }
+
+
+
+    module.exports = exports = /**@lends JSON*/ {
+
+        load: load,
+
+        /**
+        * 把一个 JSON 字符串数据解析成对象。
+        */
+        parse: function (data) {
+
+            try {
+                return JSON.parse(data);
+            }
+            catch (ex) {
+            }
+
+            try {
+                data = data.replace(/^(\r\n)+/g, '');
+                return (new Function('return ' + data))();
+            }
+            catch (ex) {
+            }
+
+            return null;
+
+        },
+
+        /**
+        * 把一个对象解析成 JSON 字符串。
+        */
+        stringify: function (data, spaces) {
+
+            if (typeof data == 'string') {
+                data = exports.parse(data);
+            }
+
+            if (spaces === undefined) { //stringify(data)
+                spaces = 4;
+            }
+
+            return JSON.stringify(data, null, spaces);
+        },
+    };
+
+
+
+});
+
+
+// lib/Path.js
+
+/**
+*/
+define('Path', function (require, module, exports) {
+
+    var $ = require('$');
+    var MiniQuery = require('MiniQuery');
+    var Url = MiniQuery.require('Url');
+
+
+    var root = '';
+
+
+    function get(name) {
+        name = name || '';
+        return root + name;
+    }
+
+    function set(type, version) {
+        root = 'data/' + type + '/' + version + '/';
+    }
+
+    return {
+        get: get,
+        set: set,
     };
 
 
@@ -490,7 +589,7 @@ define('Template', function (require, module, exports) {
 /**
 * Url地址栏的 hash 工具模块
 */
-define('Hash', function (require, module, exports) {
+define('/Hash', function (require, module, exports) {
 
     var $ = require('$');
     var MiniQuery = require('MiniQuery');
@@ -576,147 +675,152 @@ define('Hash', function (require, module, exports) {
 
     
 
-// modules/Scroller.js
+// modules/main-panel/MainPanel/Auto/Data/Helper.js
 
-/**
-* 
-*/
-define('Scroller', function (require, module, exports) {
+
+define('/MainPanel/Auto/Data/Helper', function (require, module, exports) {
 
     var $ = require('$');
     var MiniQuery = require('MiniQuery');
 
-    var Emitter = MiniQuery.require('Emitter');
-    var emitter = new Emitter();
 
-    var isByJS = false;
-    function to(y) {
-        isByJS = true;
-        y = Number(y);
-        scrollTo(null, y);
-    }
+    function normalize(list) {
+
+        var name$item = {};
 
 
-    function bindEvents() {
+        //把类排在前面
+        list.sort(function (x, y) {
 
-        $(document).on('scroll', function (event) {
-            if (isByJS) {
-                isByJS = false;
-                return;
+            if (x.isa.toLowerCase() == 'constructor' && y.isa.toLowerCase() != 'constructor') {
+                return -1;
             }
 
-            var y = document.body.scrollTop; //#a
-            emitter.fire('change', [y]);
+            if (x.isa.toLowerCase() != 'constructor' && y.isa.toLowerCase() == 'constructor') {
+                return 1;
+            }
+
+            //再按名称排序
+            return x.alias < y.alias ? -1 :
+                x.alias > y.alias ? 1 : 0;
         });
+
+
+        $.Array.each(list, function (item, index) {
+
+
+
+
+            //先整体排序
+            item.methods.sort(function (x, y) {
+                return x.name < y.name ? -1 :
+                    x.name > y.name ? 1 : 0;
+            })
+
+
+            var events = [];
+            var methods = [];
+
+            $.Array.each(item.methods, function (item) {
+
+                item['typeDesc'] = item.isStatic ? '静态' : '实例';
+
+                if (item.isEvent) {
+                    events.push(item);
+                }
+                else {
+                    methods.push(item);
+                }
+            })
+
+            var isClass = item.isa.toLowerCase() == 'constructor';
+
+            var typeDesc = '';
+            if (isClass) {
+                typeDesc += '类';
+            }
+
+            if (item.isNamespace) {
+                typeDesc += '命名空间';
+            }
+
+
+            var obj = $.Object.extend({}, item, {
+
+                'superClass': item.inheritsFrom[0],
+                'supers': [],
+                'derives': [],
+                'events': events,
+                'methods': methods,
+                'properties': item.properties.sort(function (x, y) {
+                    return x.name < y.name ? -1 :
+                        x.name > y.name ? 1 : 0;
+                }),
+
+                'isClass': isClass,
+                'srcFileName': item.srcFile,
+                'typeDesc': typeDesc,
+            });
+
+            name$item[item.alias] = obj;
+        });
+
+        $.Object.each(name$item, function (key, item) {
+
+            var supers = item.supers;
+            var superClass = item.superClass;
+
+            while (superClass) {
+                supers.push(superClass);
+                superClass = name$item[superClass].superClass;
+            }
+
+            supers.reverse();
+
+
+            superClass = item.superClass;
+            if (superClass) {
+                name$item[superClass].derives.push(item.alias);
+            }
+        });
+
+
+        return name$item;
     }
 
-    bindEvents();
 
     return {
-        to: to,
-        on: emitter.on.bind(emitter),
+        normalize: normalize,
     };
 
 });
 
 
+// modules/main-panel/MainPanel/Auto/Data.js
 
-
-
-    
-
-// modules/Sidebar/Data.js
-
-/**
-* 侧边菜单栏的数据模块
-*/
-define('Sidebar/Data', function (require, module, exports) {
+define('/MainPanel/Auto/Data', function (require, module, exports) {
 
     var $ = require('$');
     var MiniQuery = require('MiniQuery');
-    var Script = MiniQuery.require('Script');
 
+    var JSON = require('JSON');
+    var Path = require('Path');
 
-    var json = null;
-    var key = '__sidebar__';
+    var Helper = require(module, 'Helper');
 
 
     //加载数据。
-    //这里采用异步方式，方便以后从服务器端加载。
     function load(fn) {
 
-        if (json) {
+        var url = Path.get('jsdoc/classes.min.json');
+
+        JSON.load(url, function (json) {
+
+            json = Helper.normalize(json);
             fn && fn(json);
-            return;
-        }
 
-        var data = window[key];
-        if (data) {
-            
-
-
-            var items = data.items;
-
-
-            var list = $.Array.map(window['__classes__'], function (obj, index) {
-
-                var name = obj.name;
-
-                var item = $.Array.findItem(items, function (item, i) {
-                    return item.alias == name;
-                });
-             
-                return item ? null : {
-                    'text': name,
-                    'alias': name,
-                };
-
-            });
-
-            data.items = items.concat(list);
-
-
-            json = normalize(data);
-            console.dir(json);
-
-
-            fn && fn(json);
-            return;
-        }
-
-
-        Script.load({
-            url: [
-                'data/sidebar.js',
-            ],
-
-            onload: function () {
-                var data = window[key];
-                json = normalize(data);
-                fn(json);
-            }
         });
 
-    }
-
-    function normalize(data) {
-
-        var id = 0;
-
-        var list = $.Array.map(data.items, function (item, index) {
-
-            if (item.hidden) {
-                return null;
-            }
-
-            item.id = id++;
-
-            return item;
-        });
-
-        data.items = list;
-
-        return data;
     }
 
 
@@ -724,185 +828,371 @@ define('Sidebar/Data', function (require, module, exports) {
     return {
         load: load,
     };
+
 });
 
 
-// modules/Sidebar.js
+// modules/main-panel/MainPanel/Auto/Method/Example.js
 
-/**
-* 侧边菜单栏模块
-*/
-define('Sidebar', function (require, module, exports) {
+define('/MainPanel/Auto/Method/Example', function (require, module, exports) {
 
     var $ = require('$');
     var MiniQuery = require('MiniQuery');
-
-    var Emitter = MiniQuery.require('Emitter');
-    var Template = require('Template');
-    var Tabs = require('Tabs');
-
-    var Data = require(module, 'Data'); 
-
-
-    var ul = document.getElementById('ul-sidebar');
-
-    var emitter = new Emitter();
-    var tabs = null;
-    var list = [];
-
-    var id$item = {};
-    var id$index = {};
-
-    var currentItem = null;
     
+    var HLJS = require('hljs');
 
+    var panel = document.getElementById('panel-method-example');
+    var ul = document.getElementById('ul-method-example-lines');
+    var code = document.getElementById('code-method-example');
+    var pre = code.parentNode;
 
-
-    function active(id) {
-
-        var item = id$item[id];
-        var index = id$index[id];
-
-        var oldItem = currentItem;
-        currentItem = item;
-
-        tabs.active(index);
-
-        //emitter.fire('active', [item, oldItem]);
-    }
-
-    function get(id) {
-        var item = id$item[id];
-        return item;
+    //根据文本内容计算需要的高度。
+    function getHeight(lines, delta) {
+        return lines.length * 20 + (delta || 0);
     }
 
 
-    function render() {
-
-        Data.load(function (json) {
-
-            list = json.items;
-
-
-            $.Array.each(list, function (item, index) {
-                var id = item.id;
-                id$item[id] = item;
-                id$index[id] = index;
-            });
+    //产生行号的 html
+    function getLineNumbers(lines) {
+        return $.Array.keep(lines, function (item, index) {
+            return '<li>' + (index + 1) + '</li>';
+        }).join('');
+    }
 
 
-            Template.fill('#div-sidebar-title', json);
+    function getMinSpaces(lines) {
 
-            Template.fill(ul, list, function (item, index) {
+        var min = 99999;
 
-                return {
-                    'index': index,
-                    'text': item.text,
-                    'icon': item.icon,
-                };
-
-            });
-
-
-            tabs = Tabs.create({
-                container: ul,
-                selector: '>li',
-                indexKey: 'data-index',
-                current: null,
-                event: 'click',
-                activedClass: 'on',
-                change: function (index, oldIndex) { //这里的，如果当前项是高亮，再次进入时不会触发
-                    var item = list[index];
-                    var oldItem = list[oldIndex];
-
-                    emitter.fire('active', [item, oldItem]);
-                }
-            });
-
-            emitter.fire('render', [list]);
+        $.Array.each(lines, function (item, index) {
+            if (!item) { //空行
+                return;
+            }
+            var s = item.match(/^\s{0,}/g); //提取出前导空格串
+            min = Math.min(min, s[0].length);
         });
 
-
+        return min;
     }
 
 
+    function normalize(js) {
+        var lines = js.split(/\r\n|\n|\r/);
+
+        var n = getMinSpaces(lines);
+        if (n == 0) {
+            return lines;
+        }
+
+        //去掉每一行的最小公共前导空格。
+        return $.Array.keep(lines, function (s, index) {
+            return s.slice(n);
+        });
+    }
 
 
+    function render(data) {
 
-    return {
-        render: render,
-        active: active,
-        get: get,
-        on: emitter.on.bind(emitter),
-    };
-
-});
-
-
-
-
-
-    
-
-// modules/MainPanel/Auto/Overview/Summary.js
-
-define('MainPanel/Auto/Overview/Summary', function (require, module, exports) {
-
-    var $ = require('$');
-    var MiniQuery = require('MiniQuery');
-    
-    var Emitter = MiniQuery.require('Emitter');
-    var Template = require('Template');
-
-    var emitter = new Emitter();
-    var div = document.getElementById('div-' + module.id + '-content');
-  
-    var hasBind = false;
-
-    var current = {};
-
-
-    function bindEvents() {
-        if (hasBind) {
+        var list = data.example;
+        if (list.length == 0) {
+            $(panel).hide();
             return;
         }
 
-        hasBind = true;
+        $(panel).show();
 
-        $(div).delegate('[data-cmd="source"]', 'click', function () {
 
-            emitter.fire('click', 'source', [current.name, current.srcFileName]);
-        });
+        var js = data.example[0].desc;
+        var lines = normalize(js);
+        js = lines.join('\n');
+
+        code.innerHTML = HLJS.highlight('javascript', js).value;
+        ul.innerHTML = getLineNumbers(lines);
+
+        var h = getHeight(lines);
+        $(pre).height(h);
 
     }
 
-    function render(data) {
-       
-        current = {
-            'name': data.name,
-            'typeDesc': data.typeDesc,
-            'desc': data.desc,
-            'srcFileName': data.srcFileName,
-        };
-
-        Template.fill(div, current);
-
-
-        bindEvents();
-    }
 
 
     return {
         render: render,
-        on: emitter.on.bind(emitter),
     };
 
 });
 
 
-// modules/MainPanel/Auto/Overview/MethodList.js
+// modules/main-panel/MainPanel/Auto/Method/Params.js
 
-define('MainPanel/Auto/Overview/MethodList', function (require, module, exports) {
+define('/MainPanel/Auto/Method/Params', function (require, module, exports) {
+
+    var $ = require('$');
+    var MiniQuery = require('MiniQuery');
+    
+    var Highlight = require('Highlight');
+
+    var panel = document.getElementById('panel-method-params');
+    var div = document.getElementById('div-method-params');
+
+    var samples = $.String.getTemplates(div.innerHTML, [
+        {
+            name: 'table',
+            begin: '<!--',
+            end: '-->',
+
+        },
+        {
+            name: 'tr',
+            begin: '#--tr.begin--#',
+            end: '#--tr.end--#',
+            outer: '{rows}',
+        },
+        
+    ]);
+
+    var list = [];
+
+
+    function render(data) {
+
+        list = data.params || [];
+
+        if (list.length == 0) {
+            hide();
+            return;
+        }
+
+        div.innerHTML = $.String.format(samples['table'], {
+            'rows': $.Array.keep(list, function (item, index) {
+
+                return $.String.format(samples['tr'], {
+                    'name': item.name,
+                    'type': item.type,
+                    'optional': item.isOptional ? '' : '是', //这里用相反的描述
+                    'defaultValue': item.defaultValue,
+                    //'desc': $.String.escapeHtml(item.desc),
+                    //'desc': Highlight.get(item.desc),
+                    'desc': Highlight.get(item.desc),
+
+                });
+
+            }).join(''),
+
+        });
+
+        show();
+    }
+
+    function show() {
+        $(panel).show();
+    }
+
+    function hide() {
+        $(panel).hide();
+    }
+
+    return {
+        render: render,
+    };
+
+});
+
+
+// modules/main-panel/MainPanel/Auto/Method/Returns.js
+
+define('/MainPanel/Auto/Method/Returns', function (require, module, exports) {
+
+    var $ = require('$');
+    var MiniQuery = require('MiniQuery');
+    var Highlight = require('Highlight');
+
+    var panel = document.getElementById('panel-method-returns');
+    var div = document.getElementById('div-method-returns');
+
+    var samples = $.String.getTemplates(div.innerHTML, [
+        {
+            name: 'table',
+            begin: '<!--',
+            end: '-->',
+
+        },
+        {
+            name: 'tr',
+            begin: '#--tr.begin--#',
+            end: '#--tr.end--#',
+            outer: '{rows}',
+        },
+
+    ]);
+
+    var list = [];
+
+
+    function render(data) {
+
+        list = data.returns || [];
+        if (list.length == 0) {
+            hide();
+            return;
+        }
+
+
+
+        div.innerHTML = $.String.format(samples['table'], {
+
+            'rows': $.Array.keep(list, function (item, index) {
+
+                return $.String.format(samples['tr'], {
+                    'type': item.type,
+                    'desc': Highlight.get(item.desc), //$.String.escapeHtml(item.desc),
+                });
+
+            }).join(''),
+
+        });
+
+        show();
+    }
+
+    function show() {
+        $(panel).show();
+    }
+
+    function hide() {
+        $(panel).hide();
+    }
+
+    return {
+        render: render,
+    };
+});
+
+
+// modules/main-panel/MainPanel/Auto/Method/Summary.js
+
+define('/MainPanel/Auto/Method/Summary', function (require, module, exports) {
+
+    var $ = require('$');
+    var MiniQuery = require('MiniQuery');
+
+    var Template = require('Template');
+
+    var div = document.getElementById('div-method-summary');
+    
+    var samples = $.String.getTemplates(div.innerHTML, [
+      {
+          name: 'root',
+          begin: '<!--',
+          end: '-->',
+      },
+      {
+          name: 'param',
+          begin: '#--param.begin--#',
+          end: '#--param.end--#',
+          outer: '{params}',
+      },
+
+    ]);
+
+
+    function render(data) {
+
+
+        var params = data.params;
+        var count = params.length;
+
+        div.innerHTML = $.String.format(samples['root'], {
+
+            'memberOf': data.memberOf,
+            'name': data.name,
+            'typeDesc': data.typeDesc,
+            'desc': $.String.escapeHtml(data.desc),
+
+            'params': $.Array.keep(params, function (item, index) {
+
+                if (index == count - 1) {
+                    return item.name;
+                }
+
+                return $.String.format(samples['param'], {
+                    'name': item.name,
+                });
+
+            }).join(''),
+
+        });
+
+    }
+
+
+
+    return {
+        render: render,
+    };
+
+});
+
+
+// modules/main-panel/MainPanel/Auto/Method.js
+
+define('/MainPanel/Auto/Method', function (require, module, exports) {
+
+    var $ = require('$');
+    var MiniQuery = require('MiniQuery');
+
+    var Emitter = MiniQuery.require('Emitter');
+
+    var Summary = require(module, 'Summary');
+    var Params = require(module, 'Params');
+    var Returns = require(module, 'Returns');
+    var Example = require(module, 'Example');
+
+    var view = document.getElementById('view-Method');
+    var emitter = new Emitter();
+
+    function render(data) {
+
+        Summary.render(data);
+        Params.render(data);
+        Returns.render(data);
+        Example.render(data);
+
+        show();
+
+        emitter.fire('render');
+
+    }
+
+    function show() {
+        $(view).show();
+        emitter.fire('show');
+    }
+
+    function hide() {
+        $(view).hide();
+        emitter.fire('hide');
+    }
+
+
+
+    return {
+        render: render,
+        show: show,
+        hide: hide,
+        on: emitter.on.bind(emitter),
+    };
+
+
+    
+
+
+});
+
+
+// modules/main-panel/MainPanel/Auto/Overview/MethodList.js
+
+define('/MainPanel/Auto/Overview/MethodList', function (require, module, exports) {
 
     var $ = require('$');
     var MiniQuery = require('MiniQuery');
@@ -949,7 +1239,6 @@ define('MainPanel/Auto/Overview/MethodList', function (require, module, exports)
 
         show();
 
-        console.dir(list);
 
         div.innerHTML = $.String.format(samples['table'], {
 
@@ -1005,9 +1294,9 @@ define('MainPanel/Auto/Overview/MethodList', function (require, module, exports)
 });
 
 
-// modules/MainPanel/Auto/Overview/PropertyList.js
+// modules/main-panel/MainPanel/Auto/Overview/PropertyList.js
 
-define('MainPanel/Auto/Overview/PropertyList', function (require, module, exports) {
+define('/MainPanel/Auto/Overview/PropertyList', function (require, module, exports) {
 
 
     var $ = require('$');
@@ -1109,9 +1398,65 @@ define('MainPanel/Auto/Overview/PropertyList', function (require, module, export
 });
 
 
-// modules/MainPanel/Auto/Overview.js
+// modules/main-panel/MainPanel/Auto/Overview/Summary.js
 
-define('MainPanel/Auto/Overview', function (require, module, exports) {
+define('/MainPanel/Auto/Overview/Summary', function (require, module, exports) {
+
+    var $ = require('$');
+    var MiniQuery = require('MiniQuery');
+    
+    var Emitter = MiniQuery.require('Emitter');
+    var Template = require('Template');
+
+    var emitter = new Emitter();
+    var div = document.getElementById('div-' + module.id + '-content');
+  
+    var hasBind = false;
+
+    var current = {};
+
+
+    function bindEvents() {
+        if (hasBind) {
+            return;
+        }
+
+        hasBind = true;
+
+        $(div).delegate('[data-cmd="source"]', 'click', function () {
+
+            emitter.fire('click', 'source', [current.name, current.srcFileName]);
+        });
+
+    }
+
+    function render(data) {
+       
+        current = {
+            'name': data.name,
+            'typeDesc': data.typeDesc,
+            'desc': data.desc,
+            'srcFileName': data.srcFileName,
+        };
+
+        Template.fill(div, current);
+
+
+        bindEvents();
+    }
+
+
+    return {
+        render: render,
+        on: emitter.on.bind(emitter),
+    };
+
+});
+
+
+// modules/main-panel/MainPanel/Auto/Overview.js
+
+define('/MainPanel/Auto/Overview', function (require, module, exports) {
 
     var $ = require('$');
     var MiniQuery = require('MiniQuery');
@@ -1181,368 +1526,9 @@ define('MainPanel/Auto/Overview', function (require, module, exports) {
 });
 
 
-// modules/MainPanel/Auto/Method/Summary.js
+// modules/main-panel/MainPanel/Auto/Source/Code.js
 
-define('MainPanel/Auto/Method/Summary', function (require, module, exports) {
-
-    var $ = require('$');
-    var MiniQuery = require('MiniQuery');
-
-    var Template = require('Template');
-
-    var div = document.getElementById('div-method-summary');
-    
-    var samples = $.String.getTemplates(div.innerHTML, [
-      {
-          name: 'root',
-          begin: '<!--',
-          end: '-->',
-      },
-      {
-          name: 'param',
-          begin: '#--param.begin--#',
-          end: '#--param.end--#',
-          outer: '{params}',
-      },
-
-    ]);
-
-
-    function render(data) {
-
-        console.dir(data);
-
-        var params = data.params;
-        var count = params.length;
-
-        div.innerHTML = $.String.format(samples['root'], {
-
-            'memberOf': data.memberOf,
-            'name': data.name,
-            'typeDesc': data.typeDesc,
-            'desc': $.String.escapeHtml(data.desc),
-
-            'params': $.Array.keep(params, function (item, index) {
-
-                if (index == count - 1) {
-                    return item.name;
-                }
-
-                return $.String.format(samples['param'], {
-                    'name': item.name,
-                });
-
-            }).join(''),
-
-        });
-
-    }
-
-
-
-    return {
-        render: render,
-    };
-
-});
-
-
-// modules/MainPanel/Auto/Method/Params.js
-
-define('MainPanel/Auto/Method/Params', function (require, module, exports) {
-
-    var $ = require('$');
-    var MiniQuery = require('MiniQuery');
-    
-    var Highlight = require('Highlight');
-
-    var panel = document.getElementById('panel-method-params');
-    var div = document.getElementById('div-method-params');
-
-    var samples = $.String.getTemplates(div.innerHTML, [
-        {
-            name: 'table',
-            begin: '<!--',
-            end: '-->',
-
-        },
-        {
-            name: 'tr',
-            begin: '#--tr.begin--#',
-            end: '#--tr.end--#',
-            outer: '{rows}',
-        },
-        
-    ]);
-
-    var list = [];
-
-
-    function render(data) {
-
-        list = data.params || [];
-
-        if (list.length == 0) {
-            hide();
-            return;
-        }
-
-        div.innerHTML = $.String.format(samples['table'], {
-            'rows': $.Array.keep(list, function (item, index) {
-
-                return $.String.format(samples['tr'], {
-                    'name': item.name,
-                    'type': item.type,
-                    'optional': item.isOptional ? '' : '是', //这里用相反的描述
-                    'defaultValue': item.defaultValue,
-                    //'desc': $.String.escapeHtml(item.desc),
-                    //'desc': Highlight.get(item.desc),
-                    'desc': Highlight.get(item.desc),
-
-                });
-
-            }).join(''),
-
-        });
-
-        show();
-    }
-
-    function show() {
-        $(panel).show();
-    }
-
-    function hide() {
-        $(panel).hide();
-    }
-
-    return {
-        render: render,
-    };
-
-});
-
-
-// modules/MainPanel/Auto/Method/Returns.js
-
-define('MainPanel/Auto/Method/Returns', function (require, module, exports) {
-
-    var $ = require('$');
-    var MiniQuery = require('MiniQuery');
-    var Highlight = require('Highlight');
-
-    var panel = document.getElementById('panel-method-returns');
-    var div = document.getElementById('div-method-returns');
-
-    var samples = $.String.getTemplates(div.innerHTML, [
-        {
-            name: 'table',
-            begin: '<!--',
-            end: '-->',
-
-        },
-        {
-            name: 'tr',
-            begin: '#--tr.begin--#',
-            end: '#--tr.end--#',
-            outer: '{rows}',
-        },
-
-    ]);
-
-    var list = [];
-
-
-    function render(data) {
-
-        list = data.returns || [];
-        if (list.length == 0) {
-            hide();
-            return;
-        }
-
-
-
-        div.innerHTML = $.String.format(samples['table'], {
-
-            'rows': $.Array.keep(list, function (item, index) {
-
-                return $.String.format(samples['tr'], {
-                    'type': item.type,
-                    'desc': Highlight.get(item.desc), //$.String.escapeHtml(item.desc),
-                });
-
-            }).join(''),
-
-        });
-
-        show();
-    }
-
-    function show() {
-        $(panel).show();
-    }
-
-    function hide() {
-        $(panel).hide();
-    }
-
-    return {
-        render: render,
-    };
-});
-
-
-// modules/MainPanel/Auto/Method/Example.js
-
-define('MainPanel/Auto/Method/Example', function (require, module, exports) {
-
-    var $ = require('$');
-    var MiniQuery = require('MiniQuery');
-    
-    var HLJS = require('hljs');
-
-    var panel = document.getElementById('panel-method-example');
-    var ul = document.getElementById('ul-method-example-lines');
-    var code = document.getElementById('code-method-example');
-    var pre = code.parentNode;
-
-    //根据文本内容计算需要的高度。
-    function getHeight(lines, delta) {
-        return lines.length * 20 + (delta || 0);
-    }
-
-
-    //产生行号的 html
-    function getLineNumbers(lines) {
-        return $.Array.keep(lines, function (item, index) {
-            return '<li>' + (index + 1) + '</li>';
-        }).join('');
-    }
-
-
-    function getMinSpaces(lines) {
-
-        var min = 99999;
-
-        $.Array.each(lines, function (item, index) {
-            if (!item) { //空行
-                return;
-            }
-            var s = item.match(/^\s{0,}/g); //提取出前导空格串
-            min = Math.min(min, s[0].length);
-        });
-
-        return min;
-    }
-
-
-    function normalize(js) {
-        var lines = js.split(/\r\n|\n|\r/);
-
-        var n = getMinSpaces(lines);
-        if (n == 0) {
-            return lines;
-        }
-
-        //去掉每一行的最小公共前导空格。
-        return $.Array.keep(lines, function (s, index) {
-            return s.slice(n);
-        });
-    }
-
-
-    function render(data) {
-
-        var list = data.example;
-        if (list.length == 0) {
-            $(panel).hide();
-            return;
-        }
-
-        $(panel).show();
-
-
-        var js = data.example[0].desc;
-        var lines = normalize(js);
-        js = lines.join('\n');
-
-        code.innerHTML = HLJS.highlight('javascript', js).value;
-        ul.innerHTML = getLineNumbers(lines);
-
-        var h = getHeight(lines);
-        $(pre).height(h);
-
-    }
-
-
-
-    return {
-        render: render,
-    };
-
-});
-
-
-// modules/MainPanel/Auto/Method.js
-
-define('MainPanel/Auto/Method', function (require, module, exports) {
-
-    var $ = require('$');
-    var MiniQuery = require('MiniQuery');
-
-    var Emitter = MiniQuery.require('Emitter');
-
-    var Summary = require(module, 'Summary');
-    var Params = require(module, 'Params');
-    var Returns = require(module, 'Returns');
-    var Example = require(module, 'Example');
-
-    var view = document.getElementById('view-Method');
-    var emitter = new Emitter();
-
-    function render(data) {
-
-        Summary.render(data);
-        Params.render(data);
-        Returns.render(data);
-        Example.render(data);
-
-        show();
-
-        emitter.fire('render');
-
-    }
-
-    function show() {
-        $(view).show();
-        emitter.fire('show');
-    }
-
-    function hide() {
-        $(view).hide();
-        emitter.fire('hide');
-    }
-
-
-
-    return {
-        render: render,
-        show: show,
-        hide: hide,
-        on: emitter.on.bind(emitter),
-    };
-
-
-    
-
-
-});
-
-
-// modules/MainPanel/Auto/Source/Code.js
-
-define('MainPanel/Auto/Source/Code', function (require, module, exports) {
+define('/MainPanel/Auto/Source/Code', function (require, module, exports) {
 
     var $ = require('$');
     var MiniQuery = require('MiniQuery');
@@ -1591,9 +1577,9 @@ define('MainPanel/Auto/Source/Code', function (require, module, exports) {
 });
 
 
-// modules/MainPanel/Auto/Source/Data.js
+// modules/main-panel/MainPanel/Auto/Source/Data.js
 
-define('MainPanel/Auto/Source/Data', function (require, module, exports) {
+define('/MainPanel/Auto/Source/Data', function (require, module, exports) {
 
     var $ = require('$');
     var MiniQuery = require('MiniQuery');
@@ -1602,8 +1588,6 @@ define('MainPanel/Auto/Source/Data', function (require, module, exports) {
 
 
     //加载数据。
-    //这里既可采用异步方式，方便以后从服务器端加载，
-    //也可以采用直接引入的方式
     function load(url, fn) {
 
         var file = url$file[url];
@@ -1612,8 +1596,7 @@ define('MainPanel/Auto/Source/Data', function (require, module, exports) {
             return;
         }
 
-
-        var path = 'data/source/' + url;
+        var path = 'data/' + url;
 
         //这里要作为文本去获取，因为 jQuery 会自动执行 js 代码，这不是我们想要的行为
         $.get(path, function (file) {
@@ -1634,9 +1617,9 @@ define('MainPanel/Auto/Source/Data', function (require, module, exports) {
 });
 
 
-// modules/MainPanel/Auto/Source/Header.js
+// modules/main-panel/MainPanel/Auto/Source/Header.js
 
-define('MainPanel/Auto/Source/Header', function (require, module, exports) {
+define('/MainPanel/Auto/Source/Header', function (require, module, exports) {
 
     var $ = require('$');
     var Template = require('Template');
@@ -1660,9 +1643,9 @@ define('MainPanel/Auto/Source/Header', function (require, module, exports) {
 });
 
 
-// modules/MainPanel/Auto/Source/Lines.js
+// modules/main-panel/MainPanel/Auto/Source/Lines.js
 
-define('MainPanel/Auto/Source/Lines', function (require, module, exports) {
+define('/MainPanel/Auto/Source/Lines', function (require, module, exports) {
 
     var $ = require('$');
     var MiniQuery = require('MiniQuery');
@@ -1687,15 +1670,6 @@ define('MainPanel/Auto/Source/Lines', function (require, module, exports) {
             };
         });
 
-        setTimeout(function () {
-
-            $(ul).find('li').each(function (index) {
-                var li = this;
-                var p = $(li).position();
-                console.log(index, p.top, p.top == index * 20 +4);
-            });;
-        }, 1500);
-
     }
 
 
@@ -1707,9 +1681,9 @@ define('MainPanel/Auto/Source/Lines', function (require, module, exports) {
 });
 
 
-// modules/MainPanel/Auto/Source.js
+// modules/main-panel/MainPanel/Auto/Source.js
 
-define('MainPanel/Auto/Source', function (require, module, exports) {
+define('/MainPanel/Auto/Source', function (require, module, exports) {
 
     var $ = require('$');
     var MiniQuery = require('MiniQuery');
@@ -1778,194 +1752,9 @@ define('MainPanel/Auto/Source', function (require, module, exports) {
 });
 
 
-// modules/MainPanel/Auto/Data/Helper.js
+// modules/main-panel/MainPanel/Auto.js
 
-
-define('MainPanel/Auto/Data/Helper', function (require, module, exports) {
-
-    var $ = require('$');
-    var MiniQuery = require('MiniQuery');
-
-
-    function normalize(list) {
-
-        var name$item = {};
-
-
-        //把类排在前面
-        list.sort(function (x, y) {
-
-            if (x.isa.toLowerCase() == 'constructor' && y.isa.toLowerCase() != 'constructor') {
-                return -1;
-            }
-
-            if (x.isa.toLowerCase() != 'constructor' && y.isa.toLowerCase() == 'constructor') {
-                return 1;
-            }
-
-            //再按名称排序
-            return x.alias < y.alias ? -1 :
-                x.alias > y.alias ? 1 : 0;
-        });
-
-
-        $.Array.each(list, function (item, index) {
-
-            var srcFile = item.srcFile.split('\\');
-
-            var paths = $.Array.map(srcFile, function (item, index) {
-                if (item == '..') {
-                    return null;
-                }
-
-                return item;
-            });
-
-
-            //先整体排序
-            item.methods.sort(function (x, y) {
-                return x.name < y.name ? -1 :
-                    x.name > y.name ? 1 : 0;
-            })
-
-
-            var events = [];
-            var methods = [];
-
-            $.Array.each(item.methods, function (item) {
-
-                item['typeDesc'] = item.isStatic ? '静态' : '实例';
-
-                if (item.isEvent) {
-                    events.push(item);
-                }
-                else {
-                    methods.push(item);
-                }
-            })
-
-            var isClass = item.isa.toLowerCase() == 'constructor';
-
-            var typeDesc = '';
-            if (isClass) {
-                typeDesc += '类';
-            }
-
-            if (item.isNamespace) {
-                typeDesc += '命名空间';
-            }
-
-
-            var obj = $.Object.extend({}, item, {
-
-                'superClass': item.inheritsFrom[0],
-                'supers': [],
-                'derives': [],
-                'events': events,
-                'methods': methods,
-                'properties': item.properties.sort(function (x, y) {
-                    return x.name < y.name ? -1 :
-                        x.name > y.name ? 1 : 0;
-                }),
-
-                'isClass': isClass,
-                'srcFileName': paths.slice(1).join('/'),
-                'typeDesc': typeDesc,
-            });
-
-            name$item[item.alias] = obj;
-        });
-
-        $.Object.each(name$item, function (key, item) {
-
-            var supers = item.supers;
-            var superClass = item.superClass;
-
-            while (superClass) {
-                supers.push(superClass);
-                superClass = name$item[superClass].superClass;
-            }
-
-            supers.reverse();
-
-
-            superClass = item.superClass;
-            if (superClass) {
-                name$item[superClass].derives.push(item.alias);
-            }
-        });
-
-
-        return name$item;
-    }
-
-
-    return {
-        normalize: normalize,
-    };
-
-});
-
-
-// modules/MainPanel/Auto/Data.js
-
-define('MainPanel/Auto/Data', function (require, module, exports) {
-
-    var $ = require('$');
-    var MiniQuery = require('MiniQuery');
-
-    var Script = MiniQuery.require('Script');
-
-    var Helper = require(module, 'Helper');
-
-    var json = null;
-    var key = '__classes__';
-
-
-    //加载数据。
-    //这里既可采用异步方式，方便以后从服务器端加载，
-    //也可以采用直接引入的方式
-    function load(fn) {
-
-        if (json) {
-            fn && fn(json);
-            return;
-        }
-
-        var list = window[key];
-        if (list) {
-            json = Helper.normalize(list);
-            fn && fn(json);
-            return;
-        }
-
-
-        Script.load({
-            url: [
-                'data/classes.js',
-            ],
-
-            onload: function () {
-                var list = window[key];
-                json = Helper.normalize(list);
-                fn && fn(json);
-            }
-        });
-
-    }
-
-
-
-    return {
-        load: load,
-    };
-
-});
-
-
-// modules/MainPanel/Auto.js
-
-define('MainPanel/Auto', function (require, module, exports) {
+define('/MainPanel/Auto', function (require, module, exports) {
 
     var $ = require('$');
     var MiniQuery = require('MiniQuery');
@@ -1980,6 +1769,7 @@ define('MainPanel/Auto', function (require, module, exports) {
     var emitter = new Emitter();
     var view = document.getElementById('view-Auto');
     var hasBind = false;
+
 
     function render(name, view) {
 
@@ -2097,20 +1887,20 @@ define('MainPanel/Auto', function (require, module, exports) {
 });
 
 
-// modules/MainPanel/Manual/Data.js
+// modules/main-panel/MainPanel/Manual/Data.js
 
 
-define('MainPanel/Manual/Data', function (require, module, exports) {
+define('/MainPanel/Manual/Data', function (require, module, exports) {
 
     var $ = require('$');
     var MiniQuery = require('MiniQuery');
     var Url = MiniQuery.require('Url');
 
-    var baseUrl = 'data/demo/';
+    var JSON = require('JSON');
+    var Path = require('Path');
 
-    var url$json = {};
+    var baseUrl = Path.get('demo/');
     var url$md = {};
-
 
 
     function getUrl(name, url) {
@@ -2119,6 +1909,7 @@ define('MainPanel/Manual/Data', function (require, module, exports) {
             return url;
         }
 
+       
         return baseUrl + name + '/' + url;;
     }
 
@@ -2152,28 +1943,6 @@ define('MainPanel/Manual/Data', function (require, module, exports) {
 
 
 
-    function loadJSON(url, fn) {
-
-        var json = url$json[url];
-        if (json) {
-            fn && fn(json);
-            return;
-        }
-
-
-        //加上随机查询字符串，以确保拿到最新版本。
-        var rurl = Url.randomQueryString(url);
-
-        $.getJSON(rurl, function (json) {
-
-            url$json[url] = json;
-
-            fn && fn(json);
-
-        });
-    }
-
-
 
     function loadMD(url, fn) {
 
@@ -2205,7 +1974,7 @@ define('MainPanel/Manual/Data', function (require, module, exports) {
 
         var url = getUrl(name, 'data.json');
 
-        loadJSON(url, function (json) {
+        JSON.load(url, function (json) {
 
             var isReady = checkReady(json, fn);
             if (isReady) {
@@ -2273,119 +2042,9 @@ define('MainPanel/Manual/Data', function (require, module, exports) {
 
 
 
-// modules/MainPanel/Manual/Demos/Tabs.js
+// modules/main-panel/MainPanel/Manual/Demos/Panels.js
 
-define('MainPanel/Manual/Demos/Tabs', function (require, module, exports) {
-
-    var $ = require('$');
-    var MiniQuery = require('MiniQuery');
-    var KERP = require('KERP');
-
-    var Mapper = $.require('Mapper');
-    var Emitter = $.require('Emitter');
-
-    var mapper = new Mapper();
-    var guidKey = Mapper.getGuidKey();
-
-
-    function Tabs(config) {
-
-        this[guidKey] = $.String.random();
-
-        var meta = {
-            sample: config.sample,
-            list: config.list,
-            current: config.current,
-            container: config.container,
-            emitter: new Emitter(this),
-        };
-
-        mapper.set(this, meta);
-
-
-
-    }
-
-
-
-    Tabs.prototype = { //实例方法
-        constructor: Tabs,
-
-        render: function () {
-
-            var meta = mapper.get(this);
-            var list = meta.list;
-            var sample = meta.sample;
-            var current = meta.current;
-
-            var html = $.Array.keep(list, function (item, index) {
-
-                return $.String.format(sample, {
-                    'index': index,
-                    'text': item.text,
-                    'on': index == current ? 'on' : ''
-                });
-
-            }).join('');
-
-            $(meta.container).html(html);
-            return html;
-        },
-
-        active: function (index, fireEvent) {
-            var meta = mapper.get(this);
-            meta.current = index;
-
-            this.render();
-
-            if (fireEvent) {
-                meta.emitter.fire('active', [index]);
-            }
-        },
-
-        bindEvents: function () {
-            var meta = mapper.get(this);
-            var container = meta.container;
-
-            var self = this;
-
-            $(container).delegate('li', 'click', function (event) {
-                var li = this;
-                var index = +li.getAttribute('data-index');
-                self.active(index, true);
-            });
-        },
-
-        /**
-        * 给当前实例绑定一个指定名称的事件回调函数。
-        */
-        on: function (name, fn) {
-
-            var meta = mapper.get(this);
-            var emitter = meta.emitter;
-            var args = [].slice.call(arguments, 0);
-
-            emitter.on.apply(emitter, args);
-        },
-    };
-
-
-
-    return $.Object.extend(Tabs, { //静态方法
-
-        create: function (config) {
-            return new Tabs(config);
-        }
-
-    });
-
-});
-
-
-
-// modules/MainPanel/Manual/Demos/Panels.js
-
-define('MainPanel/Manual/Demos/Panels', function (require, module, exports) {
+define('/MainPanel/Manual/Demos/Panels', function (require, module, exports) {
 
     var $ = require('$');
     var MiniQuery = require('MiniQuery');
@@ -2715,9 +2374,119 @@ define('MainPanel/Manual/Demos/Panels', function (require, module, exports) {
 
 
 
-// modules/MainPanel/Manual/Demos.js
+// modules/main-panel/MainPanel/Manual/Demos/Tabs.js
 
-define('MainPanel/Manual/Demos', function (require, module, exports) {
+define('/MainPanel/Manual/Demos/Tabs', function (require, module, exports) {
+
+    var $ = require('$');
+    var MiniQuery = require('MiniQuery');
+    var KERP = require('KERP');
+
+    var Mapper = $.require('Mapper');
+    var Emitter = $.require('Emitter');
+
+    var mapper = new Mapper();
+    var guidKey = Mapper.getGuidKey();
+
+
+    function Tabs(config) {
+
+        this[guidKey] = $.String.random();
+
+        var meta = {
+            sample: config.sample,
+            list: config.list,
+            current: config.current,
+            container: config.container,
+            emitter: new Emitter(this),
+        };
+
+        mapper.set(this, meta);
+
+
+
+    }
+
+
+
+    Tabs.prototype = { //实例方法
+        constructor: Tabs,
+
+        render: function () {
+
+            var meta = mapper.get(this);
+            var list = meta.list;
+            var sample = meta.sample;
+            var current = meta.current;
+
+            var html = $.Array.keep(list, function (item, index) {
+
+                return $.String.format(sample, {
+                    'index': index,
+                    'text': item.text,
+                    'on': index == current ? 'on' : ''
+                });
+
+            }).join('');
+
+            $(meta.container).html(html);
+            return html;
+        },
+
+        active: function (index, fireEvent) {
+            var meta = mapper.get(this);
+            meta.current = index;
+
+            this.render();
+
+            if (fireEvent) {
+                meta.emitter.fire('active', [index]);
+            }
+        },
+
+        bindEvents: function () {
+            var meta = mapper.get(this);
+            var container = meta.container;
+
+            var self = this;
+
+            $(container).delegate('li', 'click', function (event) {
+                var li = this;
+                var index = +li.getAttribute('data-index');
+                self.active(index, true);
+            });
+        },
+
+        /**
+        * 给当前实例绑定一个指定名称的事件回调函数。
+        */
+        on: function (name, fn) {
+
+            var meta = mapper.get(this);
+            var emitter = meta.emitter;
+            var args = [].slice.call(arguments, 0);
+
+            emitter.on.apply(emitter, args);
+        },
+    };
+
+
+
+    return $.Object.extend(Tabs, { //静态方法
+
+        create: function (config) {
+            return new Tabs(config);
+        }
+
+    });
+
+});
+
+
+
+// modules/main-panel/MainPanel/Manual/Demos.js
+
+define('/MainPanel/Manual/Demos', function (require, module, exports) {
 
     var $ = require('$');
     var MiniQuery = require('MiniQuery');
@@ -2859,15 +2628,17 @@ define('MainPanel/Manual/Demos', function (require, module, exports) {
 
 
 
-// modules/MainPanel/Manual/Readme.js
+// modules/main-panel/MainPanel/Manual/Readme.js
 
-define('MainPanel/Manual/Readme', function (require, module, exports) {
+define('/MainPanel/Manual/Readme', function (require, module, exports) {
 
     var $ = require('$');
     var MiniQuery = require('MiniQuery');
     var Template = require('Template');
+    var Path = require('Path');
+    var JSON = require('JSON');
 
-    var hljs = require('hljs');
+    var Highlight = require('Highlight');
     var marked = require('marked');
 
 
@@ -2885,8 +2656,9 @@ define('MainPanel/Manual/Readme', function (require, module, exports) {
 
         $(div).show();
 
-       Template.fill(header, {
-            name: name
+        Template.fill(header, {
+            'path': Path.get('demo'),
+            'name': name,
         });
 
         if (!readme) {
@@ -2894,20 +2666,31 @@ define('MainPanel/Manual/Readme', function (require, module, exports) {
         }
 
         var html = marked(readme);
+        
         content.innerHTML = html;
 
         $(content).find('code[data-language]').each(function () {
+
             var code = this;
             var type = code.getAttribute('data-language');
 
             var html = code.innerHTML;
+            
 
-            html = hljs.highlight(type, html).value; //高亮代码
+            var json = JSON.parse(html);
+            if (json) {
+                html = JSON.stringify(json, 4);
+            }
+
+
+            html = Highlight.get(type, html); //高亮代码
+
             $(code).addClass('hljs').html(html);
 
         });
 
     }
+
 
 
     return {
@@ -2918,9 +2701,9 @@ define('MainPanel/Manual/Readme', function (require, module, exports) {
 });
 
 
-// modules/MainPanel/Manual.js
+// modules/main-panel/MainPanel/Manual.js
 
-define('MainPanel/Manual', function (require, module, exports) {
+define('/MainPanel/Manual', function (require, module, exports) {
 
     var $ = require('$');
     var MiniQuery = require('MiniQuery');
@@ -2970,12 +2753,12 @@ define('MainPanel/Manual', function (require, module, exports) {
 });
 
 
-// modules/MainPanel.js
+// modules/main-panel/MainPanel.js
 
 /**
 * 主面板模块
 */
-define('MainPanel', function (require, module, exports) {
+define('/MainPanel', function (require, module, exports) {
 
     var $ = require('$');
     var MiniQuery = require('MiniQuery');
@@ -3072,35 +2855,454 @@ define('MainPanel', function (require, module, exports) {
 
     
 
-// index.js
+// modules/Scroller.js
 
-//控制器。 
-; (function () {
+/**
+* 
+*/
+define('/Scroller', function (require, module, exports) {
 
     var $ = require('$');
+    var MiniQuery = require('MiniQuery');
 
-    var Sidebar = require('Sidebar');
-    var MainPanel = require('MainPanel');
-    var Hash = require('Hash');
-    var Scroller = require('Scroller');
+    var Emitter = MiniQuery.require('Emitter');
+    var emitter = new Emitter();
+
+    var isByJS = false;
+    function to(y) {
+        isByJS = true;
+        y = Number(y);
+        scrollTo(null, y);
+    }
+
+
+    function bindEvents() {
+
+        $(document).on('scroll', function (event) {
+            if (isByJS) {
+                isByJS = false;
+                return;
+            }
+
+            var y = document.body.scrollTop; //#a
+            emitter.fire('change', [y]);
+        });
+    }
+
+    bindEvents();
+
+    return {
+        to: to,
+        on: emitter.on.bind(emitter),
+    };
+
+});
+
+
+
+
+
+    
+
+// modules/sidebar/Sidebar/Data.js
+
+/**
+* 侧边菜单栏的数据模块
+*/
+define('/Sidebar/Data', function (require, module, exports) {
+
+    var $ = require('$');
+    var MiniQuery = require('MiniQuery');
+    var Script = MiniQuery.require('Script');
+
+    var JSON = require('JSON');
+    var Path = require('Path');
+
+
+
+    //加载数据。
+    function load(fn) {
+
+        var url = Path.get('sidebar.json');
+
+        JSON.load(url, function (json) {
+
+            var items = json.items;
+
+
+            loadClasses(json, function (classes) {
+
+                var list = $.Array.map(classes, function (obj, index) {
+
+                    var alias = obj.alias;
+
+                    var item = $.Array.findItem(items, function (item, i) {
+                        return item.alias == alias;
+                    });
+
+                    return item ? null : {
+                        'text': alias,
+                        'alias': alias,
+                    };
+
+                });
+
+                json.items = items.concat(list);
+
+                json = normalize(json);
+                fn && fn(json);
+
+            });
+        });
+
+
+    }
+
+
+    function loadClasses(json, fn) {
+
+        if (!json.jsdoc) { //没有 jsdoc
+            fn && fn([]);
+            return;
+        }
+
+
+        var url = Path.get('jsdoc/classes.min.json');
+        JSON.load(url, fn);
+    }
+
+
+
+    function normalize(json) {
+
+        var id = 0;
+
+        var list = $.Array.map(json.items, function (item, index) {
+
+            if (item.hidden) {
+                return null;
+            }
+
+            item.id = id++; //增加一个 id
+
+            return item;
+        });
+
+
+
+        //先整体排序
+        list.sort(function (x, y) {
+            return x.alias < y.alias ? -1 :
+                x.alias > y.alias ? 1 : 0;
+        })
+
+        json.items = list;
+
+        return json;
+    }
+
+
+
+    return {
+        load: load,
+    };
+});
+
+
+// modules/sidebar/Sidebar/Scroller.js
+
+define('/Sidebar/Scroller', function (require, module, exports) {
+
+    var $ = require('$');
+    var MiniQuery = require('MiniQuery');
+   
+    var nav = null;
+    var div = null;
+    var ul = null;
+
+    var itemHeight = 0;     //菜单项的高度
+    var windowHeight = 0;   //菜单栏的窗口高度
+    var windowSize = 0;     //窗口大小，即可以显示多少条菜单项
+    var middleIndex = 0;    //窗口中的中位数索引值
+    var lastIndex = 0;      //最后一项菜单项的索引值
+    var currentIndex = -1;   //当前激活的菜单项的索引值
+
+    var y = 0;              //当前的 y 值。
+    var maxY = 0;           //所允许向上移动的最大高度
+    var hasBind = false;
+
+    function bindEvents() {
+
+        if (hasBind) {
+            return;
+        }
+
+        hasBind = true;
+
+        $(window).on('resize', function () {
+
+            adjustHeight(); //先执行这个
+            compute(lastIndex + 1);
+            
+
+            if (currentIndex >= 0) {
+                to(currentIndex);
+            }
+        });
+
+        div.on('mousewheel', function (event) {
+
+            var isUp = event.originalEvent.wheelDelta > 0; //鼠标轮滚动方向
+            var delta = isUp ? 0 - itemHeight : itemHeight;
+
+            y = y + delta;
+
+            y = y < 0 ? 0 :
+                y > maxY ? maxY :
+                y;
+
+            console.log(y);
+
+            ul.css('transform', 'translateY(-' + y + 'px)');
+
+            event.preventDefault();
+
+        });
+    }
+
+
+    //计算跟窗口大小有关的值
+    function compute(total) {
+
+        windowHeight = ul.height();
+        windowSize = Math.floor(windowHeight / itemHeight);
+        middleIndex = Math.floor(windowSize / 2);
+        maxY = total * itemHeight - windowHeight;
+    }
+
+
+    function adjustHeight() {
+        var h = nav.height();
+        div.height(h - 60);
+    }
+
+
+    /**
+    * 用滑动窗口的方式滚动到指定索引值菜单的位置。
+    * @param {number} index 菜单项的索引。
+    */
+    function to(index) {
+
+        currentIndex = index;
+
+        //需要向上移动的距离
+        y = index <= middleIndex ? 0 : //首半段
+            index >= lastIndex - middleIndex ? lastIndex - windowSize + 1 : //末半段
+            index - middleIndex;
+
+        y = y * itemHeight;
+        y = Math.min(maxY, y);
+
+        ul.css('transform', 'translateY(-' + y + 'px)');
+
+    }
+
+
+
+    /**
+    * 渲染。
+    * @param {number} total 菜单项的总数。
+    */
+    function render(total) {
+
+        nav = $('#nav-sidebar');
+        div = $('#div-sidebar');
+        ul = $('#ul-sidebar');
+
+        lastIndex = total - 1;
+        itemHeight = ul.find('>li:eq(0)').outerHeight();  //每项都是一样的，取第一项即可
+
+        adjustHeight(); //这个先执行
+
+        compute(total);
+        bindEvents();
+
+    }
+
+
+    return {
+        render: render,
+        to: to,
+    };
+});
+
+
+// modules/sidebar/Sidebar.js
+
+/**
+* 侧边菜单栏模块
+*/
+define('/Sidebar', function (require, module, exports) {
+
+    var $ = require('$');
+    var MiniQuery = require('MiniQuery');
+
+    var Emitter = MiniQuery.require('Emitter');
+    var Template = require('Template');
+    var Tabs = require('Tabs');
+
+    var Data = require(module, 'Data');
+    var Scroller = require(module, 'Scroller');
+
+    var ul = document.getElementById('ul-sidebar');
+
+    var emitter = new Emitter();
+    var tabs = null;
+    var list = [];
+
+    var id$item = {};
+    var id$index = {};
+
+    var currentItem = null;
+
+
+    function get(id) {
+        var item = id$item[id];
+        return item;
+    }
+
+
+    function render() {
+
+
+        Data.load(function (json) {
+
+            document.title = json.title + ' ' + json.type;
+
+            list = json.items;
+
+
+            $.Array.each(list, function (item, index) {
+                var id = item.id;
+                id$item[id] = item;
+                id$index[id] = index;
+            });
+
+
+            Template.fill('#div-sidebar-title', json);
+
+            Template.fill(ul, list, function (item, index) {
+
+                var icon = item.icon;
+
+                return {
+                    'index': index,
+                    'text': item.text,
+                    'icon': icon,
+                    'icon-hidden': icon === false ? 'hidden' : '',
+                };
+
+            });
+
+
+            tabs = Tabs.create({
+                container: ul,
+                selector: '>li',
+                indexKey: 'data-index',
+                current: null,
+                event: 'click',
+                activedClass: 'on',
+                change: function (index, oldIndex) { //这里的，如果当前项是高亮，再次进入时不会触发
+                    var item = list[index];
+                    var oldItem = list[oldIndex];
+
+                    emitter.fire('active', [item, oldItem]);
+                }
+            });
+
+            Scroller.render(list.length);
+
+            emitter.fire('render', [list]);
+        });
+
+
+    }
+
+
+
+    function active(id) {
+
+        var item = id$item[id];
+        var index = id$index[id];
+
+        var oldItem = currentItem;
+        currentItem = item;
+
+        tabs.active(index);
+        Scroller.to(index);
+    }
+
+
+
+
+    return {
+        render: render,
+        active: active,
+        get: get,
+        on: emitter.on.bind(emitter),
+    };
+
+});
+
+
+
+
+
+    
+
+// index.js
+
+
+define('', function (require, module, exports) {
+
+    var $ = require('$');
+    var MiniQuery = require('MiniQuery');
+    var Url = MiniQuery.require('Url');
+
+    var qs = Url.getQueryString(window) || {
+        type: 'default',
+        version: '1.0.0',
+    };
+
+
+    var Path = require('Path');
+    Path.set(qs.type, qs.version);
+
+    
+    
+
+
+    var Sidebar = require(module, 'Sidebar');
+    var MainPanel = require(module, 'MainPanel');
+    var Hash = require(module, 'Hash');
+    var Scroller = require(module, 'Scroller');
 
 
     MainPanel.on('render', function () {
         var y = Hash.get('y');
         //这里需要延迟一下，不然由于DOM解析比较慢，会导致内容高度还没出来就先滚过去，结果是滚不到
-        setTimeout(function () { 
+        setTimeout(function () {
             Scroller.to(y);
         }, 100);
 
     });
 
-    MainPanel.on('view',  function (type, name) {
+    MainPanel.on('view', function (type, name) {
         Hash.set('view', {
             type: type,
             name: name,
         });
 
-        console.dir(Hash.get());
     });
 
 
@@ -3150,6 +3352,10 @@ define('MainPanel', function (require, module, exports) {
     Sidebar.render();
 
 
+
+
+
+
     $(document.body).delegate('.panel .header>span', 'click', function (event) {
         var span = this;
         var header = span.parentNode;
@@ -3165,9 +3371,11 @@ define('MainPanel', function (require, module, exports) {
     });
 
 
-    
 
-})();
+
+});
+
+require('');
 
 // ../bin/partial/end.js
 
@@ -3191,6 +3399,8 @@ define('MainPanel', function (require, module, exports) {
     history,
     setTimeout,
     setInterval,
+
+
 
     Array, 
     Boolean,

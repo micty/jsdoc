@@ -1,0 +1,6 @@
+﻿<div id="view-Method" style="display: none;">
+    <link rel="grunt" href="/Summary.html" />
+    <link rel="grunt" href="/Params.html" />
+    <link rel="grunt" href="/Returns.html" />
+    <link rel="grunt" href="/Example.html" data-tab="no" />
+</div>
