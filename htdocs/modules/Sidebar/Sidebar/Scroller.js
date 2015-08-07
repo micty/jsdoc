@@ -61,7 +61,7 @@ define('/Sidebar/Scroller', function (require, module, exports) {
 
     //计算跟窗口大小有关的值
     function compute(total) {
-
+       
         windowHeight = ul.height();
         windowSize = Math.floor(windowHeight / itemHeight);
         middleIndex = Math.floor(windowSize / 2);

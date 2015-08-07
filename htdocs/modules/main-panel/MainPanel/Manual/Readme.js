@@ -11,9 +11,9 @@ define('/MainPanel/Manual/Readme', function (require, module, exports) {
     var marked = require('marked');
 
 
-    var div = document.getElementById('div-readme');
-    var header = document.getElementById('div-readme-header');
-    var content = document.getElementById('div-readme-content');
+    var div = document.getElementById('div-main-panel-readme');
+    var header = document.getElementById('div-main-panel-readme-header');
+    var content = document.getElementById('div-main-panel-readme-content');
 
 
     function render(name, readme) {

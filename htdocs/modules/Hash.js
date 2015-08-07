@@ -1,6 +1,6 @@
 ﻿
 /**
-* Url地址栏的 hash 工具模块
+* url 地址栏的 hash 工具模块
 */
 define('/Hash', function (require, module, exports) {
 
@@ -9,6 +9,8 @@ define('/Hash', function (require, module, exports) {
 
     var Url = MiniQuery.require('Url');
     var Emitter = MiniQuery.require('Emitter');
+
+
     var emitter = new Emitter();
     
 
@@ -16,7 +18,9 @@ define('/Hash', function (require, module, exports) {
         var args = [].slice.call(arguments, 0);
         args = [window].concat(args);
 
-        return Url.getHash.apply(null, args);
+        var hash = Url.getHash.apply(null, args);
+        return hash;
+
     }
 
 
@@ -24,10 +28,10 @@ define('/Hash', function (require, module, exports) {
 
         var hash = Url.getHash(window) || {};
 
-        if (typeof key == 'object') {
+        if (typeof key == 'object') { //重载 set({ ... })，批量设置的情况
             $.Object.extend(hash, key);
         }
-        else {
+        else { //单个设置
             hash[key] = value;
         }
 
@@ -36,6 +40,7 @@ define('/Hash', function (require, module, exports) {
     }
 
     function remove(key) {
+
         var hash = Url.getHash(window);
         if (!hash || !(key in hash)) {
             return;
@@ -45,39 +50,43 @@ define('/Hash', function (require, module, exports) {
         Url.setHash(window, hash);
     }
 
+   
+    function clear() {
+        window.location.hash = '';
+    }
 
-    
-    var hasBind = false;
-
-    function bindEvents() {
-        if (hasBind) {
-            return;
-        }
-
-        hasBind = true;
+    function render() {
 
         Url.hashchange(window, function (hash, old) {
+
+            if (!hash) { //针对后退时，退到无 hash 的状态
+                emitter.fire('empty');
+                return;
+            }
+
             hash = $.Object.parseQueryString(hash);
             old = $.Object.parseQueryString(old);
+
             emitter.fire('change', [hash, old]);
 
         }, true);
 
+        //针对首次进入时，无 hash 的状态
+        var hash = get(''); //获取字符串形式
+        if (!hash) {
+            emitter.fire('empty');
+        }
     }
 
+
+
     return {
+        render: render,
         get: get,
         set: set,
+        clear: clear,
         remove: remove,
-
-        on: function () { //首次调用即绑定
-
-            var args = [].slice.call(arguments, 0);
-            emitter.on.apply(emitter, args);
-
-            bindEvents();
-
-        },
+        on: emitter.on.bind(emitter),
     };
 
 });

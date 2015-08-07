@@ -1,0 +1,10 @@
+body.readme {
+  max-width: 1024px;
+  margin: auto;
+  margin-top: 10px;
+}
+.view-readme .loading {
+  display: -webkit-box;
+  -webkit-box-pack: center;
+  border: none;
+}

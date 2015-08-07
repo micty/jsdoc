@@ -9,7 +9,7 @@ define('/MainPanel/Manual/Data', function (require, module, exports) {
     var JSON = require('JSON');
     var Path = require('Path');
 
-    var baseUrl = Path.get('demo/');
+ 
     var url$md = {};
 
 
@@ -19,7 +19,7 @@ define('/MainPanel/Manual/Data', function (require, module, exports) {
             return url;
         }
 
-       
+        var baseUrl = Path.get('demo/');
         return baseUrl + name + '/' + url;;
     }
 

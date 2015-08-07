@@ -13,6 +13,7 @@ define('/Sidebar', function (require, module, exports) {
 
     var Data = require(module, 'Data');
     var Scroller = require(module, 'Scroller');
+    var Title = require(module, 'Title');
 
     var ul = document.getElementById('ul-sidebar');
 
@@ -24,7 +25,7 @@ define('/Sidebar', function (require, module, exports) {
     var id$index = {};
 
     var currentItem = null;
-
+    var hasRendered = false;
 
     function get(id) {
         var item = id$item[id];
@@ -32,12 +33,19 @@ define('/Sidebar', function (require, module, exports) {
     }
 
 
-    function render() {
+    function render(fn) {
+
+        if (hasRendered) {
+            show();
+            fn && fn(list);
+            return;
+        }
 
 
         Data.load(function (json) {
 
-            document.title = json.title + ' ' + json.type;
+            hasRendered = true;
+
 
             list = json.items;
 
@@ -49,7 +57,7 @@ define('/Sidebar', function (require, module, exports) {
             });
 
 
-            Template.fill('#div-sidebar-title', json);
+            Title.render(json);
 
             Template.fill(ul, list, function (item, index) {
 
@@ -80,9 +88,10 @@ define('/Sidebar', function (require, module, exports) {
                 }
             });
 
+            show(); //这个要先执行，下面的 Scroller 才能正确计算高度
             Scroller.render(list.length);
+            fn && fn(list);
 
-            emitter.fire('render', [list]);
         });
 
 
@@ -98,18 +107,26 @@ define('/Sidebar', function (require, module, exports) {
         var oldItem = currentItem;
         currentItem = item;
 
-        tabs.active(index);
+        Title.set(item);
+
+        tabs.active(index); //这样调用不会触发 change 事件
         Scroller.to(index);
     }
 
+    function show() {
+        $('#nav-sidebar').show();
+    }
 
-
+    function hide() {
+        $('#nav-sidebar').hide();
+    }
 
     return {
         render: render,
         active: active,
         get: get,
         on: emitter.on.bind(emitter),
+        hide: hide,
     };
 
 });

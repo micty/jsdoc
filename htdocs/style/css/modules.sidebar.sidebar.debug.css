@@ -5,10 +5,12 @@
   width: 18%;
 }
 .side-bar .banner {
-  text-align: center;
+  /*text-align: center;*/
   line-height: 55px;
   height: 55px;
   font-size: 16px;
+  padding-left: 12px;
+  cursor: pointer;
 }
 .side-bar .banner .title {
   font-size: 22px;

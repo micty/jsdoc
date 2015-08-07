@@ -24,6 +24,8 @@ define('/MainPanel', function (require, module, exports) {
 
         bindEvents();
 
+        show();
+
         var alias = item.alias;
         if (alias) {
             Auto.render(alias, view);
@@ -46,7 +48,7 @@ define('/MainPanel', function (require, module, exports) {
             Manual.hide();
         }
 
-       
+        
 
         
 
@@ -58,6 +60,9 @@ define('/MainPanel', function (require, module, exports) {
         if (hasBind) {
             return;
         }
+
+        hasBind = true;
+
 
         Manual.on('render', function () {
             emitter.fire('render');
@@ -81,14 +86,37 @@ define('/MainPanel', function (require, module, exports) {
             },
         });
 
-        hasBind = true;
+
+        //这个会破坏模块化封装，在这里仅仅为了实现点击每个 panel 的 header 可以收起/展开
+        $(document.body).delegate('.panel .header>span', 'click', function (event) {
+            var span = this;
+            var header = span.parentNode;
+            var content = header.nextElementSibling;
+
+            $(content).animate({
+                height: 'toggle',
+                opacity: 'toggle',
+
+            }, 'fast', function () {
+                $(header).toggleClass('off');
+            });
+        });
 
     }
 
+    function show() {
+        $('#div-main-panel').show();
+    }
+
+
+    function hide() {
+        $('#div-main-panel').hide();
+    }
 
     return {
         render: render,
         on: emitter.on.bind(emitter),
+        hide: hide,
     };
 
 });
