@@ -3,6 +3,11 @@ body.readme {
   margin: auto;
   margin-top: 10px;
 }
+.view-readme {
+  -webkit-box-align: center;
+  -webkit-box-pack: center;
+  width: 100%;
+}
 .view-readme .loading {
   display: -webkit-box;
   -webkit-box-pack: center;

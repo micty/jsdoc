@@ -16,8 +16,9 @@ define('Path', function (require, module, exports) {
         return root + name;
     }
 
-    function set(type, version) {
-        root = 'data/' + type + '/' + version + '/';
+    function set(data) {
+      
+        root = 'data/' + data.type + '/' + data.version + '/';
     }
 
     return {

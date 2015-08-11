@@ -1,7 +1,7 @@
 
 /**
 * 模板填充
-* @namespace
+* @class
 * @name Template
 */
 define('Template', function (require, module, exports) {

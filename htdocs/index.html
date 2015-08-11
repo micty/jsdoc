@@ -2,19 +2,19 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title></title>
+    <title>JsDoc</title>
    
     <link rel="stylesheet" href="f/highlight/highlight.debug.css" />
 
     <!--grunt.css.begin-->
-    <link href="style/css/style.less.index.debug.css?46" rel="stylesheet" />
-    <link href="style/css/style.less.wrapper.debug.css?46" rel="stylesheet" />
-    <link href="style/css/modules.main-panel.less.demos.debug.css?46" rel="stylesheet" />
-    <link href="style/css/modules.main-panel.less.list.debug.css?46" rel="stylesheet" />
-    <link href="style/css/modules.main-panel.less.panel.debug.css?46" rel="stylesheet" />
-    <link href="style/css/modules.main-panel.main.debug.css?46" rel="stylesheet" />
-    <link href="style/css/modules.readme.readme.debug.css?46" rel="stylesheet" />
-    <link href="style/css/modules.sidebar.sidebar.debug.css?46" rel="stylesheet" />
+    <link href="style/css/style.less.index.debug.css?e3" rel="stylesheet" />
+    <link href="style/css/style.less.demos.debug.css?e3" rel="stylesheet" />
+    <link href="style/css/style.less.list.debug.css?e3" rel="stylesheet" />
+    <link href="style/css/style.less.panel.debug.css?e3" rel="stylesheet" />
+    <link href="style/css/style.less.wrapper.debug.css?e3" rel="stylesheet" />
+    <link href="style/css/modules.main-panel.main.debug.css?e3" rel="stylesheet" />
+    <link href="style/css/modules.readme.readme.debug.css?e3" rel="stylesheet" />
+    <link href="style/css/modules.sidebar.sidebar.debug.css?e3" rel="stylesheet" />
     <!--grunt.css.end-->
 
 </head>
@@ -26,10 +26,12 @@
                 加载中...
             </div>
         </div>
-        <nav id="nav-sidebar" class="side-bar" style="display: none;">
+        <nav id="nav-sidebar" class="sidebar" style="display: none;">
             <div id="div-sidebar-title" class="banner" title="回到首页">
                 <!--
-                <span class="title">{title}</span> {type}
+                    <a href="#">
+                        <span class="title">{title}</span><span class="type">{type}<span>
+                    </a>
                 -->
             </div>
             <div class="menu-group"></div>
@@ -43,8 +45,9 @@
                     -->
                 </ul>
             </div>
-        
         </nav>
+        <div id="div-sidebar-placeholder" class="sidebar-placeholder"></div>
+        
         <div id="div-main-panel" class="main" style="display: none;">
             <div class="header">
                 <span class="search-box">
@@ -268,7 +271,7 @@
                             <div id="div-source-header" class="header source">
                             <!--
                                 <span>源代码</span>
-                                <a href="data/{href}" target="_blank">打开</a>
+                                <a href="data/{href}" target="_blank" title="在新窗口打开源文件">打开</a>
                              -->
                             </div>
                             <div class="content demo">
@@ -297,7 +300,7 @@
                         <div id="div-main-panel-readme-header" class="header readme">
                             <!--
                             <span>readme.md</span>
-                            <a class="" href="{path}/{name}/readme.md" target="_blank">打开</a>
+                            <a class="" href="{path}/{name}/readme.md" target="_blank" title="在新窗口打开 readme.md 文件">打开</a>
                             -->
                         </div>
                         <div id="div-main-panel-readme-content" class="content markdown">
@@ -339,7 +342,8 @@
                                                 {line-numbers}
                                             </ul>
                                             <pre style="height: {pre-height}px;"><code class="hljs">{highlight-code}</code></pre>
-                                            <div class="bt-panel" style="z-index: 3;">
+                                            <div class="bt-panel" style="z-index: 3; display: none;">
+                                                暂时先隐藏该功能
                                                 <input type="button" value="运行" data-action="run" />
                                             </div>
                                             <textarea id="textarea-{type}-{guid}"
@@ -366,52 +370,53 @@
         
     </div>
 
-    <script src="f/jquery/jquery-1.11.1.debug.js?E9"></script>
-    <script src="f/miniquery/miniquery.debug.js?E9"></script>
-    <script src="f/highlight/highlight.debug.js?E9"></script>
-    <script src="f/marked/marked.mod.debug.js?E9"></script>
+    <script src="f/jquery/jquery-1.11.1.debug.js?24"></script>
+    <script src="f/miniquery/miniquery.debug.js?24"></script>
+    <script src="f/highlight/highlight.debug.js?24"></script>
+    <script src="f/marked/marked.mod.debug.js?24"></script>
 
-    <script src="config.js?E9"></script>
+    <script src="config.js?24"></script>
 
     <!--grunt.js.begin-->
-    <script src="lib/Highlight.js?75"></script>
-    <script src="lib/JSON.js?75"></script>
-    <script src="lib/Markdown.js?75"></script>
-    <script src="lib/Path.js?75"></script>
-    <script src="lib/StatusEmitter.js?75"></script>
-    <script src="lib/Tabs.js?75"></script>
-    <script src="lib/Template.js?75"></script>
-    <script src="modules/Hash.js?75"></script>
-    <script src="modules/main-panel/MainPanel/Auto/Data/Helper.js?75"></script>
-    <script src="modules/main-panel/MainPanel/Auto/Data.js?75"></script>
-    <script src="modules/main-panel/MainPanel/Auto/Method/Example.js?75"></script>
-    <script src="modules/main-panel/MainPanel/Auto/Method/Params.js?75"></script>
-    <script src="modules/main-panel/MainPanel/Auto/Method/Returns.js?75"></script>
-    <script src="modules/main-panel/MainPanel/Auto/Method/Summary.js?75"></script>
-    <script src="modules/main-panel/MainPanel/Auto/Method.js?75"></script>
-    <script src="modules/main-panel/MainPanel/Auto/Overview/MethodList.js?75"></script>
-    <script src="modules/main-panel/MainPanel/Auto/Overview/PropertyList.js?75"></script>
-    <script src="modules/main-panel/MainPanel/Auto/Overview/Summary.js?75"></script>
-    <script src="modules/main-panel/MainPanel/Auto/Overview.js?75"></script>
-    <script src="modules/main-panel/MainPanel/Auto/Source/Code.js?75"></script>
-    <script src="modules/main-panel/MainPanel/Auto/Source/Data.js?75"></script>
-    <script src="modules/main-panel/MainPanel/Auto/Source/Header.js?75"></script>
-    <script src="modules/main-panel/MainPanel/Auto/Source/Lines.js?75"></script>
-    <script src="modules/main-panel/MainPanel/Auto/Source.js?75"></script>
-    <script src="modules/main-panel/MainPanel/Auto.js?75"></script>
-    <script src="modules/main-panel/MainPanel/Manual/Data.js?75"></script>
-    <script src="modules/main-panel/MainPanel/Manual/Demos/Panels.js?75"></script>
-    <script src="modules/main-panel/MainPanel/Manual/Demos/Tabs.js?75"></script>
-    <script src="modules/main-panel/MainPanel/Manual/Demos.js?75"></script>
-    <script src="modules/main-panel/MainPanel/Manual/Readme.js?75"></script>
-    <script src="modules/main-panel/MainPanel/Manual.js?75"></script>
-    <script src="modules/main-panel/MainPanel.js?75"></script>
-    <script src="modules/readme/Readme.js?75"></script>
-    <script src="modules/sidebar/Sidebar/Data.js?75"></script>
-    <script src="modules/sidebar/Sidebar/Scroller.js?75"></script>
-    <script src="modules/sidebar/Sidebar/Title.js?75"></script>
-    <script src="modules/sidebar/Sidebar.js?75"></script>
-    <script src="index.js?75"></script>
+    <script src="lib/Highlight.js?f8"></script>
+    <script src="lib/JSON.js?f8"></script>
+    <script src="lib/Markdown.js?f8"></script>
+    <script src="lib/Path.js?f8"></script>
+    <script src="lib/StatusEmitter.js?f8"></script>
+    <script src="lib/Tabs.js?f8"></script>
+    <script src="lib/Template.js?f8"></script>
+    <script src="modules/Hash.js?f8"></script>
+    <script src="modules/main-panel/MainPanel/Auto/Data/Helper.js?f8"></script>
+    <script src="modules/main-panel/MainPanel/Auto/Data.js?f8"></script>
+    <script src="modules/main-panel/MainPanel/Auto/Method/Example.js?f8"></script>
+    <script src="modules/main-panel/MainPanel/Auto/Method/Params.js?f8"></script>
+    <script src="modules/main-panel/MainPanel/Auto/Method/Returns.js?f8"></script>
+    <script src="modules/main-panel/MainPanel/Auto/Method/Summary.js?f8"></script>
+    <script src="modules/main-panel/MainPanel/Auto/Method.js?f8"></script>
+    <script src="modules/main-panel/MainPanel/Auto/Overview/MethodList.js?f8"></script>
+    <script src="modules/main-panel/MainPanel/Auto/Overview/PropertyList.js?f8"></script>
+    <script src="modules/main-panel/MainPanel/Auto/Overview/Summary.js?f8"></script>
+    <script src="modules/main-panel/MainPanel/Auto/Overview.js?f8"></script>
+    <script src="modules/main-panel/MainPanel/Auto/Source/Code.js?f8"></script>
+    <script src="modules/main-panel/MainPanel/Auto/Source/Data.js?f8"></script>
+    <script src="modules/main-panel/MainPanel/Auto/Source/Header.js?f8"></script>
+    <script src="modules/main-panel/MainPanel/Auto/Source/Lines.js?f8"></script>
+    <script src="modules/main-panel/MainPanel/Auto/Source.js?f8"></script>
+    <script src="modules/main-panel/MainPanel/Auto.js?f8"></script>
+    <script src="modules/main-panel/MainPanel/Manual/Data.js?f8"></script>
+    <script src="modules/main-panel/MainPanel/Manual/Demos/Panels.js?f8"></script>
+    <script src="modules/main-panel/MainPanel/Manual/Demos/Tabs.js?f8"></script>
+    <script src="modules/main-panel/MainPanel/Manual/Demos.js?f8"></script>
+    <script src="modules/main-panel/MainPanel/Manual/Readme.js?f8"></script>
+    <script src="modules/main-panel/MainPanel/Manual.js?f8"></script>
+    <script src="modules/main-panel/MainPanel.js?f8"></script>
+    <script src="modules/readme/Readme.js?f8"></script>
+    <script src="modules/Scroller.js?f8"></script>
+    <script src="modules/sidebar/Sidebar/Data.js?f8"></script>
+    <script src="modules/sidebar/Sidebar/Scroller.js?f8"></script>
+    <script src="modules/sidebar/Sidebar/Title.js?f8"></script>
+    <script src="modules/sidebar/Sidebar.js?f8"></script>
+    <script src="index.js?f8"></script>
     <!--grunt.js.end-->
 
 

@@ -12,6 +12,8 @@ define('/Sidebar/Data', function (require, module, exports) {
     var Path = require('Path');
 
 
+    var id$item = {};
+    
 
     //加载数据。
     function load(fn) {
@@ -22,9 +24,9 @@ define('/Sidebar/Data', function (require, module, exports) {
 
             var items = json.items;
 
-
             loadClasses(json, function (classes) {
 
+                //把 classes 合并到 sidebar 的 items 中，已经存在的则忽略。
                 var list = $.Array.map(classes, function (obj, index) {
 
                     var alias = obj.alias;
@@ -40,9 +42,10 @@ define('/Sidebar/Data', function (require, module, exports) {
 
                 });
 
-                json.items = items.concat(list);
 
+                json.items = items.concat(list);
                 json = normalize(json);
+
                 fn && fn(json);
 
             });
@@ -51,16 +54,24 @@ define('/Sidebar/Data', function (require, module, exports) {
 
     }
 
-
+    //加载 jsoc
     function loadClasses(json, fn) {
 
-        if (!json.jsdoc) { //没有 jsdoc
+        //注意，只有在 sidebar.json 中明确指定 jsdoc: true 才会加载
+        var jsdoc = json.jsdoc;
+
+        if (!jsdoc) { //没有 jsdoc
             fn && fn([]);
             return;
         }
 
 
-        var url = Path.get('jsdoc/classes.min.json');
+        if (typeof jsdoc != 'string') {
+            jsdoc = 'jsdoc/classes.min.json';
+        }
+
+
+        var url = Path.get(jsdoc);
         JSON.load(url, fn);
     }
 
@@ -68,19 +79,10 @@ define('/Sidebar/Data', function (require, module, exports) {
 
     function normalize(json) {
 
-        var id = 0;
-
-        var list = $.Array.map(json.items, function (item, index) {
-
-            if (item.hidden) {
-                return null;
-            }
-
-            item.id = id++; //增加一个 id
-
-            return item;
+        //把隐藏的去掉
+        var list = $.Array.grep(json.items, function (item) {
+            return !item.hidden;
         });
-
 
 
         //先整体排序
@@ -89,14 +91,62 @@ define('/Sidebar/Data', function (require, module, exports) {
                 x.alias > y.alias ? 1 : 0;
         })
 
+
+        id$item = {}; //清空之前留下的
+
+
+        //增加字段
+        $.Array.each(list, function (item, index) {
+
+            var id = index;
+
+            id$item[id] = item;
+
+            item.id = id;
+            item.index = index; // 必须在排序后
+        });
+
+        console.dir(list);
+
         json.items = list;
+        json.width = parseWidth(json.width); //解析成一个标准的对象 {value: 123, unit: 'px'}
+        
 
         return json;
     }
 
 
+    function parseWidth(width) {
+        
+
+        if ($.Object.isPlain(width)) { //已经是一个解析好了的对象
+            return width;
+        }
+
+        var value = parseInt(width);
+
+        if (isNaN(value)) { //非数字
+            return null;
+        }
+
+
+        var unit = 'px';
+        if (typeof width == 'string' && width.slice(-1) == '%') {
+            unit = '%';
+        }
+
+
+        return {
+            'value': value,
+            'unit': unit,
+        };
+    }
+
 
     return {
         load: load,
+        getItemById: function(id){
+            return id$item[id];
+        },
     };
 });

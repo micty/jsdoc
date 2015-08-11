@@ -71,7 +71,7 @@ define('/Sidebar/Scroller', function (require, module, exports) {
 
     function adjustHeight() {
         var h = nav.height();
-        div.height(h - 60);
+        div.height(h - 67);
     }
 
 

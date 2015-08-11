@@ -1,8 +1,6 @@
 
 /**
-* Loading/Style
-* @namespace
-* @name Loading/Style
+* 
 */
 define('Loading/Style', function (require, module, exports) {
     var $ = require('$');

@@ -80,6 +80,14 @@ define('API/Ajax', function (require, module, exports) {
 
         var Url = MiniQuery.require('Url');
 
+        //增加一个随机字段，以使缓存失效
+        var random = config.random;
+        if (random) {
+            random = 'rd_' + $.String.random(16);
+            url = Url.addQueryString(url, random, '');
+        }
+
+
         if (method == 'post') {
             var query = config.query;
             if (query) {
@@ -124,8 +132,11 @@ define('API/Ajax', function (require, module, exports) {
 
             var code = json[field.code];
             if (code == successCode) {
+
                 var fnSuccess = config.success;
-                fnSuccess && fnSuccess(json[field.data] || {}, json, xhr);
+                var data = field.data in json ? json[field.data] : {};
+
+                fnSuccess && fnSuccess(data, json, xhr);
             }
             else {
                 var fnFail = config.fail;

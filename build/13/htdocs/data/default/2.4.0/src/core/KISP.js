@@ -19,82 +19,12 @@ define('KISP', function (require, module, exports) {
         /**
         * 版本号。 (由 grunt 自动插入)
         */
-        version: '2.4.0', //由 grunt 自动插入
+        version: '3.0.0', //由 grunt 自动插入
 
         /**
         * 文件列表。 (由 grunt 自动插入)
         */
-        files: [
-            'partial/default/begin.js',
-            'core/Module.js',
-            'core/$.js',
-            'core/MiniQuery.js',
-            'core/IScroll.js',
-            'core/KISP.js',
-            'crypto/MD5.js',
-            'excore/Config.js',
-            'excore/Config/Url.js',
-            'excore/DOM.js',
-            'excore/Edition.js',
-            'excore/File.js',
-            'excore/Fn.js',
-            'excore/JSON.js',
-            'excore/Mapper.js',
-            'excore/Module.js',
-            'excore/RandomId.js',
-            'excore/Seajs.js',
-            'excore/Style.js',
-            'excore/Url.js',
-            'api/API.js',
-            'api/API/Ajax.js',
-            'api/SSH.js',
-            'api/SSH/Ajax.js',
-            'api/SSH/Server.js',
-            'api/SSH/Server/Config.js',
-            'api/SSH.API.js',
-            'api/SSH.API/Ajax.js',
-            'api/Proxy.js',
-            'cloud-home/CloudHome.API.js',
-            'cloud-home/CloudHome.js',
-            'cloud-home/CloudHome.Native.js',
-            'cloud-home/CloudHome.Title.js',
-            'ui/Dialog.js',
-            'ui/Dialog/Sample/iOS.html',
-            'ui/Dialog/Renderer.js',
-            'ui/Dialog/Sample.js',
-            'ui/Dialog/Style.js',
-            'ui/Loading.js',
-            'ui/Loading/Sample/iOS.html',
-            'ui/Loading/Sample/spinner.html',
-            'ui/Loading/Presettings.js',
-            'ui/Loading/Sample.js',
-            'ui/Loading/Style.js',
-            'ui/Mask.js',
-            'ui/Mask/Sample.html',
-            'ui/Mask/Style.js',
-            'ui/Navigator.js',
-            'ui/NoData.js',
-            'ui/NoData/Renderer.js',
-            'ui/NoData/Sample.html',
-            'ui/NoData/Style.js',
-            'ui/Panel.js',
-            'ui/Scroller/pull.js',
-            'ui/Scroller.js',
-            'ui/Tabs.js',
-            'ui/Tabs/Helper.js',
-            'ui/Template.js',
-            'ui/Template/Multiple.js',
-            'ui/Template/Simple.js',
-            'ui/Template/Static.js',
-            'ui/Toast.js',
-            'ui/Toast/Sample/font-awesome.html',
-            'ui/Toast/Sample.js',
-            'ui/Toast/Style.js',
-            'jquery-plugin/touch.js',
-            'partial/default/expose.js',
-            'partial/default/defaults.js',
-            'partial/default/end.js'
-        ], //由 grunt 自动插入
+        files: [], //由 grunt 自动插入
 
         /**
         * 获取已经定义的所有模块的描述信息。
@@ -114,7 +44,7 @@ define('KISP', function (require, module, exports) {
         },
 
         /**
-        * 调用KISP 框架内公开的模块的指定方法，并可传递一些参数。
+        * 调用 KISP 框架内公开的模块的指定方法，并可传递一些参数。
         * @param {string} id 模块的名称(id)。
         * @param {string} name 要调用的方法名称。
         * @param {Array} args 要传递参数列表。
@@ -131,7 +61,7 @@ define('KISP', function (require, module, exports) {
                 throw new Error('模块 ' + id + ' 不存名为 ' + name + ' 的方法。');
             }
 
-            return fn.apply(null, args);
+            return fn.apply(M, args);
         },
 
         /**
@@ -215,11 +145,13 @@ define('KISP', function (require, module, exports) {
                 cfg = new Config();
             }
 
-            if (typeof name == 'object') { // 批量设置 data({...})
+            // 重载批量设置 data({...})
+            if (typeof name == 'object') { 
                 cfg.set(name);
                 return;
             }
 
+            //重载 data(name)
             if (arguments.length == 1) {
                 return cfg.get(name);
             }
@@ -233,60 +165,36 @@ define('KISP', function (require, module, exports) {
         * @param {string|Object} text 要显示的消息文本。
             如果指定为一个对象，则先调用 JSON.string(text, null, 4) 得到字符串再进行显示。
         */
-        alert: function (text, text1, textN) {
-            
-            var $ = require('$');
-
-            //重载 alert(obj);
-            //方便程序员调试
-            if (typeof text == 'object') {
-
-                var Style = require('Style');
-
-                text = $.String.format('<pre style="{style}">{text}</pre>', {
-                    'style': Style.stringify({
-                        'text-align': 'start',
-                        'font-family': '\'Fixedsys Excelsior 3.01\'',
-                    }),
-
-                    'text': JSON.stringify(text, null, 4),
-                });
-            }
-
-            
-
-            var args = [].slice.call(arguments, 1);
-            args = [text].concat(args);
-            text = $.String.format.apply(null, args);
-
+        alert: function (text, text1, textN, fn) {
 
             if (dlg) {
                 dlg.destroy();
             }
 
-            //根据文本来计算高度，大概值，并不要求很准确
-            var len = $.String.getByteLength(text);
-            var h = Math.max(len, 125);
-            var max = document.documentElement.clientHeight;
+            var Alert = require('Alert');
 
-            if (h >= max * 0.8) {
-                h = '80%';
+            var args = [].slice.call(arguments, 0);
+            dlg = Alert.create.apply(null, args);
+
+            dlg.show();
+           
+        },
+
+        /**
+        * 定义并启动一个指定的(或匿名)模块，用于启动应用程序。
+        * @param {string} name 启动模块的名称。 若不指定，则默认为空字符串。
+        * @param {function} factory 工厂函数，即启动函数。
+        */
+        launch: function (name, factory) {
+
+            if (typeof name == 'function') { //重载 launch(factory)
+                factory = name;
+                name = '';
             }
 
-            var Dialog = require('Dialog');
-            
-
-            dlg = new Dialog({
-                'text': text,
-                'buttons': ['确定'],
-                'volatile': false,
-                'mask': true,
-                'autoClosed': true,
-                'width': '80%',
-                'height': h,
-            });
-          
-            dlg.show();
+            var Module = require('Module');
+            Module.define(name, factory);
+            Module.require(name);
         },
 
 

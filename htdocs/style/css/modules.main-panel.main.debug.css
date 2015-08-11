@@ -1,6 +1,5 @@
 .main {
-  float: right;
-  width: 81%;
+  -webkit-box-flex: 1;
 }
 .main > .header {
   line-height: 55px;

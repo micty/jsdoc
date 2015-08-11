@@ -24,7 +24,7 @@ define('/Readme', function (require, module, exports) {
         var url = 'data/readme.md';
 
         Markdown.load(url, function (readme) {
-
+            //return;
             $(content).removeClass('loading');
 
             if (!readme) {

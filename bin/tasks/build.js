@@ -35,15 +35,17 @@ module.exports = function (grunt, level) {
         //拷贝其他目录和文件
         copy: [
             '<%=dir.style%>**',
-            //'<%=dir.htdocs%>lib/**',
             '<%=dir.htdocs%>data/**',
-            //'<%=dir.htdocs%>api/**',
             '<%=dir.htdocs%>f/**',
 
-             '!<%=dir.css%>**/*',
+            '!<%=dir.css%>**', //这个目录不需要拷贝，因为在别的地方会重新生成
 
             //排除的
+            level >= 1 ? '!<%=dir.style%>less' : null, //删除 less 目录
             level >= 1 ? '!<%=dir.htdocs%>**/*.less' : null,
+
+            level >= 3 ? '!<%=dir.htdocs%>f/**/*.map' : null,
+
             level >= 3 ? '!<%=dir.htdocs%>**/*.debug.css' : null,
             level >= 3 ? '!<%=dir.htdocs%>**/*.css.map' : null,
             level >= 3 ? '!<%=dir.htdocs%>**/*.debug.js' : null,

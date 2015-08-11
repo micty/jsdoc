@@ -1,9 +1,9 @@
 /*
 * KISP - KISP JavaScript Library
 * name: default 
-* version: 2.4.0
-* build: 2015-06-09 14:40:36
-* files: 69(67)
+* version: 3.0.0
+* build: 2015-07-31 11:17:17
+* files: 76(74)
 *    partial/default/begin.js
 *    core/Module.js
 *    core/$.js
@@ -21,7 +21,6 @@
 *    excore/Mapper.js
 *    excore/Module.js
 *    excore/RandomId.js
-*    excore/Seajs.js
 *    excore/Style.js
 *    excore/Url.js
 *    api/API.js
@@ -33,24 +32,35 @@
 *    api/SSH.API.js
 *    api/SSH.API/Ajax.js
 *    api/Proxy.js
-*    cloud-home/CloudHome.API.js
-*    cloud-home/CloudHome.js
-*    cloud-home/CloudHome.Native.js
-*    cloud-home/CloudHome.Title.js
-*    ui/Dialog.js
-*    ui/Dialog/Sample/iOS.html
-*    ui/Dialog/Renderer.js
-*    ui/Dialog/Sample.js
-*    ui/Dialog/Style.js
-*    ui/Loading.js
-*    ui/Loading/Sample/iOS.html
-*    ui/Loading/Sample/spinner.html
-*    ui/Loading/Presettings.js
-*    ui/Loading/Sample.js
-*    ui/Loading/Style.js
-*    ui/Mask.js
-*    ui/Mask/Sample.html
-*    ui/Mask/Style.js
+*    third-party/cloud-home/CloudHome/Native.js
+*    third-party/cloud-home/CloudHome.API.js
+*    third-party/cloud-home/CloudHome.js
+*    third-party/cloud-home/CloudHome.Title.js
+*    third-party/seajs/Seajs.js
+*    third-party/wechat/WeChat/JsApiList.js
+*    third-party/wechat/WeChat/Lib.js
+*    third-party/wechat/WeChat/Signature.js
+*    third-party/wechat/WeChat.js
+*    ui/dialog/Alert.js
+*    ui/dialog/Alert/Sample.html
+*    ui/dialog/Dialog.js
+*    ui/dialog/Dialog/Sample/iOS.html
+*    ui/dialog/Dialog/Renderer.js
+*    ui/dialog/Dialog/Sample.js
+*    ui/dialog/Dialog/Style.js
+*    ui/dialog/Loading.js
+*    ui/dialog/Loading/Sample/iOS.html
+*    ui/dialog/Loading/Sample/spinner.html
+*    ui/dialog/Loading/Presettings.js
+*    ui/dialog/Loading/Sample.js
+*    ui/dialog/Loading/Style.js
+*    ui/dialog/Mask.js
+*    ui/dialog/Mask/Sample.html
+*    ui/dialog/Mask/Style.js
+*    ui/dialog/Toast.js
+*    ui/dialog/Toast/Sample/font-awesome.html
+*    ui/dialog/Toast/Sample.js
+*    ui/dialog/Toast/Style.js
 *    ui/Navigator.js
 *    ui/NoData.js
 *    ui/NoData/Renderer.js
@@ -65,10 +75,7 @@
 *    ui/Template/Multiple.js
 *    ui/Template/Simple.js
 *    ui/Template/Static.js
-*    ui/Toast.js
-*    ui/Toast/Sample/font-awesome.html
-*    ui/Toast/Sample.js
-*    ui/Toast/Style.js
+*    ui/View.js
 *    jquery-plugin/touch.js
 *    partial/default/expose.js
 *    partial/default/defaults.js
@@ -125,6 +132,7 @@ var Module = (function () {
     var mod = new Module({
         seperator: '/',
         crossover: true,
+        repeated: false, //不允许重复定义 
     });
 
     return {
@@ -132,6 +140,7 @@ var Module = (function () {
         require: mod.require.bind(mod), //该方法仅用于 end.js 中
         expose: mod.expose.bind(mod),
         modules: mod.modules.bind(mod),
+        tree: mod.tree.bind(mod),
 
         /**
         * 绑定到指定模块的指定方法。
@@ -195,82 +204,12 @@ define('KISP', function (require, module, exports) {
         /**
         * 版本号。 (由 grunt 自动插入)
         */
-        version: '2.4.0', //由 grunt 自动插入
+        version: '3.0.0', //由 grunt 自动插入
 
         /**
         * 文件列表。 (由 grunt 自动插入)
         */
-        files: [
-            'partial/default/begin.js',
-            'core/Module.js',
-            'core/$.js',
-            'core/MiniQuery.js',
-            'core/IScroll.js',
-            'core/KISP.js',
-            'crypto/MD5.js',
-            'excore/Config.js',
-            'excore/Config/Url.js',
-            'excore/DOM.js',
-            'excore/Edition.js',
-            'excore/File.js',
-            'excore/Fn.js',
-            'excore/JSON.js',
-            'excore/Mapper.js',
-            'excore/Module.js',
-            'excore/RandomId.js',
-            'excore/Seajs.js',
-            'excore/Style.js',
-            'excore/Url.js',
-            'api/API.js',
-            'api/API/Ajax.js',
-            'api/SSH.js',
-            'api/SSH/Ajax.js',
-            'api/SSH/Server.js',
-            'api/SSH/Server/Config.js',
-            'api/SSH.API.js',
-            'api/SSH.API/Ajax.js',
-            'api/Proxy.js',
-            'cloud-home/CloudHome.API.js',
-            'cloud-home/CloudHome.js',
-            'cloud-home/CloudHome.Native.js',
-            'cloud-home/CloudHome.Title.js',
-            'ui/Dialog.js',
-            'ui/Dialog/Sample/iOS.html',
-            'ui/Dialog/Renderer.js',
-            'ui/Dialog/Sample.js',
-            'ui/Dialog/Style.js',
-            'ui/Loading.js',
-            'ui/Loading/Sample/iOS.html',
-            'ui/Loading/Sample/spinner.html',
-            'ui/Loading/Presettings.js',
-            'ui/Loading/Sample.js',
-            'ui/Loading/Style.js',
-            'ui/Mask.js',
-            'ui/Mask/Sample.html',
-            'ui/Mask/Style.js',
-            'ui/Navigator.js',
-            'ui/NoData.js',
-            'ui/NoData/Renderer.js',
-            'ui/NoData/Sample.html',
-            'ui/NoData/Style.js',
-            'ui/Panel.js',
-            'ui/Scroller/pull.js',
-            'ui/Scroller.js',
-            'ui/Tabs.js',
-            'ui/Tabs/Helper.js',
-            'ui/Template.js',
-            'ui/Template/Multiple.js',
-            'ui/Template/Simple.js',
-            'ui/Template/Static.js',
-            'ui/Toast.js',
-            'ui/Toast/Sample/font-awesome.html',
-            'ui/Toast/Sample.js',
-            'ui/Toast/Style.js',
-            'jquery-plugin/touch.js',
-            'partial/default/expose.js',
-            'partial/default/defaults.js',
-            'partial/default/end.js'
-        ], //由 grunt 自动插入
+        files: [], //由 grunt 自动插入
 
         /**
         * 获取已经定义的所有模块的描述信息。
@@ -290,7 +229,7 @@ define('KISP', function (require, module, exports) {
         },
 
         /**
-        * 调用KISP 框架内公开的模块的指定方法，并可传递一些参数。
+        * 调用 KISP 框架内公开的模块的指定方法，并可传递一些参数。
         * @param {string} id 模块的名称(id)。
         * @param {string} name 要调用的方法名称。
         * @param {Array} args 要传递参数列表。
@@ -307,7 +246,7 @@ define('KISP', function (require, module, exports) {
                 throw new Error('模块 ' + id + ' 不存名为 ' + name + ' 的方法。');
             }
 
-            return fn.apply(null, args);
+            return fn.apply(M, args);
         },
 
         /**
@@ -391,11 +330,13 @@ define('KISP', function (require, module, exports) {
                 cfg = new Config();
             }
 
-            if (typeof name == 'object') { // 批量设置 data({...})
+            // 重载批量设置 data({...})
+            if (typeof name == 'object') { 
                 cfg.set(name);
                 return;
             }
 
+            //重载 data(name)
             if (arguments.length == 1) {
                 return cfg.get(name);
             }
@@ -409,60 +350,36 @@ define('KISP', function (require, module, exports) {
         * @param {string|Object} text 要显示的消息文本。
             如果指定为一个对象，则先调用 JSON.string(text, null, 4) 得到字符串再进行显示。
         */
-        alert: function (text, text1, textN) {
-            
-            var $ = require('$');
-
-            //重载 alert(obj);
-            //方便程序员调试
-            if (typeof text == 'object') {
-
-                var Style = require('Style');
-
-                text = $.String.format('<pre style="{style}">{text}</pre>', {
-                    'style': Style.stringify({
-                        'text-align': 'start',
-                        'font-family': '\'Fixedsys Excelsior 3.01\'',
-                    }),
-
-                    'text': JSON.stringify(text, null, 4),
-                });
-            }
-
-            
-
-            var args = [].slice.call(arguments, 1);
-            args = [text].concat(args);
-            text = $.String.format.apply(null, args);
-
+        alert: function (text, text1, textN, fn) {
 
             if (dlg) {
                 dlg.destroy();
             }
 
-            //根据文本来计算高度，大概值，并不要求很准确
-            var len = $.String.getByteLength(text);
-            var h = Math.max(len, 125);
-            var max = document.documentElement.clientHeight;
+            var Alert = require('Alert');
 
-            if (h >= max * 0.8) {
-                h = '80%';
+            var args = [].slice.call(arguments, 0);
+            dlg = Alert.create.apply(null, args);
+
+            dlg.show();
+           
+        },
+
+        /**
+        * 定义并启动一个指定的(或匿名)模块，用于启动应用程序。
+        * @param {string} name 启动模块的名称。 若不指定，则默认为空字符串。
+        * @param {function} factory 工厂函数，即启动函数。
+        */
+        launch: function (name, factory) {
+
+            if (typeof name == 'function') { //重载 launch(factory)
+                factory = name;
+                name = '';
             }
 
-            var Dialog = require('Dialog');
-            
-
-            dlg = new Dialog({
-                'text': text,
-                'buttons': ['确定'],
-                'volatile': false,
-                'mask': true,
-                'autoClosed': true,
-                'width': '80%',
-                'height': h,
-            });
-          
-            dlg.show();
+            var Module = require('Module');
+            Module.define(name, factory);
+            Module.require(name);
         },
 
 
@@ -684,23 +601,35 @@ define('Config', function (require, module,  exports) {
                 setItem(name, config);
             }
             
+
             //内部共用方法，设置单个模块的默认配置对象。
             function setItem(name, config) {
 
-                var obj = name$config[name];
-                if (obj) {
-                    $.Object.extend(obj, config);
+                var obj;
+
+                if (name in name$config) {
+                    obj = name$config[name];
+                    if ($.Object.isPlain(obj)) { //纯对象
+                        obj = $.Object.extend(obj, config); //则合并
+                    }
+                    else { //其他的，则重设
+                        obj = name$config[name] = config;
+                    }
                 }
-                else {
+                else { //首次设置
                     obj = name$config[name] = config;
                 }
+
 
                 //第一次或重新设置了 config，让其 formatted 指示已失效
                 name$formatted[name] = false;
 
                 return obj;
             }
+
         },
+
+
 
         /**
         * 获取指定模块名称的默认配置。
@@ -719,6 +648,11 @@ define('Config', function (require, module,  exports) {
             }
 
             var config = name$config[name];
+
+            if (!$.Object.isPlain(config)) { //非纯对象，直接返回即可
+                return config;
+            }
+
             if (name == 'Url') { //这个模块特殊，不用也不能转换，不然会构成 require 死循环。
                 return config;
             }
@@ -1172,6 +1106,7 @@ define('Module', function (require, module, exports) {
 
     var mod = new Module(defaults);
 
+
     return /**@lends Module*/ {
 
         /**
@@ -1189,6 +1124,9 @@ define('Module', function (require, module, exports) {
         * @return 返回指定的模块。
         */
         require: mod.require.bind(mod),
+
+        modules: mod.modules.bind(mod),
+        tree: mod.tree.bind(mod),
 
     };
 
@@ -1229,81 +1167,6 @@ define('RandomId', function (require, module, exports) {
 
 });
 
-
-
-
-
-/**
-* 动态加载模块类。
-* 对 seajs 的进一步封装，以适合本项目的使用。
-* @namespace
-* @name Seajs
-*/
-define('Seajs', function (require, module, exports) {
-
-    var $ = require('$');
-    var MiniQuery = require('MiniQuery');
-
-    var Config = require('Config');
-
-    var seajs = window['seajs'];
-
-
-    function ready(fn) {
-
-        if (seajs) {
-            fn && fn(seajs);
-            return;
-        }
-
-
-        //先加载 seajs 库
-        var defaults = Config.get(module.id); //默认配置
-        var url = defaults.url;
-
-        var Script = MiniQuery.require('Script');
-        Script.load({
-            url: url,
-            id: 'seajsnode', //提供 id，提高性能。 详见 https://github.com/seajs/seajs/issues/260
-
-            onload: function () {
-                seajs = window['seajs'];
-                seajs.config(defaults);
-
-                fn && fn(seajs);
-            }
-        });
-
-    }
-
-    
-
-    module.exports = exports = /**@lends Seajs*/ {
-
-        use: function () {
-
-            var args = [].slice.call(arguments, 0);
-
-            ready(function (seajs) {
-                seajs.use.apply(seajs, args);
-            });
-
-        },
-
-        define: function () {
-
-            var args = [].slice.call(arguments, 0);
-
-            ready(function (seajs) {
-                seajs.Module.define.apply(seajs, args);
-            });
-        }
-    };
-
-
-
-
-});
 
 
 
@@ -1611,6 +1474,8 @@ define('API', function (require, module, exports) {
     var Fn = require('Fn');
     var mapper = require('Mapper');
 
+
+
     /**
     * API 构造器。
     * @param {string} name 后台接口的名称。 简短名称，且不包括后缀。
@@ -1631,6 +1496,7 @@ define('API', function (require, module, exports) {
         }
 
 
+
         //发起 ajax 请求所需要的配置对象。
         var ajax = {
             'name': name,
@@ -1639,6 +1505,8 @@ define('API', function (require, module, exports) {
 
             'url': config.url || '',
             'ext': config.ext || '',
+            'random': config.random,
+
             'successCode': successCode,
             'field': config.field,
             'proxy': proxy,
@@ -1973,6 +1841,14 @@ define('API/Ajax', function (require, module, exports) {
 
         var Url = MiniQuery.require('Url');
 
+        //增加一个随机字段，以使缓存失效
+        var random = config.random;
+        if (random) {
+            random = 'rd_' + $.String.random(16);
+            url = Url.addQueryString(url, random, '');
+        }
+
+
         if (method == 'post') {
             var query = config.query;
             if (query) {
@@ -2017,8 +1893,11 @@ define('API/Ajax', function (require, module, exports) {
 
             var code = json[field.code];
             if (code == successCode) {
+
                 var fnSuccess = config.success;
-                fnSuccess && fnSuccess(json[field.data] || {}, json, xhr);
+                var data = field.data in json ? json[field.data] : {};
+
+                fnSuccess && fnSuccess(data, json, xhr);
             }
             else {
                 var fnFail = config.fail;
@@ -2705,8 +2584,11 @@ define('SSH.API', function (require, module, exports) {
                 meta.fireEvent('fail', [code, msg, json, xhr]);
             },
 
-            error: function (xhr) { //错误
-                meta.fireEvent('error', [xhr]);
+            error: function (code, msg, json, xhr) { //错误
+
+                //为了让业务层能知道 SSH 层发生了 fail，通过判断 json 是否为空即可
+                //当 http 协议层连接错误，则 code, msg, json 三个参数都为 undefined
+                meta.fireEvent('error', [code, msg, json, xhr]);
             },
         };
 
@@ -2831,6 +2713,7 @@ define('SSH.API/Ajax', function (require, module, exports) {
         var field = config.field;
 
         ssh.on({
+            //SSH 层请求成功了
             'success': function (json, root, xhr) { //此处 data 为 json， json 为 root
 
                 if (!json) {
@@ -2849,11 +2732,13 @@ define('SSH.API/Ajax', function (require, module, exports) {
             },
 
             'fail': function (code, msg, json, xhr) {
-                fnError && fnError(xhr);
+                //为了让业务层能知道 SSH 层发生了 fail，通过判断 json 是否为空即可
+                fnError && fnError( code, msg, json, xhr); 
             },
 
             'error': function (xhr) {
-                fnError && fnError(xhr);
+                //当 http 协议层连接错误，则 code, msg, json 三个参数都为 undefined
+                fnError && fnError(undefined, undefined, undefined, xhr);
             },
         });
 
@@ -3072,6 +2957,81 @@ define('Proxy', function (require, module,  exports) {
     };
 });
 
+/**
+* 调用云之家 native 方法的模块。
+*/
+define('CloudHome/Native', function (require, module, exports) {
+
+    var cid = 0;    //回调 id 计数器，递增
+    var id$fn = {}; //回调列表
+
+
+    //该方法给云之家 native 调用，名称必须为这个
+    window.XuntongJSBridge = {
+
+        /**
+        * 处理云之家的回调。
+        * 该方法给云之家 native 调用
+        */
+        'handleMessageFromXT': function (id, json) {
+
+            var fn = id$fn[id];
+            if (!fn) {
+                return;
+            }
+
+            fn(json || {});
+        },
+    };
+
+
+
+    return /**@lends CloudHome.Native*/ {
+
+        /**
+        * 调用云之家原生接口。
+        * @param {string} name 要调用的原生接口的名称。
+        * @param {Object} [data] 要传递的数据对象。
+        * @param {function} fn 回调函数。 会接收到一个参数: json 对象
+        */
+        invoke: function (name, data, fn) {
+
+            if (typeof data == 'function') { //重载 invoke(name, fn)
+                fn = data;
+                data = null;
+            }
+
+            data = JSON.stringify(data || {});
+            data = encodeURIComponent(data);
+
+            var id = fn ? ++cid : 0;
+            if (id) {
+                id$fn[id] = fn;
+            }
+
+            var url = ['xuntong', name, id, data].join(':');
+
+            var iframe = document.createElement('iframe');
+
+            // for some reason we need to set a non-empty size for the iOS6 simulator
+            iframe.setAttribute('height', '1px');
+            iframe.setAttribute('width', '1px');
+
+            iframe.setAttribute('src', url);
+
+            document.documentElement.appendChild(iframe);
+            iframe.parentNode.removeChild(iframe);
+            iframe = null;
+
+            //var img = new Image();
+            //img.src = url;
+
+        },
+    };
+
+
+});
+
 
 /**
 * 云之家接口类
@@ -3171,9 +3131,9 @@ define('CloudHome.API', function (require, module, exports) {
             var name = meta.name;
             var field = meta.field;
 
-            var Native = require('CloudHome.Native');
+            var CloudHome = require('CloudHome');
 
-            Native.invoke(name, data, function (json) {
+            CloudHome.invoke(name, data, function (json) {
 
                 //云之家返回的 success 字段竟然是字符串的 'true' 或 'false'
                 var isSuccess = String(json[field.success]).toLowerCase() == 'true';
@@ -3314,9 +3274,14 @@ define('CloudHome', function (require, module, exports) {
     var MiniQuery = require('MiniQuery');
     var Url = MiniQuery.require('Url');
 
-    var iframeHTML = '<iframe src="data:image/gif;base64,R0lGODlhAQABAID/AMDAwAAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=="></iframe>';
+    var Native = require(module, 'Native');
+
+
 
     module.exports = exports = /**@lends CloudHome*/ {
+
+        invoke: Native.invoke,
+
 
         /**
         * 判断是否在云之家打开的。
@@ -3325,87 +3290,17 @@ define('CloudHome', function (require, module, exports) {
             return Url.hasQueryString(window, 'ticket'); 
         },
 
-
-
-
-    };
-
-});
-
-/**
-* 调用云之家 native 方法的模块。
-* @namespace
-* @name CloudHome.Native
-*/
-define('CloudHome.Native', function (require, module, exports) {
-
-    var cid = 0;    //回调 id 计数器，递增
-    var id$fn = {}; //回调列表
-
-
-    //该方法给云之家 native 调用，名称必须为这个
-    window.XuntongJSBridge = {
-
-        /**
-        * 处理云之家的回调。
-        * 该方法给云之家 native 调用
-        */
-        'handleMessageFromXT': function (id, json) {
-
-            var fn = id$fn[id];
-            if (!fn) {
-                return;
-            }
-
-            fn(json || {});
+        close: function () {
+            Native.invoke('close');
         },
+
+
+
+
+
+
     };
 
-
-
-    return /**@lends CloudHome.Native*/ {
-
-        /**
-        * 调用云之家原生接口。
-        * @param {string} name 要调用的原生接口的名称。
-        * @param {Object} [data] 要传递的数据对象。
-        * @param {function} fn 回调函数。 会接收到一个参数: json 对象
-        */
-        invoke: function (name, data, fn) {
-
-            if (typeof data == 'function') { //重载 invoke(name, fn)
-                fn = data;
-                data = null;
-            }
-
-
-            data = JSON.stringify(data || {});
-            data = encodeURIComponent(data);
-
-            var id = fn ? ++cid : 0;
-            if (id) {
-                id$fn[id] = fn;
-            }
-
-            var url = ['xuntong', name, id, data].join(':');
-
-            var iframe = document.createElement('iframe');
-
-
-            // for some reason we need to set a non-empty size for the iOS6 simulator
-            iframe.setAttribute('height', '1px');
-            iframe.setAttribute('width', '1px');
-
-            iframe.setAttribute('src', url);
-
-            document.documentElement.appendChild(iframe);
-            iframe.parentNode.removeChild(iframe);
-            iframe = null;
-
-        },
-    };
-
-  
 });
 
 
@@ -3419,11 +3314,10 @@ define('CloudHome.Title', function (require, module, exports) {
     var $ = require('$');
     var MiniQuery = require('MiniQuery');
 
-    var Native = require('CloudHome.Native');
 
 
     var current = document.title;
-    var iframeHTML = '<iframe src="data:image/gif;base64,R0lGODlhAQABAID/AMDAwAAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=="></iframe>';
+    //var iframeHTML = '<iframe src="data:image/gif;base64,R0lGODlhAQABAID/AMDAwAAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=="></iframe>';
 
 
     module.exports = exports = /**@lends CloudHome.Title*/ {
@@ -3436,26 +3330,30 @@ define('CloudHome.Title', function (require, module, exports) {
 
             current = title;
 
-            Native.invoke('setWebViewTitle', {
+            var CloudHome = require('CloudHome');
+
+            CloudHome.invoke('setWebViewTitle', {
                 'title': title
             });
 
-            // hack 在微信等 webview 中无法修改 document.title 的情况
-            try {
-                document.title = title;
+            //// hack 在微信等 webview 中无法修改 document.title 的情况
+            //try {
+            //    document.title = title;
                 
-                var body = $('body');
+            //    var body = $('body');
 
-                var iframe = $(iframeHTML).on('load', function () {
-                    setTimeout(function () {
-                        iframe.off('load').remove();
-                    }, 0);
-                }).appendTo(body);
+            //    var iframe = $(iframeHTML).on('load', function () {
 
-            }
-            catch (ex) {
+            //        setTimeout(function () {
+            //            iframe.off('load').remove();
+            //        }, 0);
 
-            }
+            //    }).appendTo(body);
+
+            //}
+            //catch (ex) {
+
+            //}
 
             
         },
@@ -3472,7 +3370,8 @@ define('CloudHome.Title', function (require, module, exports) {
         */
         hide: function () {
             current = document.title;
-            Native.invoke('hideWebViewTitle');
+            var CloudHome = require('CloudHome');
+            CloudHome.invoke('hideWebViewTitle');
         },
 
         /**
@@ -3490,6 +3389,532 @@ define('CloudHome.Title', function (require, module, exports) {
     };
 
 });
+
+
+
+/**
+* 动态加载模块类。
+* 对 seajs 的进一步封装，以适合本项目的使用。
+* @namespace
+* @name Seajs
+*/
+define('Seajs', function (require, module, exports) {
+
+    var $ = require('$');
+    var MiniQuery = require('MiniQuery');
+
+    var Config = require('Config');
+
+    var seajs = window['seajs'];
+
+
+    function ready(fn) {
+
+        if (seajs) {
+            fn && fn(seajs);
+            return;
+        }
+
+
+        //先加载 seajs 库
+        var defaults = Config.get(module.id); //默认配置
+        var url = defaults.url;
+
+        var Script = MiniQuery.require('Script');
+        Script.load({
+            url: url,
+            id: 'seajsnode', //提供 id，提高性能。 详见 https://github.com/seajs/seajs/issues/260
+
+            onload: function () {
+                seajs = window['seajs'];
+                seajs.config(defaults);
+
+                fn && fn(seajs);
+            },
+        });
+
+    }
+    
+
+    module.exports = exports = /**@lends Seajs*/ {
+
+        use: function () {
+
+            var args = [].slice.call(arguments, 0);
+
+            ready(function (seajs) {
+                seajs.use.apply(seajs, args);
+            });
+
+        },
+
+        define: function () {
+
+            var args = [].slice.call(arguments, 0);
+
+            ready(function (seajs) {
+                seajs.Module.define.apply(seajs, args);
+            });
+        },
+    };
+
+
+
+
+});
+
+
+
+/**
+*
+*/
+define('WeChat/JsApiList', function (require, module, exports) {
+
+    var $ = require('$');
+    var MiniQuery = require('MiniQuery');
+   
+
+    function get(wx, reg) {
+
+        if (reg instanceof Array) {
+            return reg;
+        }
+
+
+        var list = Object.keys(wx);
+        if (reg == '*') {
+            return list;
+        }
+
+        //todo
+        //��������������ʽ������ʵ��
+
+        return [];
+    }
+
+
+    module.exports = exports = {
+        get: get,
+    };
+
+});
+
+
+/**
+*
+*/
+define('WeChat/Lib', function (require, module, exports) {
+
+    var $ = require('$');
+    var MiniQuery = require('MiniQuery');
+   
+    var wx = window.wx;
+
+
+    function load(url, fn) {
+
+        if (wx) {
+            fn && fn(wx);
+            return;
+        }
+
+        var Script = MiniQuery.require('Script');
+
+        Script.load(url, function () {
+            wx = window.wx;
+            fn && fn(wx);
+        });
+    }
+
+
+    module.exports = exports = {
+        load: load,
+    };
+
+});
+
+
+/**
+* 微信签名。
+*/
+define('WeChat/Signature', function (require, module, exports) {
+
+    var $ = require('$');
+    var MiniQuery = require('MiniQuery');
+    var Config = require('Config');
+    var API = require('API');
+
+
+    var defaults = null;
+
+
+    function ajax(config, fn) {
+
+        var api = new API(defaults.name, {
+            url: defaults.url,
+        });
+
+
+        api.on('success', function (data, json) {
+            fn && fn(data);
+        });
+
+        api.on('fail', function (code, msg, json) {
+            console.dir(json);
+        });
+
+        api.on('error', function () {
+            console.log(module.id + ': ajax error');
+        });
+
+
+        api.get({
+            'eid': config.eid,
+            'url': config.url,
+            'timestamp': config.timestamp,    //时间戳
+            'noncestr': config.noncestr,     //随机串
+        });
+
+    }
+
+
+    function get(config, fn) {
+
+        defaults = defaults || Config.clone(module.id);
+
+        ajax(config, function (signature) {
+
+            fn && fn({
+                'timestamp': config.timestamp,
+                'noncestr': config.noncestr,
+                'url': config.url,
+                'signature': signature,
+            });
+
+        });
+    }
+
+
+
+    module.exports = exports = {
+        get: get,
+    };
+
+});
+
+/**
+* 微信。
+* @namespace
+* @name WeChat
+*/
+define('WeChat', function (require, module, exports) {
+
+    var $ = require('$');
+    var MiniQuery = require('MiniQuery');
+    var Config = require('Config');
+
+    var Emitter = MiniQuery.require('Emitter');
+
+    var emitter = new Emitter();
+    var status = '';    // wx 的状态: ready 或 error
+    var wx = null;      // jweixin.js 中对应的全局导致对象。
+    var current = null; // 在 init() 中获得的 config
+
+
+    module.exports = exports = /**@lends WeChat*/ {
+
+        /**
+        * 初始化微信环境。
+        * 该方法会加载微信的 js 库，并进行签名验证，准备就绪后会触发 ready 事件。
+        */
+        init: function (config) {
+
+            var JsApiList = require(module, 'JsApiList');
+            var Lib = require(module, 'Lib');
+            var Signature = require(module, 'Signature');
+
+            config = current = Config.clone(module.id, config);
+
+            //并行加载 js 库和验证签名，而不是串行去做
+            var sg = null;
+
+            Lib.load(config.js, function (wxObj) {
+                wx = wxObj;
+                checkReady(wxObj, sg);
+            });
+
+            Signature.get({
+                'eid': config.eid,
+                'url': config.url,
+                'timestamp': config.timestamp,
+                'noncestr': config.noncestr,
+
+            }, function (data) {
+                sg = data;
+                checkReady(wx, data);
+            });
+
+
+            var count = 0;
+
+            function checkReady(wx, data) {
+
+                if (!wx || !data) {
+                    count++;
+                    if (count < 5) {
+                        setTimeout(checkReady, 200);
+                    }
+                    return;
+                }
+
+                //这是一个异步操作
+                wx.config({
+                    'debug': config.debug,
+                    'appId': config.appid,
+
+                    'timestamp': data.timestamp,
+                    'nonceStr': data.noncestr,
+                    'signature': data.signature,
+
+                    'jsApiList': JsApiList.get(wx, config.apis),
+                });
+
+                // config() 调用完成后的成功回调
+                wx.ready(function () {
+                    status = 'ready';
+                    emitter.fire('ready', [wx]);
+                });
+
+                // config() 调用完成后的出错回调
+                wx.error(function (json) {
+                   
+                    if (json.code == 42001 && config.retryAfterExpired) {
+                        exports.init(config);  //签名过期时需要重新签名
+                    }
+                    else {
+                        status = 'error';
+                        emitter.fire('error', [wx]);
+                    }
+                });
+            }
+        },
+
+        /**
+        * 绑定事件。
+        * 已重载 on({...}，因此支持批量绑定。
+        * @param {string} name 事件名称。
+        * @param {function} fn 回调函数。
+        */
+        on: function (name, fn) {
+
+            var args = [].slice.call(arguments, 0);
+
+            if (!status) { //请求尚未完成，先添加到回调列表
+                emitter.on.apply(emitter, args);
+                return;
+            }
+
+            //请求已完成，立即触发
+            var emt = new Emitter(); //使用临时的事件触发器。
+            emt.on.apply(emt, args);
+            emt.fire(status, [wx]);
+            emt.destroy();
+            emt = null;
+
+        },
+
+        /**
+        * 获取跳转到登录授权页面的 url。
+        */
+        getLoginUrl: function (eid, url) {
+
+            //重载 getLoginUrl(url)
+            if (arguments.length == 1) {
+                if (!current) {
+                    throw new Error('当不指定参数 eid 时，请先调用 init() 方法以传入 eid 字段。');
+                }
+                url = eid;
+                eid = current.eid;
+            }
+
+            var defaults = Config.get(module.id);
+            var login = defaults.login;
+
+            var data = $.Object.extend({}, login.data, {
+                'eid': eid,
+                'from_url': url,
+            });
+
+            var Url = MiniQuery.require('Url');
+            url = Url.addQueryString(login.url, data);
+            return url;
+
+        },
+
+
+        /**
+        * 在微信就绪后绑定分享操作数据。
+        * @param {string} type 分享的类型，可取的值有: 
+        *   'AppMessage': 分享给朋友;
+        *   'QQ': 分享给 QQ;
+        *   'QZone': 分享到 QQ 空间;
+        *   'Timeline': 分享到朋友圈;
+        *   'Weibo': 分享到微博;
+        * @param {Object} data 配置数据对象。
+        */
+        share: function (type, data) {
+            exports.on('ready', function (wx) {
+
+                var url = exports.getLoginUrl(data.link || data.url); //多名称方式
+
+                data = $.Object.extend({}, data, {
+                    'link': url,
+                    'imgUrl': data.imgUrl || data.icon, //多名称方式
+                });
+
+                //下面两个字段不是微信接口层所需要的，安全起见，移除掉为好。
+                data = $.Object.remove(data, [
+                    'url',
+                    'icon',
+                ]);
+
+                var name = 'onMenuShare' + type;
+                var share = wx[name];
+                if (typeof share != 'function') {
+                    throw new Error('wx 对象中不存在方法: ' + name);
+                }
+
+                share = share.bind(wx);
+                share(data);
+            });
+
+        },
+
+        /**
+        * 在微信就绪后调用 wx 对象中指定名称的方法。
+        * 这是一个异步调用，并可传递一些参数。
+        * @param {string} methodName 要调用的方法名称: 
+        */
+        invoke: function (methodName, arg0, argN) {
+
+            exports.on('ready', function (wx) {
+
+                var fn = wx[methodName];
+                if (typeof fn != 'function') {
+                    throw new Error('wx 对象中不存在方法: ' + methodName);
+                }
+
+                var args = [].slice.call(arguments, 1);
+                fn.apply(wx, args);
+            });
+
+        },
+
+
+        
+    };
+
+});
+
+
+
+/**
+* alert 对话框
+* @namespace
+* @name Alert
+* @private
+*/
+define('Alert', function (require, module, exports) {
+
+    var $ = require('$');
+
+
+    //根据文本来计算高度，大概值，并不要求很准确
+    function getHeight(text) {
+
+        var len = $.String.getByteLength(text);
+        var h = Math.max(len, 125);
+        var max = document.documentElement.clientHeight;
+
+        if (h >= max * 0.8) {
+            h = '80%';
+        }
+
+        return h;
+    }
+
+
+
+
+    /**
+    * 创建一个 alert 对话框。
+    */
+    function create(text, text1, textN, fn) {
+
+        //重载 alert(obj); 以方便程序员调试查看 json 对象。
+        if (typeof text == 'object') {
+            var Sample = require(module, 'Sample');
+
+            text = $.String.format(Sample, {
+                'text': JSON.stringify(text, null, 4),
+            });
+        }
+
+
+        var args = [].slice.call(arguments, 1);
+
+        //在参数列表中找到的第一个函数当作是回调函数，并忽略后面的参数。
+        var index = $.Array.findIndex(args, function (item, index) {
+            return typeof item == 'function';
+        });
+
+        if (index >= 0) { //找到回调函数
+            fn = args[index];
+            args = args.slice(0, index); //回调函数前面的都当作是要显示的文本
+        }
+        else {
+            fn = null;
+        }
+
+        args = [text].concat(args);
+        text = $.String.format.apply(null, args);
+
+
+
+        var Dialog = require('Dialog');
+
+        var dialog = new Dialog({
+            'text': text,
+            'buttons': [{ text: '确定', fn: fn, }],
+            'volatile': false,
+            'mask': true,
+            'autoClosed': true,
+            'width': '80%',
+            'z-index': 99999,
+            'cssClass': 'Alert',
+            'height': getHeight(text),
+        });
+
+        return dialog;
+
+    }
+
+
+
+    return {
+        create: create,
+    };
+
+});
+
+
+/*
+* Alert/Sample
+* 由 grunt 生成，来源: ui/dialog/Alert/Sample.html
+*/
+define('Alert/Sample', [
+    '<pre class="json">{text}</pre>',
+].join('\n'));
 
 
 /**
@@ -3648,9 +4073,12 @@ define('Dialog', function (require, module, exports) {
             setTimeout(function () {
                 var style = meta.style;
                 $(div).css(style).show();
-                meta.visible = true;
-                meta.emitter.fire('show');
             }, 0);
+
+            //下面的两行不要放在上面的 setTimeout 里，
+            //因为外面可能已经调用了 destroy() 而导致 emitter 不可用
+            meta.visible = true;
+            meta.emitter.fire('show');
 
         },
 
@@ -3748,7 +4176,7 @@ define('Dialog', function (require, module, exports) {
 
 /*
 * Dialog/Sample/iOS
-* 由 grunt 生成，来源: ui/Dialog/Sample/iOS.html
+* 由 grunt 生成，来源: ui/dialog/Dialog/Sample/iOS.html
 */
 define('Dialog/Sample/iOS', [
     '#--div.begin--#',
@@ -3960,9 +4388,7 @@ define('Dialog/Sample', function (require, module, exports) {
 
 
 /**
-* Dialog/Style
-* @namespace
-* @name Dialog/Style
+* 
 */
 define('Dialog/Style', function (require, module, exports) {
     var $ = require('$');
@@ -4346,7 +4772,7 @@ define('Loading', function (require, module, exports) {
 
 /*
 * Loading/Sample/iOS
-* 由 grunt 生成，来源: ui/Loading/Sample/iOS.html
+* 由 grunt 生成，来源: ui/dialog/Loading/Sample/iOS.html
 */
 define('Loading/Sample/iOS', [
     '<div id="{id}" class="KISP Loading-iOS {cssClass}" style="{style}">',
@@ -4370,7 +4796,7 @@ define('Loading/Sample/iOS', [
 
 /*
 * Loading/Sample/spinner
-* 由 grunt 生成，来源: ui/Loading/Sample/spinner.html
+* 由 grunt 生成，来源: ui/dialog/Loading/Sample/spinner.html
 */
 define('Loading/Sample/spinner', [
     '<div id="{id}" class="KISP Loading-spinner {cssClass}" style="{style}">',
@@ -4492,9 +4918,7 @@ define('Loading/Sample', function (require, module, exports) {
 
 
 /**
-* Loading/Style
-* @namespace
-* @name Loading/Style
+* 
 */
 define('Loading/Style', function (require, module, exports) {
     var $ = require('$');
@@ -4554,6 +4978,8 @@ define('Loading/Style', function (require, module, exports) {
         if (style['margin-top'] === undefined) { //未指定
             style['margin-top'] = getMargin(style.height);
         }
+
+
 
 
         return style;
@@ -4652,6 +5078,9 @@ define('Mask', function (require, module, exports) {
             $(meta.container).prepend(html);
             div = meta.div = document.getElementById(id);
 
+            var style = Style.get(meta.style);
+            $(div).css(style);
+
             $(div).on('click', function () {
                 meta.emitter.fire('click');
             });
@@ -4667,8 +5096,15 @@ define('Mask', function (require, module, exports) {
                     $(div).on('click', function () {
                         self.hide();
 
+                        //先备份原来的 opacity
+                        var opacity = $(div).css('opacity');
+
                         //显示一个完全透明的层 200ms，防止点透
                         self.show({ opacity: 0, duration: 200 });
+
+                        setTimeout(function () {
+                            $(div).css('opacity', opacity);
+                        }, 200);
                     });
                 }
             }
@@ -4685,24 +5121,30 @@ define('Mask', function (require, module, exports) {
             if (typeof config == 'number') { //重载 show(duration);
                 config = { 'duration': config, };
             }
-            else {
-                config = config || {};
-            }
 
 
             var meta = mapper.get(this);
             var emitter = meta.emitter;
-            var style = Style.get(meta.style, config);
-            
-            meta.showTime = new Date(); //记录开始显示的时间点
 
             this.render();
-            $(meta.div).css(style).show();
+
+            var div = $(meta.div);
+
+            if (config) {
+                var style = Style.get(meta.style, config);
+                div.css(style);
+            }
+
+            meta.showTime = new Date(); //记录开始显示的时间点
+            div.show();
+
 
             emitter.fire('show');
 
 
-            var duration = 'duration' in config ? config.duration : meta.duration;
+            var duration = config && ('duration' in config) ?
+                    config.duration :
+                    meta.duration;
 
             if (duration) {
                 var self = this;
@@ -4852,7 +5294,7 @@ define('Mask', function (require, module, exports) {
 
 /*
 * Mask/Sample
-* 由 grunt 生成，来源: ui/Mask/Sample.html
+* 由 grunt 生成，来源: ui/dialog/Mask/Sample.html
 */
 define('Mask/Sample', [
     '<div id="{id}" class="KISP Mask" style="display: none;"></div>',
@@ -4913,6 +5355,422 @@ define('Mask/Style', function (require, module, exports) {
 
 
 /**
+* 简易信息提示组件
+* @class
+* @name Toast
+*/
+define('Toast', function (require, module, exports) {
+    var $ = require('$');
+    var MiniQuery = require('MiniQuery');
+
+    var Mapper = MiniQuery.require('Mapper');
+    var Emitter = MiniQuery.require('Emitter');
+
+    var Config = require('Config');
+    var RandomId = require('RandomId');
+
+    //子模块
+    var Sample = require(module, 'Sample');
+    var Style = require(module, 'Style');
+
+    var mapper = new Mapper();
+
+
+
+    function render(style) {
+
+        var meta = mapper.get(this);
+
+        var id = meta.id;
+        var sample = meta.sample;
+
+        var Style = require('Style');
+
+        var html = $.String.format(sample, {
+            'id': id,
+            'icon': meta.icon,
+            'icon-id': meta.iconId,
+            'text-id': meta.textId,
+            'text': meta.text,
+            'style': Style.stringify(style),
+            'cssClass': meta.cssClass,
+        });
+
+        $(document.body).prepend(html);
+
+        var div = document.getElementById(id);
+        meta.div = div;
+
+        return div;
+
+    }
+
+
+    /**
+    * 构造器。
+    * @constructor
+    */
+    function Toast(config) {
+
+        Mapper.setGuid(this);
+
+        config = Config.clone(module.id, config);
+
+        var emitter = new Emitter(this);
+
+        var cssClass = config.cssClass;
+        if (cssClass instanceof Array) {
+            cssClass = cssClass.join(' ');
+        }
+
+        var text = config.text;
+        if (!text && text !== 0) { // 0 除外
+            cssClass += ' no-text'; //注意，前面要有个空格
+        }
+        else {
+            cssClass += ' has-text';
+        }
+
+        var icon = config.icon;
+        cssClass += icon ? ' has-icon' : ' no-icon';
+
+        var prefix = config.prefix;
+        var suffix = config.suffix;
+
+        var meta = {
+
+            'id': RandomId.get(prefix, suffix),
+            'icon': icon,
+            'iconId': RandomId.get(prefix, 'icon-', suffix),
+            'textId': RandomId.get(prefix, 'text-', suffix),
+
+            'div': null,
+            'sample': Sample.get(config.sample), //加载相应的 HTML 模板
+            'text': text,
+            'emitter': emitter,
+            'mask': config.mask,
+            'masker': null, // Mask 的实例，重复使用
+            'style': Style.get(config),
+            'showTime': 0, //开始显示时的时间点
+            'cssClass': cssClass,
+            'duration': config.duration,
+        };
+
+        mapper.set(this, meta);
+
+    }
+
+
+    //实例方法
+    Toast.prototype = /**@lends Toast#*/ {
+        constructor: Toast,
+
+        /**
+        * 显示本组件。
+        */
+        show: function (text, config) {
+
+            var type = typeof text;
+            
+            if (type == 'object') { //重载 show(config)
+                config = text;
+                text = config.text;
+            }
+            
+            config = config || {};
+
+            var meta = mapper.get(this);
+            var div = meta.div;
+
+
+            var style = Style.get(meta.style, config);
+
+            if (!div) { //首次 render
+                div = render.call(this, style);
+            }
+
+
+            $(div).css(style);
+
+            var Mask = require('Mask');
+            var mask = Mask.filter(meta.mask, config.mask);
+            var masker = meta.masker;
+
+            //指定了启用 mask 层
+            if (mask) {
+                if (!masker) {
+                    masker = new Mask();
+                    meta.masker = masker;
+                }
+                masker.show(mask);
+            }
+            else {
+                if (masker) { //之前已经创建了，并且可能是显示的。
+                    masker.hide();
+                }
+            }
+
+
+            if (text !== undefined && text != meta.text) {
+                $('#' + meta.textId).html(text);
+                meta.text = text;
+                $(div).removeClass('no-text').addClass('has-text');
+            }
+
+
+            if ('icon' in config) {
+                var icon = config.icon;
+                if (icon) {
+                    $(div).removeClass('no-icon').addClass('has-icon');
+
+                    if (icon != meta.icon) {
+                        $('#' + meta.iconId).removeClass('fa-' + meta.icon).addClass('fa-' + icon);
+                        meta.icon = icon;
+                    }
+                }
+                else {
+                    $(div).removeClass('has-icon').addClass('no-icon');
+                }
+            }
+
+
+            meta.showTime = new Date(); //记录开始显示的时间点
+
+            $(div).show();
+            meta.emitter.fire('show');
+
+            //优先使用参数中的，当不存在时，再使用 meta 的 
+            var duration = 'duration' in config ? config.duration : meta.duration;
+
+            if (duration) {
+                var self = this;
+                setTimeout(function () {
+                    self.hide();
+                }, duration);
+            }
+        },
+
+        /**
+        * 隐藏本组件。
+        * @param {number} [lastTime] 需要持续显示的时间。
+        */
+        hide: function (lastTime) {
+            var meta = mapper.get(this);
+            var div = meta.div;
+
+            if (!div) {
+                return;
+            }
+
+            if (!lastTime) { //未指定要持续显示的时间，则立即隐藏
+                hide();
+                return;
+            }
+
+            var now = new Date();
+            var showTime = meta.showTime;
+
+            var useTime = now - showTime;       //已经显示的时间
+            var leftTime = lastTime - useTime;  //剩余时间
+
+            if (leftTime > 0) {
+                setTimeout(hide, leftTime);
+            }
+            else { //立即隐藏
+                hide();
+            }
+
+            //内部方法
+            function hide() {
+                var masker = meta.masker;
+                if (masker) {
+                    masker.hide();
+                }
+                meta.showTime = 0;
+                $(div).hide();
+                meta.emitter.fire('hide');
+            }
+
+        },
+
+        /**
+        * 移除本组件对应的 DOM 节点。
+        */
+        remove: function () {
+
+            var meta = mapper.get(this);
+            var div = meta.div;
+
+            if (!div) {
+                return;
+            }
+
+
+            var masker = meta.masker;
+            if (masker) {
+                masker.remove();
+            }
+
+            //reset
+            meta.div = null;
+            meta.masker = null;
+            meta.hasBind = false;
+
+            $(div).off();
+
+            document.body.removeChild(div);
+            meta.emitter.fire('remove');
+
+        },
+
+        /**
+        * 绑定事件。
+        */
+        on: function (name, fn) {
+            var meta = mapper.get(this);
+            var emitter = meta.emitter;
+
+            var args = [].slice.call(arguments, 0);
+            emitter.on.apply(emitter, args);
+        },
+
+        /**
+        * 销毁本组件
+        */
+        destroy: function () {
+            var meta = mapper.get(this);
+            var emitter = meta.emitter;
+
+            this.remove();
+            emitter.destroy();
+
+            mapper.remove(this);
+        },
+
+    };
+
+    return Toast;
+
+});
+
+
+/*
+* Toast/Sample/font-awesome
+* 由 grunt 生成，来源: ui/dialog/Toast/Sample/font-awesome.html
+*/
+define('Toast/Sample/font-awesome', [
+    '<div id="{id}" class="KISP Toast-font-awesome {cssClass}">',
+    '    <div>',
+    '        <i id="{icon-id}" class="fa fa-{icon}"></i>',
+    '    </div>',
+    '    <span id="{text-id}" class="text">{text}</span>',
+    '</div>',
+].join('\n'));
+
+
+/**
+*
+*/
+define('Toast/Sample', function (require, module, exports) {
+    
+    var name$sample = {};
+
+
+    function get(name) {
+        var sample = name$sample[name];
+        if (sample) {
+            return sample;
+        }
+
+        sample = require(module, name);
+        name$sample[name] = sample;
+        return sample;
+    }
+
+
+
+    return {
+        get: get,
+    };
+
+
+});
+
+
+
+/**
+* 
+*/
+define('Toast/Style', function (require, module, exports) {
+    var $ = require('$');
+    var Style = require('Style');
+    
+
+    function getMargin(v) {
+
+        var type = typeof v;
+
+        if (type == 'number') {
+            return (0 - v / 2) + 'px';
+        }
+
+        if (type == 'string' && v.slice(-2) == 'px') {
+            v = parseInt(v);
+            return (0 - v / 2) + 'px';
+        }
+
+    }
+
+
+
+    function get(item0, item1, itemN) {
+
+        var list = [].slice.call(arguments);
+
+        var style = Style.filter(list, [
+            'background',
+            'border-radius',
+            'bottom',
+            'color',
+            'font-size',
+            'height',
+            'left',
+            'margin-top',
+            'right',
+            'top',
+            'width',
+            'z-index',
+        ]);
+
+
+        //���ݿ��ȼ��� margin-left �� margin-top��ʹ�þ���
+
+        var v = getMargin(style.width);
+        if (v) {
+            style['margin-left'] = v;
+        }
+
+        v = getMargin(style.height);
+        if (v) {
+            style['margin-top'] = v;
+        }
+
+        return style;
+
+
+    }
+
+
+    return {
+        get: get,
+    };
+
+
+});
+
+
+
+/**
 * 状态导航器
 * @class
 * @name Navigator
@@ -4946,10 +5804,10 @@ define('Navigator', function (require, module,  exports) {
         var emitter = new Emitter(this);
 
         var meta = {
-            emitter: emitter,
-            statcks: [],
-            quiet: false,
-            hash: hash,
+            'emitter': emitter,
+            'statcks': [],
+            'quiet': false,
+            'hash': hash,
         };
 
         mapper.set(this, meta);
@@ -5114,7 +5972,7 @@ define('NoData', function (require, module, exports) {
 
 
     /**
-    * 滚动器构造函数。
+    * 构造函数。
     */
     function NoData(container, config) {
 
@@ -5203,15 +6061,9 @@ define('NoData', function (require, module, exports) {
 
         toggle: function (needShow) {
             var meta = mapper.get(this);
-            var div = meta.div;
-
-            if (!div) {
-                return;
-            }
-
             var visible = meta.visible;
 
-            if (needShow === undefined) { //重载 toggle()
+            if (arguments.length == 0) { //重载 toggle()
                 if (visible) {
                     this.hide();
                 }
@@ -5419,14 +6271,16 @@ define('Panel', function (require, module, exports) {
         Mapper.setGuid(this);
         config = Config.clone(module.id, config);
 
-        var emitter = new Emitter(this);
-
 
         var meta = {
-            'emitter': emitter,
+            'emitter': new Emitter(this),
+            'outerEmitter': new Emitter(), //供外部用的 emitter
+
             'container': container,
             'rendered': false,
             'showAfterRender': config.showAfterRender,
+            'cssClass': config.cssClass,
+            'visible': false,
         };
 
         mapper.set(this, meta);
@@ -5459,6 +6313,7 @@ define('Panel', function (require, module, exports) {
             var args = [].slice.call(arguments);
             container.show.apply(container, args);
 
+            meta.visible = true;
             emitter.fire('show');
 
         },
@@ -5475,8 +6330,52 @@ define('Panel', function (require, module, exports) {
             var args = [].slice.call(arguments);
             container.hide.apply(container, args);
 
+            meta.visible = false;
             emitter.fire('hide');
 
+        },
+
+        /**
+        * 切换显示或隐藏本组件。
+        */
+        toggle: function (needShow) {
+            var meta = mapper.get(this);
+            var visible = meta.visible;
+
+            if (arguments.length == 0) { //重载 toggle()
+                if (visible) {
+                    this.hide();
+                }
+                else {
+                    this.show();
+                }
+            }
+            else {
+                if (visible && !needShow) {
+                    this.hide();
+                }
+                else if (!visible && needShow) {
+                    this.show();
+                }
+            }
+        },
+
+
+
+        /**
+        * 对本组件进行简单的模板填充。
+        */
+        fill: function (data, fn) {
+
+            var Template = require('Template');
+
+            var meta = mapper.get(this);
+            var container = meta.container;
+            var emitter = meta.emitter;
+
+            Template.fill(container, data, fn);
+
+            emitter.fire('fill', [data]);
         },
 
 
@@ -5485,17 +6384,21 @@ define('Panel', function (require, module, exports) {
         */
         render: function () {
 
+            var args = [].slice.call(arguments);
+
             var meta = mapper.get(this);
             var emitter = meta.emitter;
+            var container = meta.container;
+            var cssClass = meta.cssClass;
 
             var rendered = meta.rendered;
             if (!rendered) { //首次 render
-                emitter.fire('init');
+                emitter.fire('init', args);
             }
 
-            emitter.fire('before-render', [rendered]);
+            emitter.fire('before-render', args);
+            $(container).addClass(cssClass);
 
-            var args = [].slice.call(arguments);
             emitter.fire('render', args);
 
             meta.rendered = true;
@@ -5504,6 +6407,7 @@ define('Panel', function (require, module, exports) {
                 this.show();
             }
 
+            emitter.fire('after-render', args);
         },
 
         /**
@@ -5516,6 +6420,24 @@ define('Panel', function (require, module, exports) {
             emitter.fire('refresh', args);
 
         },
+
+        /**
+        * 获取一个状态，该状态表示本组件是否为显示状态。
+        */
+        visible: function () {
+            var meta = mapper.get(this);
+            return meta.visible;
+        },
+
+        /**
+        * 获取一个状态，该状态表示本组件是否已渲染过。
+        */
+        rendered: function () {
+            var meta = mapper.get(this);
+            return meta.rendered;
+        },
+
+    
 
         /**
         * 销毁本组件
@@ -5542,29 +6464,64 @@ define('Panel', function (require, module, exports) {
 
 
         /**
-        * 包装一个新对象，使其拥有实例的成员和新对象的成员。
-        *
+        * 触发外部的事件。
+        */
+        fire: function (name, args) {
+            var meta = mapper.get(this);
+            var outerEmitter = meta.outerEmitter;
+            var args = [].slice.call(arguments, 0);
+            outerEmitter.fire.apply(outerEmitter, args);
+        },
+
+
+        /**
+        * 包装一个新对象，使其拥有当前实例的部分成员和新对象的成员。
+        * @param {Object} [obj] 要需要包装的对象。 
+            如果不指定，则只包装当前实例对象。
+        * @return {Object} 返回一个由当前实例的部分成员和要包装对象的成员组成的新对象。
+        * @example
+            var panel = KISP.create('Panel');
+            var obj = panel.wrap();
+            obj.show();
+
+            var obj1 = panel.wrap({ a: 100 });
+            console.log(obj1.a);
         */
         wrap: function (obj) {
 
-            var panel = {};
+            var meta = mapper.get(this);
+            var outerEmitter = meta.outerEmitter;
+
+            var panel = {
+                //重写 on，让事件绑定到外部的事件管理器上，而不是 this 内部使用的 emitter
+                on: function () {
+                    var args = [].slice.call(arguments, 0);
+                    outerEmitter.on.apply(outerEmitter, args);
+                },
+            };
+
 
             for (var key in this) {
 
-                if (key.slice(0, 1) == '_' || key == 'constructor') { //忽略下划线开头的成员。
+                //忽略的成员。
+                if (key.slice(0, 1) == '_' ||
+                    (/^(constructor|fire|on|wrap)$/g).test(key)) {
                     continue;
                 }
 
                 var value = this[key];
+
+                //实例方法静态化
                 if (typeof value == 'function') {
-                    value = value.bind(this);
+                    value = value.bind(this); 
                 }
 
                 panel[key] = value;
             }
 
-            return $.Object.extend(panel, obj);
+            return obj ? $.Object.extend(panel, obj) : panel;
         },
+
 
     };
 
@@ -5750,6 +6707,8 @@ define('Scroller', function (require, module,  exports) {
             'pulldown': {},
             'pullup': {},
             'hasBindPull': false, //是否已绑定 pull 中要用到的事件
+            'el': el,
+            'resize': null, //针对 $(el).on('resize', meta.resize)
         };
 
         mapper.set(this, meta);
@@ -5813,16 +6772,19 @@ define('Scroller', function (require, module,  exports) {
 
         if (config.autoRefresh) { 
             var self = this;
+            var resize = meta.resize = function () {
+                var meta = mapper.get(self);
+
+                if (!meta) { //不存在，说明已经调用了 destroy()
+                    return;
+                }
+
+                self.refresh();
+            };
 
             //需要 jQuery 插件，详情: https://github.com/cowboy/jquery-resize
-            $(el).on('resize', function () {
-                try{ //有时会出错，暂未找到原因。 
-                    self.refresh();
-                }
-                catch (ex) {
-                    console.log(ex);
-                }
-            });
+            $(el).on('resize', resize);
+            
         }
 
 
@@ -5978,6 +6940,13 @@ define('Scroller', function (require, module,  exports) {
         */
         destroy: function () {
             var meta = mapper.get(this);
+
+            //移除之前绑定的 resize 事件
+            var resize = meta.resize;
+            if (resize) {
+                $(meta.el).off('resize', resize);
+            }
+
             var scroller = meta.scroller;
             scroller.destroy();
 
@@ -6084,6 +7053,7 @@ define('Tabs', function (require, module, exports) {
             'activedIndex': -1,
             'activedNode': null, 
             'activedClass': config.activedClass,
+            'pressedClass': config.pressedClass,
             'repeated': config.repeated,
 
             'eventName': config.eventName,
@@ -6143,6 +7113,8 @@ define('Tabs', function (require, module, exports) {
 
                 var eventName = meta.eventName;
                 var selector = meta.selector;
+                var pressedClass = meta.pressedClass;
+
                 var self = this;
 
                 var change = meta.change = function (event) {
@@ -6150,7 +7122,14 @@ define('Tabs', function (require, module, exports) {
                     self.active(index);
                 };
 
-                $(container).on(eventName, selector, change);
+                if (eventName == 'touch') { //特殊处理
+                    var $ = require('jquery-plugin/touch');
+                    $(container).touch(selector, change, pressedClass);
+                }
+                else {
+                    var $ = require('$');
+                    $(container).on(eventName, selector, change);
+                }
             }
 
 
@@ -6384,7 +7363,7 @@ define('Tabs/Helper', function (require, module, exports) {
 
 /**
 * 模板填充
-* @namespace
+* @class
 * @name Template
 */
 define('Template', function (require, module, exports) {
@@ -6759,13 +7738,12 @@ define('Template/Static', function (require, module, exports) {
 
 });
 
-
 /**
-* 简易信息提示组件
+* 视图组件
 * @class
-* @name Toast
+* @name View
 */
-define('Toast', function (require, module, exports) {
+define('View', function (require, module, exports) {
     var $ = require('$');
     var MiniQuery = require('MiniQuery');
 
@@ -6773,395 +7751,38 @@ define('Toast', function (require, module, exports) {
     var Emitter = MiniQuery.require('Emitter');
 
     var Config = require('Config');
-    var RandomId = require('RandomId');
-
-    //子模块
-    var Sample = require(module, 'Sample');
-    var Style = require(module, 'Style');
 
     var mapper = new Mapper();
-
-
-
-    function render(style) {
-
-        var meta = mapper.get(this);
-
-        var id = meta.id;
-        var sample = meta.sample;
-
-        var Style = require('Style');
-
-        var html = $.String.format(sample, {
-            'id': id,
-            'icon': meta.icon,
-            'icon-id': meta.iconId,
-            'text-id': meta.textId,
-            'text': meta.text,
-            'style': Style.stringify(style),
-            'cssClass': meta.cssClass,
-        });
-
-        $(document.body).prepend(html);
-
-        var div = document.getElementById(id);
-        meta.div = div;
-
-        return div;
-
-    }
-
 
     /**
     * 构造器。
     * @constructor
     */
-    function Toast(config) {
+    function View(container, config) {
 
-        Mapper.setGuid(this);
+        var cssClass = ' KISP View';
 
-        config = Config.clone(module.id, config);
-
-        var emitter = new Emitter(this);
-
-        var cssClass = config.cssClass;
-        if (cssClass instanceof Array) {
-            cssClass = cssClass.join(' ');
-        }
-
-        var text = config.text;
-        if (!text && text !== 0) { // 0 除外
-            cssClass += ' no-text'; //注意，前面要有个空格
-        }
-        else {
-            cssClass += ' has-text';
-        }
-
-        var icon = config.icon;
-        cssClass += icon ? ' has-icon' : ' no-icon';
-
-        var prefix = config.prefix;
-        var suffix = config.suffix;
-
-        var meta = {
-
-            'id': RandomId.get(prefix, suffix),
-            'icon': icon,
-            'iconId': RandomId.get(prefix, 'icon-', suffix),
-            'textId': RandomId.get(prefix, 'text-', suffix),
-
-            'div': null,
-            'sample': Sample.get(config.sample), //加载相应的 HTML 模板
-            'text': text,
-            'emitter': emitter,
-            'mask': config.mask,
-            'masker': null, // Mask 的实例，重复使用
-            'style': Style.get(config),
-            'showTime': 0, //开始显示时的时间点
-            'cssClass': cssClass,
-            'duration': config.duration,
-        };
-
-        mapper.set(this, meta);
-
-    }
-
-
-    //实例方法
-    Toast.prototype = /**@lends Toast#*/ {
-        constructor: Toast,
-
-        /**
-        * 显示本组件。
-        */
-        show: function (text, config) {
-
-            var type = typeof text;
-            
-            if (type == 'object') { //重载 show(config)
-                config = text;
-                text = config.text;
-            }
-            
-            config = config || {};
-
-            var meta = mapper.get(this);
-            var div = meta.div;
-
-
-            var style = Style.get(meta.style, config);
-
-            if (!div) { //首次 render
-                div = render.call(this, style);
-            }
-
-
-            $(div).css(style);
-
-            var Mask = require('Mask');
-            var mask = Mask.filter(meta.mask, config.mask);
-            var masker = meta.masker;
-
-            //指定了启用 mask 层
-            if (mask) {
-                if (!masker) {
-                    masker = new Mask();
-                    meta.masker = masker;
-                }
-                masker.show(mask);
+        if (config) {
+            if (!config.cssClass) {
+                config.cssClass = cssClass;
             }
             else {
-                if (masker) { //之前已经创建了，并且可能是显示的。
-                    masker.hide();
-                }
+                config.cssClass += cssClass;
             }
-
-
-            if (text !== undefined && text != meta.text) {
-                $('#' + meta.textId).html(text);
-                meta.text = text;
-                $(div).removeClass('no-text').addClass('has-text');
-            }
-
-
-            if ('icon' in config) {
-                var icon = config.icon;
-                if (icon) {
-                    $(div).removeClass('no-icon').addClass('has-icon');
-
-                    if (icon != meta.icon) {
-                        $('#' + meta.iconId).removeClass('fa-' + meta.icon).addClass('fa-' + icon);
-                        meta.icon = icon;
-                    }
-                }
-                else {
-                    $(div).removeClass('has-icon').addClass('no-icon');
-                }
-            }
-
-
-            meta.showTime = new Date(); //记录开始显示的时间点
-
-            $(div).show();
-            meta.emitter.fire('show');
-
-            //优先使用参数中的，当不存在时，再使用 meta 的 
-            var duration = 'duration' in config ? config.duration : meta.duration;
-
-            if (duration) {
-                var self = this;
-                setTimeout(function () {
-                    self.hide();
-                }, duration);
-            }
-        },
-
-        /**
-        * 隐藏本组件。
-        * @param {number} [lastTime] 需要持续显示的时间。
-        */
-        hide: function (lastTime) {
-            var meta = mapper.get(this);
-            var div = meta.div;
-
-            if (!div) {
-                return;
-            }
-
-            if (!lastTime) { //未指定要持续显示的时间，则立即隐藏
-                hide();
-                return;
-            }
-
-            var now = new Date();
-            var showTime = meta.showTime;
-
-            var useTime = now - showTime;       //已经显示的时间
-            var leftTime = lastTime - useTime;  //剩余时间
-
-            if (leftTime > 0) {
-                setTimeout(hide, leftTime);
-            }
-            else { //立即隐藏
-                hide();
-            }
-
-            //内部方法
-            function hide() {
-                var masker = meta.masker;
-                if (masker) {
-                    masker.hide();
-                }
-                meta.showTime = 0;
-                $(div).hide();
-                meta.emitter.fire('hide');
-            }
-
-        },
-
-        /**
-        * 移除本组件对应的 DOM 节点。
-        */
-        remove: function () {
-
-            var meta = mapper.get(this);
-            var div = meta.div;
-
-            if (!div) {
-                return;
-            }
-
-
-            var masker = meta.masker;
-            if (masker) {
-                masker.remove();
-            }
-
-            //reset
-            meta.div = null;
-            meta.masker = null;
-            meta.hasBind = false;
-
-            $(div).off();
-
-            document.body.removeChild(div);
-            meta.emitter.fire('remove');
-
-        },
-
-        /**
-        * 绑定事件。
-        */
-        on: function (name, fn) {
-            var meta = mapper.get(this);
-            var emitter = meta.emitter;
-
-            var args = [].slice.call(arguments, 0);
-            emitter.on.apply(emitter, args);
-        },
-
-        /**
-        * 销毁本组件
-        */
-        destroy: function () {
-            var meta = mapper.get(this);
-            var emitter = meta.emitter;
-
-            this.remove();
-            emitter.destroy();
-
-            mapper.remove(this);
-        },
-
-    };
-
-    return Toast;
-
-});
-
-
-/*
-* Toast/Sample/font-awesome
-* 由 grunt 生成，来源: ui/Toast/Sample/font-awesome.html
-*/
-define('Toast/Sample/font-awesome', [
-    '<div id="{id}" class="KISP Toast-font-awesome {cssClass}">',
-    '    <div>',
-    '        <i id="{icon-id}" class="fa fa-{icon}"></i>',
-    '    </div>',
-    '    <span id="{text-id}" class="text">{text}</span>',
-    '</div>',
-].join('\n'));
-
-
-/**
-*
-*/
-define('Toast/Sample', function (require, module, exports) {
-    
-    var name$sample = {};
-
-
-    function get(name) {
-        var sample = name$sample[name];
-        if (sample) {
-            return sample;
+        }
+        else {
+            config = { cssClass: cssClass };
         }
 
-        sample = require(module, name);
-        name$sample[name] = sample;
-        return sample;
-    }
 
-
-
-    return {
-        get: get,
-    };
-
-
-});
-
-
-
-/**
-* Toast/Style
-* @namespace
-* @name Toast/Style
-*/
-define('Toast/Style', function (require, module, exports) {
-    var $ = require('$');
-    var Style = require('Style');
-    
-
-    function getMargin(v) {
-
-        var type = typeof v;
-
-        if (type == 'number') {
-            return (0 - v / 2) + 'px';
-        }
-
-        if (type == 'string' && v.slice(-2) == 'px') {
-            v = parseInt(v);
-            return (0 - v / 2) + 'px';
-        }
-
-        return '0px';
-    }
-
-
-
-    function get(item0, item1, itemN) {
-
-        var list = [].slice.call(arguments);
-
-        var style = Style.filter(list, [
-            'background',
-            'border-radius',
-            'bottom',
-            'color',
-            'font-size',
-            'height',
-            'left',
-            'margin-top',
-            'right',
-            'top',
-            'width',
-            'z-index',
-        ]);
-
-
-        return style;
-
+        var Panel = require('Panel');
+        var panel = new Panel(container, config);
+        return panel;
 
     }
 
 
-    return {
-        get: get,
-    };
-
+    return View;
 
 });
 
@@ -7173,52 +7794,77 @@ define('jquery-plugin/touch', function (require, module,  exports) {
     var $ = require('$');
 
 
-    function touch(selector, fn) {
+    function touch(selector, fn, cssClass) {
 
         var isMoving = false;
 
-        //重载 touch(fn)，如 $(div).touch(fn)
+        //重载 touch(fn, cssClass)，
+        //如 $(div).touch(fn, cssClass)
         if (typeof selector == 'function') {
 
+            cssClass = fn;
             fn = selector;
+            selector = null;
 
             return $(this).on({
+              
+                'touchstart': function (event) {
+                    if (cssClass) {
+                        $(this).addClass(cssClass);
+                    }
+                },
+
                 'touchmove': function () {
                     isMoving = true;
                 },
 
-                'touchend': function (e) {
+                'touchend': function (event) {
+
+                    if (cssClass) {
+                        $(this).removeClass(cssClass);
+                    }
+
                     if (isMoving) {
                         isMoving = false;
                         return;
                     }
 
-                    var args = [].slice.call(arguments, 0);
+                    var args = [].slice.call(arguments);
                     fn.apply(this, args);
-                }
+                },
             });
         }
 
-        //重载 touch( { } ) 批量的情况
+        //重载 touch( { }, cssClass) 批量的情况
         if ($.Object.isPlain(selector)) {
             var self = this;
 
             $.Object.each(selector, function (key, fn) {
-                touch.call(self, key, fn);
+                touch.call(self, key, fn, cssClass);
             });
 
             return this;
         }
 
 
-        //此时为 $(div).touch(selector, fn)
+        //此时为 $(div).touch(selector, fn, cssClass)
         return $(this).delegate(selector, {
+
+            'touchstart': function (event) {
+                if (cssClass) {
+                    $(this).addClass(cssClass);
+                }
+            },
 
             'touchmove': function () {
                 isMoving = true;
             },
 
-            'touchend': function (e) {
+            'touchend': function (event) {
+                if (cssClass) {
+                    $(this).removeClass(cssClass);
+                }
+
                 if (isMoving) {
                     isMoving = false;
                     return;
@@ -7259,8 +7905,10 @@ Module.expose({
     //cloud-home
     'CloudHome.API': true,
     'CloudHome': true,
-    'CloudHome.Native': true,
     'CloudHome.Title': true,
+
+    //wechat
+    'WeChat': true,
 
     //core
     '$': true,
@@ -7288,6 +7936,7 @@ Module.expose({
     'Tabs': true,
     'Template': true,
     'Toast': true,
+    'View': true,
 
 });
 
@@ -7316,6 +7965,7 @@ define('defaults', /**@lends defaults*/ {
     'Module': {
         seperator: '/',     //私有模块的分隔符
         crossover: false,   //不允许跨级调用
+        repeated: false,    //不允许重复定义同名的模块
     },
 
     /**
@@ -7333,6 +7983,11 @@ define('defaults', /**@lends defaults*/ {
         * 随机延迟时间，更真实模块实际网络
         */
         delay: false, //格式为 { min: 500, max: 2000 }
+
+        /**
+        * 在 url 中增加一个随机 key，以解决缓存问题。
+        */
+        random: true,
 
         /**
         * 把请求时的 data 中的第一级子对象进行序列化的方法。
@@ -7503,7 +8158,7 @@ define('defaults', /**@lends defaults*/ {
         /**
         * 生成的 id 的前缀。
         */
-        prefix: 'kisp-dialog-',
+        prefix: 'KISP-Dialog-',
 
         /**
         * 生成的 id 的随机后缀的长度。
@@ -7546,7 +8201,7 @@ define('defaults', /**@lends defaults*/ {
         /**
         * 生成的 id 的前缀。
         */
-        prefix: 'kisp-loading-',
+        prefix: 'KISP-Loading-',
 
         /**
         * 生成的 id 的随机后缀的长度。
@@ -7587,7 +8242,7 @@ define('defaults', /**@lends defaults*/ {
         /**
         * 生成的 id 的前缀。
         */
-        prefix: 'kisp-mask-',
+        prefix: 'KISP-Mask-',
         
         /**
         * 生成的 id 的随机后缀的长度。
@@ -7610,7 +8265,8 @@ define('defaults', /**@lends defaults*/ {
 
     'Tabs': {
         current: null,
-        eventName: 'click',
+        eventName: 'touch', //当指定为 'touch' 时，会调用 $(container).touch()进行绑定。 
+        pressedClass: '',   //仅当 eventName = 'touch' 时有效。
         activedClass: '',
         selector: '>*', //取直接子节点
         repeated: false, //是否允许重复激活相同的项。
@@ -7627,13 +8283,12 @@ define('defaults', /**@lends defaults*/ {
         /**
         * 生成的 id 的前缀。
         */
-        prefix: 'kisp-toast-',
+        prefix: 'KISP-Toast-',
 
         /**
         * 生成的 id 的随机后缀的长度。
         */
         suffix: 4,
-
         text: '',
 
         /**
@@ -7641,20 +8296,18 @@ define('defaults', /**@lends defaults*/ {
         */
         mask: false,
 
-
         sample: 'font-awesome',
         cssClass: '',
 
         icon: 'check',
         duration: 0, // 0 表示一直显示。
-
-
         //默认样式
         
     },
 
     'Panel': {
         showAfterRender: true,
+        cssClass: '',
     },
 
 
@@ -7663,7 +8316,7 @@ define('defaults', /**@lends defaults*/ {
         /**
         * 生成的 id 的前缀。
         */
-        prefix: 'kisp-nodata-',
+        prefix: 'KISP-NoData-',
 
         /**
         * 生成的 id 的随机后缀的长度。
@@ -7684,6 +8337,50 @@ define('defaults', /**@lends defaults*/ {
         //'top': 0,
         //'z-index': 1024,
     },
+
+    'Seajs': {
+        url: '', // seajs.js 文件所在的 url，具体应用时请指定。
+    },
+
+    'WeChat/Signature': {
+        name: 'Jsapi_Signature',
+        url: 'http://mob.cmcloud.cn/servercloud/weixin/',
+    },
+
+    /**
+    * 微信相关配置
+    */
+    'WeChat': {
+
+        debug: false,
+        appid: '',
+        eid: '',
+
+        'timestamp': parseInt(new Date().getTime() / 1000),
+        'noncestr': Math.random().toString(36).slice(2),
+        'url': window.location.href.split('#')[0],
+
+        js: 'http://res.wx.qq.com/open/js/jweixin-1.0.0.js',
+
+        /**
+        * 跳转到登录授权页的 url
+        */
+        login: {
+            url: 'http://mob.cmcloud.cn/servercloud/weixin/kisapp',
+            data: {
+                focus: 0,
+                type: 1,
+                eid: '',
+                from_url: '',
+            },
+        },
+
+        apis: '*', //表示所有
+
+        retryAfterExpired: true, //签名过期时需要重试
+    },
+
+   
 
 });
 

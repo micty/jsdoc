@@ -1,22 +1,10 @@
 ﻿{
-    "title": "KISP",
+    "title": "2.4.0",
     "type": "接口文档",
-    "width": 170,
+    "jsdoc": true,
     "items": [
         {
-            "text": "首页",
-            "name": "~",
-            "icon": false
-        },
-        
-        {
-            "text": "vCRM",
-            "name": "vCRM",
-            "icon": false
-        },
-        
-        {
-            "text": "API",
+            "text": "---API---",
             "name": "API",
             "alias": "API"
         }

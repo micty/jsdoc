@@ -74,8 +74,11 @@ define('SSH.API', function (require, module, exports) {
                 meta.fireEvent('fail', [code, msg, json, xhr]);
             },
 
-            error: function (xhr) { //错误
-                meta.fireEvent('error', [xhr]);
+            error: function (code, msg, json, xhr) { //错误
+
+                //为了让业务层能知道 SSH 层发生了 fail，通过判断 json 是否为空即可
+                //当 http 协议层连接错误，则 code, msg, json 三个参数都为 undefined
+                meta.fireEvent('error', [code, msg, json, xhr]);
             },
         };
 

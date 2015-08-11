@@ -32,6 +32,7 @@ define('SSH.API/Ajax', function (require, module, exports) {
         var field = config.field;
 
         ssh.on({
+            //SSH 层请求成功了
             'success': function (json, root, xhr) { //此处 data 为 json， json 为 root
 
                 if (!json) {
@@ -50,11 +51,13 @@ define('SSH.API/Ajax', function (require, module, exports) {
             },
 
             'fail': function (code, msg, json, xhr) {
-                fnError && fnError(xhr);
+                //为了让业务层能知道 SSH 层发生了 fail，通过判断 json 是否为空即可
+                fnError && fnError( code, msg, json, xhr); 
             },
 
             'error': function (xhr) {
-                fnError && fnError(xhr);
+                //当 http 协议层连接错误，则 code, msg, json 三个参数都为 undefined
+                fnError && fnError(undefined, undefined, undefined, xhr);
             },
         });
 

@@ -25,7 +25,7 @@ define('NoData', function (require, module, exports) {
 
 
     /**
-    * 滚动器构造函数。
+    * 构造函数。
     */
     function NoData(container, config) {
 
@@ -114,15 +114,9 @@ define('NoData', function (require, module, exports) {
 
         toggle: function (needShow) {
             var meta = mapper.get(this);
-            var div = meta.div;
-
-            if (!div) {
-                return;
-            }
-
             var visible = meta.visible;
 
-            if (needShow === undefined) { //重载 toggle()
+            if (arguments.length == 0) { //重载 toggle()
                 if (visible) {
                     this.hide();
                 }

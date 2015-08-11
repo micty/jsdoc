@@ -1,8 +1,6 @@
 
 /**
-* Toast/Style
-* @namespace
-* @name Toast/Style
+* 
 */
 define('Toast/Style', function (require, module, exports) {
     var $ = require('$');

@@ -33,10 +33,10 @@ define('Navigator', function (require, module,  exports) {
         var emitter = new Emitter(this);
 
         var meta = {
-            emitter: emitter,
-            statcks: [],
-            quiet: false,
-            hash: hash,
+            'emitter': emitter,
+            'statcks': [],
+            'quiet': false,
+            'hash': hash,
         };
 
         mapper.set(this, meta);

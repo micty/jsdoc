@@ -74,6 +74,8 @@ define('Scroller', function (require, module,  exports) {
             'pulldown': {},
             'pullup': {},
             'hasBindPull': false, //是否已绑定 pull 中要用到的事件
+            'el': el,
+            'resize': null, //针对 $(el).on('resize', meta.resize)
         };
 
         mapper.set(this, meta);
@@ -137,16 +139,19 @@ define('Scroller', function (require, module,  exports) {
 
         if (config.autoRefresh) { 
             var self = this;
+            var resize = meta.resize = function () {
+                var meta = mapper.get(self);
+
+                if (!meta) { //不存在，说明已经调用了 destroy()
+                    return;
+                }
+
+                self.refresh();
+            };
 
             //需要 jQuery 插件，详情: https://github.com/cowboy/jquery-resize
-            $(el).on('resize', function () {
-                try{ //有时会出错，暂未找到原因。 
-                    self.refresh();
-                }
-                catch (ex) {
-                    console.log(ex);
-                }
-            });
+            $(el).on('resize', resize);
+            
         }
 
 
@@ -302,6 +307,13 @@ define('Scroller', function (require, module,  exports) {
         */
         destroy: function () {
             var meta = mapper.get(this);
+
+            //移除之前绑定的 resize 事件
+            var resize = meta.resize;
+            if (resize) {
+                $(meta.el).off('resize', resize);
+            }
+
             var scroller = meta.scroller;
             scroller.destroy();
 

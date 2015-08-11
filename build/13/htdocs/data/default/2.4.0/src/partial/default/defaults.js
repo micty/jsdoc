@@ -22,6 +22,7 @@ define('defaults', /**@lends defaults*/ {
     'Module': {
         seperator: '/',     //私有模块的分隔符
         crossover: false,   //不允许跨级调用
+        repeated: false,    //不允许重复定义同名的模块
     },
 
     /**
@@ -39,6 +40,11 @@ define('defaults', /**@lends defaults*/ {
         * 随机延迟时间，更真实模块实际网络
         */
         delay: false, //格式为 { min: 500, max: 2000 }
+
+        /**
+        * 在 url 中增加一个随机 key，以解决缓存问题。
+        */
+        random: true,
 
         /**
         * 把请求时的 data 中的第一级子对象进行序列化的方法。
@@ -209,7 +215,7 @@ define('defaults', /**@lends defaults*/ {
         /**
         * 生成的 id 的前缀。
         */
-        prefix: 'kisp-dialog-',
+        prefix: 'KISP-Dialog-',
 
         /**
         * 生成的 id 的随机后缀的长度。
@@ -252,7 +258,7 @@ define('defaults', /**@lends defaults*/ {
         /**
         * 生成的 id 的前缀。
         */
-        prefix: 'kisp-loading-',
+        prefix: 'KISP-Loading-',
 
         /**
         * 生成的 id 的随机后缀的长度。
@@ -293,7 +299,7 @@ define('defaults', /**@lends defaults*/ {
         /**
         * 生成的 id 的前缀。
         */
-        prefix: 'kisp-mask-',
+        prefix: 'KISP-Mask-',
         
         /**
         * 生成的 id 的随机后缀的长度。
@@ -316,7 +322,8 @@ define('defaults', /**@lends defaults*/ {
 
     'Tabs': {
         current: null,
-        eventName: 'click',
+        eventName: 'touch', //当指定为 'touch' 时，会调用 $(container).touch()进行绑定。 
+        pressedClass: '',   //仅当 eventName = 'touch' 时有效。
         activedClass: '',
         selector: '>*', //取直接子节点
         repeated: false, //是否允许重复激活相同的项。
@@ -333,13 +340,12 @@ define('defaults', /**@lends defaults*/ {
         /**
         * 生成的 id 的前缀。
         */
-        prefix: 'kisp-toast-',
+        prefix: 'KISP-Toast-',
 
         /**
         * 生成的 id 的随机后缀的长度。
         */
         suffix: 4,
-
         text: '',
 
         /**
@@ -347,20 +353,18 @@ define('defaults', /**@lends defaults*/ {
         */
         mask: false,
 
-
         sample: 'font-awesome',
         cssClass: '',
 
         icon: 'check',
         duration: 0, // 0 表示一直显示。
-
-
         //默认样式
         
     },
 
     'Panel': {
         showAfterRender: true,
+        cssClass: '',
     },
 
 
@@ -369,7 +373,7 @@ define('defaults', /**@lends defaults*/ {
         /**
         * 生成的 id 的前缀。
         */
-        prefix: 'kisp-nodata-',
+        prefix: 'KISP-NoData-',
 
         /**
         * 生成的 id 的随机后缀的长度。
@@ -390,6 +394,50 @@ define('defaults', /**@lends defaults*/ {
         //'top': 0,
         //'z-index': 1024,
     },
+
+    'Seajs': {
+        url: '', // seajs.js 文件所在的 url，具体应用时请指定。
+    },
+
+    'WeChat/Signature': {
+        name: 'Jsapi_Signature',
+        url: 'http://mob.cmcloud.cn/servercloud/weixin/',
+    },
+
+    /**
+    * 微信相关配置
+    */
+    'WeChat': {
+
+        debug: false,
+        appid: '',
+        eid: '',
+
+        'timestamp': parseInt(new Date().getTime() / 1000),
+        'noncestr': Math.random().toString(36).slice(2),
+        'url': window.location.href.split('#')[0],
+
+        js: 'http://res.wx.qq.com/open/js/jweixin-1.0.0.js',
+
+        /**
+        * 跳转到登录授权页的 url
+        */
+        login: {
+            url: 'http://mob.cmcloud.cn/servercloud/weixin/kisapp',
+            data: {
+                focus: 0,
+                type: 1,
+                eid: '',
+                from_url: '',
+            },
+        },
+
+        apis: '*', //表示所有
+
+        retryAfterExpired: true, //签名过期时需要重试
+    },
+
+   
 
 });
 

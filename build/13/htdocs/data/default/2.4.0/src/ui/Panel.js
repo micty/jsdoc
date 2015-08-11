@@ -23,14 +23,16 @@ define('Panel', function (require, module, exports) {
         Mapper.setGuid(this);
         config = Config.clone(module.id, config);
 
-        var emitter = new Emitter(this);
-
 
         var meta = {
-            'emitter': emitter,
+            'emitter': new Emitter(this),
+            'outerEmitter': new Emitter(), //供外部用的 emitter
+
             'container': container,
             'rendered': false,
             'showAfterRender': config.showAfterRender,
+            'cssClass': config.cssClass,
+            'visible': false,
         };
 
         mapper.set(this, meta);
@@ -63,6 +65,7 @@ define('Panel', function (require, module, exports) {
             var args = [].slice.call(arguments);
             container.show.apply(container, args);
 
+            meta.visible = true;
             emitter.fire('show');
 
         },
@@ -79,8 +82,52 @@ define('Panel', function (require, module, exports) {
             var args = [].slice.call(arguments);
             container.hide.apply(container, args);
 
+            meta.visible = false;
             emitter.fire('hide');
 
+        },
+
+        /**
+        * 切换显示或隐藏本组件。
+        */
+        toggle: function (needShow) {
+            var meta = mapper.get(this);
+            var visible = meta.visible;
+
+            if (arguments.length == 0) { //重载 toggle()
+                if (visible) {
+                    this.hide();
+                }
+                else {
+                    this.show();
+                }
+            }
+            else {
+                if (visible && !needShow) {
+                    this.hide();
+                }
+                else if (!visible && needShow) {
+                    this.show();
+                }
+            }
+        },
+
+
+
+        /**
+        * 对本组件进行简单的模板填充。
+        */
+        fill: function (data, fn) {
+
+            var Template = require('Template');
+
+            var meta = mapper.get(this);
+            var container = meta.container;
+            var emitter = meta.emitter;
+
+            Template.fill(container, data, fn);
+
+            emitter.fire('fill', [data]);
         },
 
 
@@ -89,17 +136,21 @@ define('Panel', function (require, module, exports) {
         */
         render: function () {
 
+            var args = [].slice.call(arguments);
+
             var meta = mapper.get(this);
             var emitter = meta.emitter;
+            var container = meta.container;
+            var cssClass = meta.cssClass;
 
             var rendered = meta.rendered;
             if (!rendered) { //首次 render
-                emitter.fire('init');
+                emitter.fire('init', args);
             }
 
-            emitter.fire('before-render', [rendered]);
+            emitter.fire('before-render', args);
+            $(container).addClass(cssClass);
 
-            var args = [].slice.call(arguments);
             emitter.fire('render', args);
 
             meta.rendered = true;
@@ -108,6 +159,7 @@ define('Panel', function (require, module, exports) {
                 this.show();
             }
 
+            emitter.fire('after-render', args);
         },
 
         /**
@@ -120,6 +172,24 @@ define('Panel', function (require, module, exports) {
             emitter.fire('refresh', args);
 
         },
+
+        /**
+        * 获取一个状态，该状态表示本组件是否为显示状态。
+        */
+        visible: function () {
+            var meta = mapper.get(this);
+            return meta.visible;
+        },
+
+        /**
+        * 获取一个状态，该状态表示本组件是否已渲染过。
+        */
+        rendered: function () {
+            var meta = mapper.get(this);
+            return meta.rendered;
+        },
+
+    
 
         /**
         * 销毁本组件
@@ -146,29 +216,64 @@ define('Panel', function (require, module, exports) {
 
 
         /**
-        * 包装一个新对象，使其拥有实例的成员和新对象的成员。
-        *
+        * 触发外部的事件。
+        */
+        fire: function (name, args) {
+            var meta = mapper.get(this);
+            var outerEmitter = meta.outerEmitter;
+            var args = [].slice.call(arguments, 0);
+            outerEmitter.fire.apply(outerEmitter, args);
+        },
+
+
+        /**
+        * 包装一个新对象，使其拥有当前实例的部分成员和新对象的成员。
+        * @param {Object} [obj] 要需要包装的对象。 
+            如果不指定，则只包装当前实例对象。
+        * @return {Object} 返回一个由当前实例的部分成员和要包装对象的成员组成的新对象。
+        * @example
+            var panel = KISP.create('Panel');
+            var obj = panel.wrap();
+            obj.show();
+
+            var obj1 = panel.wrap({ a: 100 });
+            console.log(obj1.a);
         */
         wrap: function (obj) {
 
-            var panel = {};
+            var meta = mapper.get(this);
+            var outerEmitter = meta.outerEmitter;
+
+            var panel = {
+                //重写 on，让事件绑定到外部的事件管理器上，而不是 this 内部使用的 emitter
+                on: function () {
+                    var args = [].slice.call(arguments, 0);
+                    outerEmitter.on.apply(outerEmitter, args);
+                },
+            };
+
 
             for (var key in this) {
 
-                if (key.slice(0, 1) == '_' || key == 'constructor') { //忽略下划线开头的成员。
+                //忽略的成员。
+                if (key.slice(0, 1) == '_' ||
+                    (/^(constructor|fire|on|wrap)$/g).test(key)) {
                     continue;
                 }
 
                 var value = this[key];
+
+                //实例方法静态化
                 if (typeof value == 'function') {
-                    value = value.bind(this);
+                    value = value.bind(this); 
                 }
 
                 panel[key] = value;
             }
 
-            return $.Object.extend(panel, obj);
+            return obj ? $.Object.extend(panel, obj) : panel;
         },
+
 
     };
 

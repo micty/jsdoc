@@ -1,9 +1,10 @@
 ﻿##基于 Node.js 的 Panoramio 数据抓取和分析工具
 ---------------------------------------------------------------
 
+###[JsDoc 2.4.0](?type=default&version=2.4.0)
+###[JsDoc 3.0.0](?type=default&version=3.0.0)
 
-
-### Panoramio 简介 [JsDoc](?type=default&version=3.0.0)
+### Panoramio 简介 
 
 > Panoramio 隶属于 Google 的免费照片上传网站，提供无限的相册空间，单张照片最大 25M。
 该网站上传的照片主要用于 Google Earth 上的实景照片，上传照片后可以在卫星地图上进行定位（Google 建议这样做），照片经过审核之后即可出现在 Google Earth 和 Google 卫星地图上。
@@ -29,6 +30,12 @@ disabled | Boolean | (默认值: ``false``) 是否禁用
 
 #### 示例代码：抓取指定用户所有的照片信息
 
+``` css
+.a {
+    color: red;
+}
+
+```
 
 ``` javascript
 

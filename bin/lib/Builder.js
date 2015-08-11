@@ -310,8 +310,13 @@ module.exports = (function () {
                 return;
             }
 
+            //删除 .debug.js 和 .debug.css 文件(其他的在别的地方删除了)
             var config = {
-                src: meta.concat.dest, //删除 .debug.js 文件(其他的在别的地方删除了)
+                src: [
+                    meta.concat.dest,
+                    meta.concatCss.dest.replace('.all.min.css', '.all.debug.css'),
+                ],
+                //src: meta.concat.dest,
                 options: {
                     force: true //允许删除当前工作目录外的其他文件
                 }

@@ -12,8 +12,10 @@ Module.expose({
     //cloud-home
     'CloudHome.API': true,
     'CloudHome': true,
-    'CloudHome.Native': true,
     'CloudHome.Title': true,
+
+    //wechat
+    'WeChat': true,
 
     //core
     '$': true,
@@ -41,6 +43,7 @@ Module.expose({
     'Tabs': true,
     'Template': true,
     'Toast': true,
+    'View': true,
 
 });
 

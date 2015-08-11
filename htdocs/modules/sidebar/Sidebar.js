@@ -10,52 +10,41 @@ define('/Sidebar', function (require, module, exports) {
     var Emitter = MiniQuery.require('Emitter');
     var Template = require('Template');
     var Tabs = require('Tabs');
+    var Tree = MiniQuery.require('Tree');
 
     var Data = require(module, 'Data');
     var Scroller = require(module, 'Scroller');
     var Title = require(module, 'Title');
 
     var ul = document.getElementById('ul-sidebar');
+    var nav = document.getElementById('nav-sidebar');
 
     var emitter = new Emitter();
     var tabs = null;
-    var list = [];
-
-    var id$item = {};
-    var id$index = {};
-
     var currentItem = null;
-    var hasRendered = false;
-
-    function get(id) {
-        var item = id$item[id];
-        return item;
-    }
 
 
-    function render(fn) {
+    var tree = new Tree();
 
-        if (hasRendered) {
-            show();
-            fn && fn(list);
+
+    function render(data, fn) {
+
+        var keys = [data.type, data.version];
+        var json = tree.get(keys);
+
+        if (json) { //已经渲染
+            show(json);
+            fn && fn(json);
             return;
         }
 
 
         Data.load(function (json) {
 
-            hasRendered = true;
+            tree.clear(); //清空之前所有的
+            tree.set(keys, json);
 
-
-            list = json.items;
-
-
-            $.Array.each(list, function (item, index) {
-                var id = item.id;
-                id$item[id] = item;
-                id$index[id] = index;
-            });
-
+            var list = json.items;
 
             Title.render(json);
 
@@ -72,6 +61,9 @@ define('/Sidebar', function (require, module, exports) {
 
             });
 
+            if (tabs) {
+                tabs.destroy();
+            }
 
             tabs = Tabs.create({
                 container: ul,
@@ -80,6 +72,7 @@ define('/Sidebar', function (require, module, exports) {
                 current: null,
                 event: 'click',
                 activedClass: 'on',
+
                 change: function (index, oldIndex) { //这里的，如果当前项是高亮，再次进入时不会触发
                     var item = list[index];
                     var oldItem = list[oldIndex];
@@ -88,9 +81,10 @@ define('/Sidebar', function (require, module, exports) {
                 }
             });
 
-            show(); //这个要先执行，下面的 Scroller 才能正确计算高度
+            show(json); //这个要先执行，下面的 Scroller 才能正确计算高度
             Scroller.render(list.length);
-            fn && fn(list);
+
+            fn && fn(json);
 
         });
 
@@ -101,8 +95,8 @@ define('/Sidebar', function (require, module, exports) {
 
     function active(id) {
 
-        var item = id$item[id];
-        var index = id$index[id];
+        var item = Data.getItemById(id);
+        var index = item.index;
 
         var oldItem = currentItem;
         currentItem = item;
@@ -113,18 +107,40 @@ define('/Sidebar', function (require, module, exports) {
         Scroller.to(index);
     }
 
-    function show() {
-        $('#nav-sidebar').show();
+    function show(json) {
+
+        var el = $(nav);
+        var holder = $('#div-sidebar-placeholder');
+
+        var w = json.width;
+       
+
+        if (w) {
+            var value = w.value;
+            var unit = w.unit;
+
+            el.css('width', value + unit);
+
+            value = unit == 'px' ? value + 10 : value + 1; //像素和百分比的补差不同
+            holder.css('width', value + unit);
+        }
+        else {
+            el.css('width', '18%'); //必须设置回默认值，否则在两种方案中切换可能不正常
+            holder.css('width', '19%');
+        }
+
+        el.show();
+
     }
 
     function hide() {
-        $('#nav-sidebar').hide();
+        $(nav).hide();
     }
 
     return {
         render: render,
         active: active,
-        get: get,
+        get: Data.getItemById,
         on: emitter.on.bind(emitter),
         hide: hide,
     };

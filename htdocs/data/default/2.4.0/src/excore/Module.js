@@ -14,6 +14,7 @@ define('Module', function (require, module, exports) {
 
     var mod = new Module(defaults);
 
+
     return /**@lends Module*/ {
 
         /**
@@ -31,6 +32,9 @@ define('Module', function (require, module, exports) {
         * @return 返回指定的模块。
         */
         require: mod.require.bind(mod),
+
+        modules: mod.modules.bind(mod),
+        tree: mod.tree.bind(mod),
 
     };
 

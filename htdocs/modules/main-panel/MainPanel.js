@@ -15,18 +15,19 @@ define('/MainPanel', function (require, module, exports) {
 
     var emitter = new Emitter();
     var hasBind = false;
+    var div = document.getElementById('div-main-panel');
 
 
 
-
-    function render(item, view) {
-
+    function render(data) {
 
         bindEvents();
 
-        show();
+        show(data.width);
 
-        var alias = item.alias;
+        var view = data.view;
+        var alias = data.alias;
+
         if (alias) {
             Auto.render(alias, view);
         }
@@ -40,7 +41,7 @@ define('/MainPanel', function (require, module, exports) {
         }
 
 
-        var name = item.name;
+        var name = data.name;
         if (name) {
             Manual.render(name);
         }
@@ -57,6 +58,7 @@ define('/MainPanel', function (require, module, exports) {
 
 
     function bindEvents() {
+
         if (hasBind) {
             return;
         }
@@ -69,7 +71,6 @@ define('/MainPanel', function (require, module, exports) {
         });
 
         Auto.on('render', function () {
-            //debugger;
             emitter.fire('render');
         });
 
@@ -104,13 +105,15 @@ define('/MainPanel', function (require, module, exports) {
 
     }
 
-    function show() {
-        $('#div-main-panel').show();
+    function show(width) {
+
+        var el = $(div);
+        el.show();
     }
 
 
     function hide() {
-        $('#div-main-panel').hide();
+        $(div).hide();
     }
 
     return {

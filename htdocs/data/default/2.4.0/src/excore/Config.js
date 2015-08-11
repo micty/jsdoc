@@ -53,23 +53,35 @@ define('Config', function (require, module,  exports) {
                 setItem(name, config);
             }
             
+
             //内部共用方法，设置单个模块的默认配置对象。
             function setItem(name, config) {
 
-                var obj = name$config[name];
-                if (obj) {
-                    $.Object.extend(obj, config);
+                var obj;
+
+                if (name in name$config) {
+                    obj = name$config[name];
+                    if ($.Object.isPlain(obj)) { //纯对象
+                        obj = $.Object.extend(obj, config); //则合并
+                    }
+                    else { //其他的，则重设
+                        obj = name$config[name] = config;
+                    }
                 }
-                else {
+                else { //首次设置
                     obj = name$config[name] = config;
                 }
+
 
                 //第一次或重新设置了 config，让其 formatted 指示已失效
                 name$formatted[name] = false;
 
                 return obj;
             }
+
         },
+
+
 
         /**
         * 获取指定模块名称的默认配置。
@@ -88,6 +100,11 @@ define('Config', function (require, module,  exports) {
             }
 
             var config = name$config[name];
+
+            if (!$.Object.isPlain(config)) { //非纯对象，直接返回即可
+                return config;
+            }
+
             if (name == 'Url') { //这个模块特殊，不用也不能转换，不然会构成 require 死循环。
                 return config;
             }

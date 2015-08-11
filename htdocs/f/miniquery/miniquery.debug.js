@@ -1,11 +1,13 @@
 /*
 * MiniQuery - MiniQuery JavaScript Library
-* for: jsdoc 
-* version: 3.3.2
-* build: 2015-03-26 13:50:59
-* files: 25(23)
-*    partial/jsdoc/begin.js
-*    compatible/Function.prototype.js
+* for: default 
+* version: 3.4.3
+* build: 2015-08-11 17:48:43
+* files: 28(26)
+*    partial/default/begin.js
+*    compatible/Date.js
+*    compatible/Function.js
+*    compatible/Object.js
 *    core/Module.js
 *    core/$.js
 *    core/Array.js
@@ -15,20 +17,21 @@
 *    core/MiniQuery.js
 *    core/Object.js
 *    core/String.js
+*    excore/Emitter/Helper.js
 *    excore/Emitter/Tree.js
 *    excore/Emitter.js
 *    excore/Mapper.js
 *    excore/Module.js
+*    excore/Tree.js
 *    excore/Url.js
 *    browser/Cookie/Expires.js
 *    browser/Cookie.js
 *    browser/LocalStorage.js
 *    browser/SessionStorage.js
-*    browser/String.js
 *    browser/Script.js
 *    browser/Url.js
-*    partial/jsdoc/expose.js
-*    partial/jsdoc/end.js
+*    partial/default/expose.js
+*    partial/default/end.js
 */
 ;( function (
     global, 
@@ -68,6 +71,12 @@
 
 
 
+if (!Date.now) {
+    Date.now = function now() {
+        return new Date().getTime();
+    };
+}
+
 //兼容
 if (!Function.prototype.bind) {
     Function.prototype.bind = function (thisArg) {
@@ -87,6 +96,29 @@ if (!Function.prototype.bind) {
     };
 }
 
+//兼容
+if (!Object.keys) {
+
+    Object.keys = function (obj) {
+
+        if (obj == null) { // null 或 undefined
+            throw new Error('Cannot convert undefined or null to object');
+        }
+
+        var a = [];
+
+        if (!obj) {
+            return a;
+        }
+
+        for (var key in obj) {
+            a.push(key);
+        }
+
+        return a;
+    };
+}
+
 /**
 * 模块管理器类
 * @class
@@ -95,6 +127,20 @@ var Module = (function () {
 
     var guidKey = '__guid__';
     var guid$meta = {};
+
+
+    function getType(obj) {
+        if (!obj) { //NaN|false|null|undefined|0|''
+            return obj;
+        }
+
+        var type = typeof obj;
+        if (type == 'string' || type == 'number' || type == 'boolean') {
+            return obj;
+        }
+
+        return ({}).toString.call(obj);
+    }
 
 
     /**
@@ -108,14 +154,13 @@ var Module = (function () {
 
         config = config || {
             seperator: '/',
-            shortcut: true,
         };
 
         var meta = {
             'id$module': {},
             'seperator': config.seperator,
-            'shortcut': config.shortcut,
             'crossover': config.crossover,
+            'repeated': config.repeated, //是否允许重复定义
         };
 
         guid$meta[guid] = meta;
@@ -137,17 +182,24 @@ var Module = (function () {
             var meta = guid$meta[guid];
 
             var id$module = meta.id$module;
+            var repeated = meta.repeated;
+
+            if (!repeated && id$module[id]) {
+                throw new Error('配置设定了不允许定义重复的模块: 已存在名为 "' + id + '" 的模块');
+            }
 
 
             id$module[id] = {
-                factory: factory,
-                exports: null,      //这个值在 require 后可能会给改写
-                required: false,    //指示是否已经 require 过
-                exposed: false,     //默认对外不可见
-                module: null,       //用于检测在 define 中加载下级模块，即 require(module, id) 时用到
+                'factory': factory, //工厂函数或导出对象
+                'exports': null,    //这个值在 require 后可能会给改写
+                'required': false,  //指示是否已经 require 过
+                'exposed': false,   //默认对外不可见
+                'module': null,     //用于检测在 define 中加载下级模块，即 require(module, id) 时用到
+                'count': 0,         // require 的次数统计
+                'mod': null,        //用来存放 require 时产生的中间结果
             };
 
-
+            return this;
         },
 
         /**
@@ -164,7 +216,9 @@ var Module = (function () {
 
             var module = null;
 
-            if (typeof id == 'object') { // 重载 require(module, id)
+
+            // 重载 require(module, id);
+            if (typeof id == 'object') { 
                 module = id; //此时 module 相对于 id 为父模块
 
                 if (!module) {
@@ -172,26 +226,29 @@ var Module = (function () {
                 }
 
                 var parentId = module.id;
-                var parentMod = id$module[parentId];
-                if (!parentMod) {
+                var parentModule = id$module[parentId];
+                if (!parentModule) {
                     throw new Error('不存在 module.id 为 ' + parentId + ' 的父模块。');
                 }
 
                 //防止用户手动构造 module 对象以达到跨界调用的目的。
                 //传进来的 module 必须是 define 函数中的 factory 函数中的第二个参数 module 原始对象。
-                if (module !== parentMod.module) { 
+                if (module !== parentModule.module) { 
                     throw new Error('当作为 require(module, id) 调用时，第一个参数 module 必须为 define 中的工厂函数第二个原始参数 module 对象。');
                 }
 
                 id = arguments[1];
             }
 
+            if (typeof id != 'string') {
+                throw new Error('参数 id 的类型必须为 string');
+            }
 
             var crossover = meta.crossover;
             var seperator = meta.seperator;
 
             //如 'List/API' 或 '/List/API'
-            if (!crossover && id.lastIndexOf(seperator) > 0) { 
+            if (!crossover && id.indexOf(seperator) >= 0) { 
                 throw new Error('配置已经设定了不允许跨级加载模块。');
             }
 
@@ -205,14 +262,16 @@ var Module = (function () {
                 return;
             }
 
+            module.count++;
+
             if (module.required) { //已经 require 过了
                 return module.exports;
             }
 
 
             //首次 require
-
             module.required = true; //更改标志，指示已经 require 过一次
+            
 
             var factory = module.factory;
 
@@ -224,10 +283,13 @@ var Module = (function () {
             //factory 是个工厂函数
             var require = arguments.callee.bind(this); //引用自身，并且作为静态方法调用
             var exports = {};
-            var mod = {
-                id: id,
-                exports: exports,
+            var mod = module.mod = { //传递一些额外的信息给 factory 函数，可能会用得到。
+                'id': id,
+                'exports': exports,
+                'parent': parentModule ? parentModule.mod : null,
             };
+
+
 
             module.module = mod; //保存到元数据中
 
@@ -244,10 +306,12 @@ var Module = (function () {
         
         /**
         * 设置或获取对外暴露的模块。
+        * 已重载 get(id)、set(id, exposed) 三种方法。
         * 通过此方法，可以控制指定的模块是否可以通过 MiniQuery.require(id) 来加载到。
         * @param {string|Object} id 模块的名称。
             当指定为一个 {} 时，则表示批量设置。
             当指定为一个字符串时，则单个设置。
+            
         * @param {boolean} [exposed] 模块是否对外暴露。
             当参数 id 为字符串时，且不指定该参数时，表示获取操作，
             即获取指定 id 的模块是否对外暴露。
@@ -278,7 +342,7 @@ var Module = (function () {
             }
 
             //set 操作
-            if (typeof id == 'object') { // expose({ })，批量 set
+            if (typeof id == 'object') { //重载 expose({...}); 批量 set
                 var id$exposed = id;
                 for (var id in id$exposed) {
                     var exposed = id$exposed[id];
@@ -287,13 +351,103 @@ var Module = (function () {
                 return;
             }
 
-            if (arguments.length == 2) { // expose('', true|false)，单个 set
+            var len = arguments.length;
+
+            if (len == 2) { //重载 expose('', true|false); 单个 set
                 set(id, exposed);
                 return;
             }
 
-            //get 操作
-            return get(id);
+            if (len == 1) { //重载 expose(id);
+                return get(id); 
+            }
+
+            
+        },
+
+
+        /**
+        * 获取所有的模块描述信息。
+        * @return {Object} 返回已经定义的模块描述信息对象。
+        */
+        modules: function () {
+            var guid = this[guidKey];
+            var meta = guid$meta[guid];
+            var id$module = meta.id$module;
+            var seperator = meta.seperator;
+
+            var obj = {};
+
+            for (var id in id$module) {
+                var module = id$module[id];
+
+                var ids = id.split(seperator).slice(0, -1);
+                var parentId = ids.length > 0 ? ids.join(seperator) : null;
+
+                obj[id] = {
+                    'id': id,
+                    'required': module.required,
+                    'exposed': module.exposed,
+                    'count': module.count,
+                    'factory': getType(module.factory),
+                    'exports': getType(module.exports),
+                    'parentId': parentId,
+                };
+            }
+
+            return obj;
+        },
+
+        /**
+        * 获取所有的模块树形结构描述对象。
+        * @param [leafValue=""] 叶子结点所需要表示成的值。 默认为空字符串。
+        * @return {Object} 返回已经定义的模块的树形结构。
+        */
+        tree: function (leafValue) {
+
+            if (arguments.length == 0) {
+                leafValue = '';
+            }
+
+            var guid = this[guidKey];
+            var meta = guid$meta[guid];
+            var id$module = meta.id$module;
+            var seperator = meta.seperator;
+
+            var tree = {};
+
+            for (var id in id$module) {
+
+                var ids = id.split(seperator);
+                var len = ids.length;
+
+                if (len == 1 && !(id in tree)) { //不含有 seperator，顶级模块
+                    tree[id] = leafValue;
+                    continue;
+                }
+
+                var node = tree;
+
+                for (var i = 0; i < len; i++) {
+
+                    var key = ids[i];
+
+                    var obj = node[key];
+                    if (!obj) {
+                        if (i == len - 1) { //叶子结点
+                            node[key] = leafValue;
+                        }
+                        else {
+                            obj = node[key] = {};
+                        }
+                    }
+
+                    node = obj;
+                }
+            }
+
+
+            return tree;
         },
 
         /**
@@ -310,11 +464,12 @@ var Module = (function () {
 
 })();
 
+
 //内部模块管理器
 var mod = new Module({
     seperator: '/',
     crossover: true,
-    shortcut: true,
+    repeated: true,
 });
 
 //提供快捷方式
@@ -2427,7 +2582,6 @@ define('Object', function (require, module, exports) {
             var $Array = require('Array');
             var clone = arguments.callee;
 
-            var $ = MiniQuery;
 
             if (exports.isArray(obj)) {
                 return $Array.keep(obj, function (item, index) {
@@ -4033,6 +4187,26 @@ define('Object', function (require, module, exports) {
         },
 
 
+        /**
+        * 
+        */
+        path: function (obj, keys, value) {
+
+            var $Array = require('Array');
+
+            $Array.each(keys, function (key, index) {
+                obj = obj[key];
+
+                if (!obj) {
+                    obj = obj[key] = {};
+                }
+
+
+
+            });
+        },
+
+
     };
 
 });
@@ -4113,7 +4287,8 @@ define('core/String', function (require, module, exports) {
                 return string;
             }
 
-            var endIndex = string.indexOf(endTag);
+            //从开始标记之后位置的开始算起
+            var endIndex = string.indexOf(endTag, startIndex + startTag.length);
             if (endIndex < 0) {
                 return string;
             }
@@ -4683,42 +4858,286 @@ define('String', function (require, module, exports) {
 
 
 /**
-* Emitter/Tree 模块。
-* @namespace
+* 
+* 
+*/
+define('Emitter/Helper', function (require, module, exports) {
+    
+    var $ = require('$');
+    var $Array = require('Array');
+    var $Object = require('Object');
+
+
+    //绑定事件。
+    function bind(meta, isOneOff, name, fn) {
+
+        var tree = meta.tree;
+
+        // 单名称情况 on(name, fn)，专门成一个分支，为了优化
+        if (typeof name == 'string' && typeof fn == 'function') {
+            tree.add([name], {
+                'fn': fn,
+                'isOneOff': isOneOff,
+            });
+            return;
+        }
+
+        //多名称情况
+        var args = $.toArray(arguments).slice(2); //从 name 开始
+
+        //重载 bind(meta, isOneOff, name0, name1, ..., nameN, {...}) 的情况
+        //先尝试找到 {} 所在的位置
+        var index = $Array.findIndex(args, function (item, index) {
+            return typeof item == 'object';
+        });
+
+        if (index >= 0) {
+            var obj = args[index];
+            var names = args.slice(0, index); 
+            var list = $Object.linearize(obj);
+
+            $Array.each(list, function (item, index) {
+
+                var keys = names.concat(item.keys);
+
+                tree.add(keys, {
+                    'fn': item.value,
+                    'isOneOff': isOneOff,
+                });
+            });
+            return;
+        }
+
+
+        //重载 bind(meta, isOneOff, name0, name1, ..., nameN, fn) 的情况
+        //尝试找到回调函数 fn 所在的位置
+        var index = $Array.findIndex(args, function (item, index) {
+            return typeof item == 'function';
+        });
+
+        if (index < 0) {
+            throw new Error('参数中必须指定一个回调函数');
+        }
+
+        fn = args[index]; //回调函数
+        var names = args.slice(0, index); //前面的都当作是名称
+
+        tree.add(names, {
+            'fn': fn,
+            'isOneOff': isOneOff,
+        });
+    }
+
+
+    //触发事件。
+    function fire(meta, config) {
+
+        config = config || {
+            names: ['click', 'name'],
+            args: [100, 200],
+            stop: 100,
+        };
+
+        var names = config.names;
+        if (!names || names.length == 0) {
+            throw new Error('必须至少指定一个事件名称。');
+        }
+
+        var tree = meta.tree;
+
+        var list = tree.getList(names);
+        if (list.length == 0) {
+            return [];
+        }
+
+
+        function stop(list) {
+
+            if (!('stop' in config)) { //重写，提高后续调用效率
+                stop = function () {
+                    return false;
+                };
+                return false;
+            }
+
+            var fn = config.stop;
+            if (typeof fn == 'function') {
+                stop = fn;
+                return fn(list) === true;
+            }
+
+            stop = function (list) {
+                return list.slice(-1)[0] === fn; //取最后一个值进行判断
+            };
+
+            return list.slice(-1)[0] === fn;
+        }
+
+
+        //这里要特别注意，在执行回调的过程中，回调函数里有可能会去修改回调列表，
+        //而此处又要去移除那些一次性的回调（即只执行一次的），
+        //为了避免破坏回调函数里的修改结果，这里要边移除边执行回调，而且每次都要
+        //以原来的回调列表为准去查询要移除的项的确切位置。
+
+        var items = list.slice(0); //复制一份，因为回调列表可能会在执行回调过程发生变化。
+        var returns = [];
+        var len = items.length;
+        var context = meta.context || null;
+        var args = config.args || [];
+
+        for (var i = 0; i < len; i++) {
+            var item = items[i];
+
+            if (item.isOneOff) { //只需执行一次的
+                var index = $Array.indexOf(list, item); //找到该项在回调列表中的索引位置
+                if (index >= 0) {
+                    list.splice(index, 1); //直接从原数组删除。 list 数组发生了变化，但 items 数组不变
+                }
+            }
+
+            var value = item.fn.apply(context, args); //让 fn 内的 this 指向 context
+            returns.push(value);
+
+            //返回值符合设定的停止值，则停止后续的调用
+            if (stop(returns) === true) {
+                break;
+            }
+        }
+
+        return returns;
+
+    }
+
+    //设置事件树。
+    function set(meta, $arguments, key, value) {
+
+        var tree = meta.tree;
+        var names = $.toArray($arguments);
+        tree.set(names, key, value);
+    }
+
+
+    return {
+        bind: bind,
+        fire: fire,
+        set: set,
+    };
+
+});
+
+
+
+
+
+
+
+
+
+
+/**
+* 用于管理树形结构的事件。
+* @class
 */
 define('Emitter/Tree', function (require, module, exports) {
 
     var $Array = require('Array');
+    var $String = require('String');
+    var Mapper = require('Mapper');
 
-    
-    module.exports = exports = /**@lends Emitter/Tree*/{ 
+    var mapper = new Mapper();
 
-        add: function (name$node, names, item) {
+
+
+    function Tree() {
+
+        var id = module.id + '-' + $String.random();
+        Mapper.setGuid(this, id);
+
+        var meta = {
+            'name$node': {}, //顶级节点容器对象
+        };
+
+        mapper.set(this, meta);
+
+    }
+
+
+
+    Tree.prototype = {
+        constructor: Tree,
+
+        /**
+        * 添加一项对指定的路径节点的列表中。
+        * @param {Array} names 路径节点的名称数组。
+        * @param [item] 要添加的项， 可以是任何类型。
+        * 当不指定此参数，则只参加相应的节点树，但并不添加任何项到列表中。
+        * @return {Object} 返回被创建的最后一个节点对象。
+        */
+        add: function (names, item) {
+
+            var meta = mapper.get(this);
+            var name$node = meta.name$node;
 
             var lastIndex = names.length - 1;
+            var hasItem = arguments.length == 2; //重载 add(names)
+            var node = null;
 
             $Array.each(names, function (name, index) {
 
-                var node = name$node[name];
+                node = name$node[name];
                 if (!node) {
                     node = name$node[name] = {
-                        'list': [],
-                        'tree': {}
+                        'list': [],         //本节点的回调列表
+                        'name$node': {},    //子节点的容器对象
+                        'enabled': true,    //当为 false 时，表示本节点的回调被禁用
+                        'spreaded': true,   //当为 false 时，表示子节点的回调被禁用
                     };
                 }
 
                 if (index < lastIndex) {
-                    name$node = node.tree;
+                    name$node = node.name$node; //准备下一轮迭代
+                    return;
                 }
-                else { //最后一项
+
+                //最后一项
+                if (hasItem) { // add(names, item)
                     node.list.push(item);
                 }
 
             });
 
+            return node;
+
         },
 
-        getNode: function (name$node, names) {
+     
+
+        /**
+        * 清空全部数据。
+        */
+        clear: function () {
+            var meta = mapper.get(this);
+            meta.name$node = {};
+        },
+
+        /**
+        * 检查是否包含任意的节点。
+        */
+        checkEmpty: function () {
+            var meta = mapper.get(this);
+            var name$node = meta.name$node;
+            return $Object.isEmpty(name$node);
+        },
+
+        /**
+        * 获取指定的路径数组所对应节点。
+        * @param {Array} names 节点名称对应的路径数组。
+        * @return 返回所对应的项。
+        */
+        getNode: function (names) {
+
+            var meta = mapper.get(this);
+            var name$node = meta.name$node;
 
             var lastIndex = names.length - 1;
 
@@ -4726,21 +5145,65 @@ define('Emitter/Tree', function (require, module, exports) {
                 var name = names[i];
                 var node = name$node[name];
 
-                if (!node || i == lastIndex) { //最后一项
+                if (!node || i == lastIndex) { //不存在或最后一项
                     return node;
                 }
 
-                name$node = node.tree;
+                //准备下一轮迭代
+                name$node = node.name$node;
             }
 
         },
 
-        getList: function (name$node, names) {
-            var node = exports.getNode(name$node, names);
-            return node ? node.list : null;
-        }
+        get: function (names, key) {
+            var node = this.getNode(names);
+            return node ? node[key] : undefined;
+        },
+
+
+        set: function (names, key, value) {
+            var node = this.add(names);
+            node[key] = value;
+        },
+
+
+        getList: function (names) {
+    
+            var meta = mapper.get(this);
+            var name$node = meta.name$node;
+
+            var lastIndex = names.length - 1;
+
+            for (var i = 0; i <= lastIndex; i++) {
+                var name = names[i];
+                var node = name$node[name];
+
+                if (!node) { //不存在该节点
+                    return [];
+                }
+
+                if (i == lastIndex) { //最后一个，即目标节点
+                    return node.enabled ? node.list : [];
+                }
+
+                if (!node.spreaded) {
+                    return [];
+                }
+
+                //准备下一轮迭代
+                name$node = node.name$node;
+            }
+
+
+        },
+
+
+      
 
     };
+
+    
+    return Tree;
 
 
 });
@@ -4767,150 +5230,10 @@ define('Emitter', function (require, module, exports) {
     var $String = require('String');
     var Mapper = require('Mapper');
 
-    var Tree = require(module, 'Tree'); //完整名称为 Emitter/Tree
+    var Tree = require(module, 'Tree');
+    var Helper = require(module, 'Helper');
 
     var mapper = new Mapper();
-
-
-
-    //绑定事件。
-    //实例的私有方法，必须用 bind.apply(this, []) 的方式来调用。
-    function bind(isOneOff, name, fn) {
-
-        var meta = mapper.get(this);
-        var all = meta.all;
-
-        // 单名称情况 on(name, fn)，专门成一个分支，为了优化
-        if (typeof name == 'string' && typeof fn == 'function') {
-            Tree.add(all, [name], {
-                'fn': fn,
-                'isOneOff': isOneOff,
-            });
-            return;
-        }
-
-        //多名称情况
-        var args = $.toArray(arguments).slice(1);
-
-        //重载 bind(isOneOff, name0, name1, ..., nameN, {...}) 的情况
-        //先尝试找到 {} 所在的位置
-        var index = $Array.findIndex(args, function (item, index) {
-            return typeof item == 'object';
-        });
-
-        if (index >= 0) {
-            var obj = args[index];
-            var names = args.slice(0, index);
-            var list = $Object.linearize(obj);
-
-            $Array.each(list, function (item, index) {
-
-                var keys = names.concat(item.keys);
-
-                Tree.add(all, keys, {
-                    'fn': item.value,
-                    'isOneOff': isOneOff,
-                });
-            });
-            return;
-        }
-
-
-        //重载 bind(isOneOff, name0, name1, ..., nameN, fn) 的情况
-        //尝试找到回调函数 fn 所在的位置
-        var index = $Array.findIndex(args, function (item, index) {
-            return typeof item == 'function';
-        });
-
-        if (index < 0) {
-            throw new Error('参数中必须指定一个回调函数');
-        }
-
-        fn = args[index]; //回调函数
-        var names = args.slice(0, index); //前面的都当作是名称
-
-        Tree.add(all, names, {
-            'fn': fn,
-            'isOneOff': isOneOff,
-        });
-    }
-
-
-    //触发事件。
-    //实例的私有方法，必须用 fire.apply(this, []) 的方式来调用。
-    function fire(config) {
-
-        var names = config.names;
-        if (!names || names.length == 0) {
-            throw new Error('必须至少指定一个事件名称。');
-        }
-
-        var meta = mapper.get(this);
-        var all = meta.all;
-
-        var list = Tree.getList(all, names);
-        if (!list || list.length == 0) {
-            return [];
-        }
-
-
-        function stop(list) {
-
-            if (!('stop' in config)) {
-                stop = function () {
-                    return false;
-                };
-                return false;
-            }
-
-            var fn = config.stop;
-            if (typeof fn == 'function') {
-                stop = fn;
-                return fn(list) === true;
-            }
-
-            stop = function (list) { 
-                return list.slice(-1)[0] === fn; //取最后一个值进行判断
-            };
-
-            return list.slice(-1)[0] === fn;
-        }
-
-
-        //这里要特别注意，在执行回调的过程中，回调函数里有可能会去修改回调列表，
-        //而此处又要去移除那些一次性的回调（即只执行一次的），
-        //为了避免破坏回调函数里的修改结果，这里要边移除边执行回调，而且每次都要
-        //以原来的回调列表为准去查询要移除的项的确切位置。
-
-        var items = list.slice(0); //复制一份，因为回调列表可能会在执行回调过程发生变化。
-        var returns = [];
-        var len = items.length;
-        var context = meta.context || null;
-        var args = config.args || [];
-
-        for (var i = 0; i < len; i++) {
-            var item = items[i];
-
-            if (item.isOneOff) { //只需执行一次的
-                var index = $Array.indexOf(list, item); //找到该项在回调列表中的索引位置
-                if (index >= 0) {
-                    list.splice(index, 1); //直接从原数组删除
-                }
-            }
-
-            var value = item.fn.apply(context, args); //让 fn 内的 this 指向 obj
-            returns.push(value);
-
-            //返回值符合设定的停止值，则停止后续的调用
-            if (stop(returns) === true) {
-                break;
-            }
-        }
-
-        return returns;
-
-    }
-
 
 
 
@@ -4927,7 +5250,7 @@ define('Emitter', function (require, module, exports) {
 
         var meta = {
             'context': context,
-            'all': {},
+            'tree': new Tree(),
         };
 
         mapper.set(this, meta);
@@ -4950,9 +5273,13 @@ define('Emitter', function (require, module, exports) {
             });
         */
         on: function (name, fn) {
+
+            var meta = mapper.get(this);
+
             var args = $.toArray(arguments);
-            args = [false].concat(args);
-            bind.apply(this, args);
+            args = [meta, false].concat(args);
+
+            Helper.bind.apply(null, args);
         },
 
         /**
@@ -4962,9 +5289,13 @@ define('Emitter', function (require, module, exports) {
             在处理函数内部， this 指向构造器参数 context 对象。
         */
         one: function (name, fn) {
+
+            var meta = mapper.get(this);
+
             var args = $.toArray(arguments);
-            args = [true].concat(args);
-            bind.apply(this, args);
+            args = [meta, true].concat(args);
+
+            Helper.bind.apply(null, args);
         },
 
 
@@ -4979,11 +5310,12 @@ define('Emitter', function (require, module, exports) {
         off: function (name, fn) {
 
             var meta = mapper.get(this);
-            var all = meta.all;
+            var tree = meta.tree;
+
 
             //未指定事件名，则移除所有的事件
             if (name === undefined) {
-                meta.all = {};
+                tree.clear();
                 return;
             }
 
@@ -5002,7 +5334,7 @@ define('Emitter', function (require, module, exports) {
             fn = args[index];
 
             var names = args.slice(0, index);
-            var node = Tree.getNode(all, names);
+            var node = tree.getNode(names);
             if (!node) { //尚未存在该名称所对应的节点
                 return;
             }
@@ -5049,14 +5381,16 @@ define('Emitter', function (require, module, exports) {
         */
         fire: function (config) {
 
+            var meta = mapper.get(this);
+
             if (typeof config == 'object') { //重载 fire({...})
-                return fire.apply(this, [config]);
+                return Helper.fire(meta, config);
             }
 
             //多名称情况: fire(name0, name1, name2, ..., nameN, params)
             var args = $.toArray(arguments);
 
-            //找到回调函数所在的位置
+            //找到参数数组所在的位置
             var index = $Array.findIndex(args, function (item, index) {
                 return item instanceof Array;
             });
@@ -5065,10 +5399,10 @@ define('Emitter', function (require, module, exports) {
                 index = args.length;
             }
            
-            return fire.apply(this, [{
+            return Helper.fire(meta, {
                 'names': args.slice(0, index),
                 'args': args[index]
-            }]);
+            });
 
         },
 
@@ -5083,10 +5417,10 @@ define('Emitter', function (require, module, exports) {
         has: function (name, fn) {
 
             var meta = mapper.get(this);
-            var all = meta.all;
+            var tree = meta.tree;
 
             if (arguments.length == 0) { //未指定名称，则判断是否包含了任意类型的事件
-                return !$Object.isEmpty(all);
+                return tree.checkEmpty();
             }
 
             //多名称情况: fire(name0, name1, name2, ..., nameN, fn)
@@ -5104,7 +5438,7 @@ define('Emitter', function (require, module, exports) {
             fn = args[index];
 
             var names = args.slice(0, index);
-            var list = Tree.getList(all, names);
+            var list = tree.getList(names);
 
             if (!list || list.length == 0) { //尚未存在该名称所对应的节点
                 return false;
@@ -5121,6 +5455,27 @@ define('Emitter', function (require, module, exports) {
 
 
         },
+
+        enable: function (name) {
+            var meta = mapper.get(this);
+            Helper.set(meta, arguments, 'enabled', true);
+        },
+
+        disable: function (name) {
+            var meta = mapper.get(this);
+            Helper.set(meta, arguments, 'enabled', false);
+        },
+
+        enableSpread: function (name) {
+            var meta = mapper.get(this);
+            Helper.set(meta, arguments, 'spreaded', true);
+        },
+
+        disableSpread: function (name) {
+            var meta = mapper.get(this);
+            Helper.set(meta, arguments, 'spreaded', false);
+        },
+       
 
         /**
         * 销毁本实例对象。
@@ -5482,7 +5837,7 @@ define('Module', function (require, module, exports) {
     var mod = new Module({
         seperator: '/',
         crossover: true,
-        shortcut: true,
+        repeated: true, //允许重复定义
     });
 
 
@@ -5507,6 +5862,227 @@ define('Module', function (require, module, exports) {
     module.exports = exports = Module;
 
 });
+
+
+/**
+* 树形结构的存储类。
+* @class
+* @name Tree
+*/
+define('Tree', function (require, module, exports) {
+
+    var $ = require('$');
+
+    var $Array = require('Array');
+    var $String = require('String');
+    var $Object = require('Object');
+    var Mapper = require('Mapper');
+
+    var mapper = new Mapper();
+
+
+    /**
+    * 构造器。
+    */
+    function Tree() {
+
+        var id = module.id + '-' + $String.random();
+        Mapper.setGuid(this, id);
+
+        var meta = {
+            'key$node': {}, //顶级节点容器对象
+            'count': 0,     //节点计数
+        };
+
+        mapper.set(this, meta);
+
+    }
+
+
+
+    function getNode(key$node, keys) {
+
+        var lastIndex = keys.length - 1;
+
+        for (var index = 0; index <= lastIndex; index++) {
+
+            var key = keys[index];
+            var node = key$node[key];
+
+            if (!node || index == lastIndex) { //不存在了，或是最后一项了
+                return node || null;
+            }
+
+            key$node = node.key$node; //准备下一轮迭代
+        }
+    }
+
+
+
+    //实例方法
+    Tree.prototype = /**@lends Tree.prototype */{
+        constructor: Tree,
+
+        /**
+        * 设置指定节点上的值。
+        * 如果不存在该节点，则先创建，然后存储值到上面；否则直接改写原来的值为指定的值。
+        * 已重载 set(key0, key1, ..., keyN, value) 的情况。
+        * @param {Array} keys 节点路径数组。
+        * @param value 要设置的值。
+        * @example
+            cache.set(['path', 'to'], 123);
+            cache.set('path', 'to', 123); //跟上面的等价
+        */
+        set: function (keys, value) {
+
+            //重载 set(key0, key1, ..., keyN, value) 的情况。
+            if (!(keys instanceof Array)) {
+                var args = [].slice.call(arguments, 0);
+                keys = args.slice(0, -1);
+                value = args.slice(-1)[0]; //参数中的最后一个即为 value
+            }
+
+            var meta = mapper.get(this);
+            var key$node = meta.key$node;
+            var lastIndex = keys.length - 1;
+            var node = null;
+
+            $Array.each(keys, function (key, index) {
+
+                node = key$node[key];
+
+                if (!node) {
+                    meta.count++;
+
+                    node = key$node[key] = {
+                        'key$node': {},         //子节点的容器对象
+                        'parent': key$node,     //指向父节点，方便后续处理
+                        'key': key,             //当前的 key，方便后续处理
+                        //'value': undefined,   //会有一个这样的字段，但先不创建。
+                    };
+                }
+
+                if (index < lastIndex) {
+                    key$node = node.key$node; //准备下一轮迭代
+                }
+                else { //最后一项
+                    node.value = value;
+                }
+
+            });
+
+         
+        },
+
+        /**
+        * 获取指定路径的节点上的值。
+        * @return 返回该节点上的值。 如果不存在该节点，则返回 undefined。
+        */
+        get: function (keys) {
+
+            //重载 get(key0, key1, ..., keyN) 的情况
+            if (!(keys instanceof Array)) {
+                keys = [].slice.call(arguments);
+            }
+
+            var meta = mapper.get(this);
+            var key$node = meta.key$node;
+
+            var node = getNode(key$node, keys);
+            return node ? node.value : undefined;
+        },
+
+
+        /**
+        * 清空全部数据。
+        */
+        clear: function () {
+            var meta = mapper.get(this);
+            meta.key$node = {};
+            meta.count = 0;
+        },
+
+        /**
+        * 删除指定节点上的值。
+        */
+        remove: function (keys) {
+
+            //重载 remove(key0, key1, ..., keyN) 的情况
+            if (!(keys instanceof Array)) {
+                keys = [].slice.call(arguments);
+            }
+
+            var meta = mapper.get(this);
+            var key$node = meta.key$node;
+
+            var node = getNode(key$node, keys);
+
+            if (!node) { //不存在该节点
+                return;
+            }
+
+
+            var obj = node.key$node;        //子节点
+
+            if (!obj || $Object.isEmpty(obj)) {    //不存在子节点
+
+                meta.count--;
+                delete node.parent[node.key];       //删除整个节点自身，节省内存
+            }
+            else {
+                delete node.value; //删除值
+            }
+
+        },
+
+        /**
+        * 删除指定的节点及所有子节点。
+        */
+        removeAll: function (keys) {
+
+            //重载 remove(key0, key1, ..., keyN) 的情况
+            if (!(keys instanceof Array)) {
+                keys = [].slice.call(arguments);
+            }
+
+            var meta = mapper.get(this);
+            var key$node = meta.key$node;
+
+            var node = getNode(key$node, keys);
+            if (!node) { //不存在该节点
+                return;
+            }
+
+            meta.count--;
+            delete node.parent[node.key];   //删除整个节点自身
+        },
+
+        /**
+        * 获取节点总数。
+        * @return {number} 返回节点的总数目。
+        */
+        count: function () {
+            var meta = mapper.get(this);
+            return meta.count;
+        },
+
+
+
+
+    };
+
+
+    return Tree;
+
+
+});
+
+
+
+
+
+
+
 
 
 
@@ -6546,117 +7122,6 @@ define('SessionStorage', function (require, module, exports) {
 
 
 /**
-* 字符串工具类
-* @namespace
-* @name String
-*/
-define('browser/String', function (require, module, exports) {
-
-    module.exports = exports = /**@lends String*/ {
-        /**
-        * 用做过滤直接放到HTML里的
-        * @return {String}
-        */
-        escapeHtml: function (string) {
-            var s = String(string);
-
-            var reg = /[&'"<>\/\\\-\x00-\x09\x0b-\x0c\x1f\x80-\xff]/g;
-            s = s.replace(reg, function (r) {
-                return "&#" + r.charCodeAt(0) + ";"
-            });
-            s = s.replace(/ /g, "&nbsp;");
-            s = s.replace(/\r\n/g, "<br />");
-            s = s.replace(/\n/g, "<br />");
-            s = s.replace(/\r/g, "<br />");
-
-            return s;
-        },
-
-        /**
-        * 用做过滤HTML标签里面的东东 比如这个例子里的<input value="XXX"> XXX就是要过滤的
-        * @return {String}
-        */
-        escapeElementAttribute: function (string) {
-            var s = String(string);
-            var reg = /[&'"<>\/\\\-\x00-\x1f\x80-\xff]/g;
-
-            return s.replace(reg, function (r) {
-                return "&#" + r.charCodeAt(0) + ";"
-            });
-        },
-
-        /**
-        * 用做过滤直接放到HTML里js中的
-        * @return {String}
-        */
-        escapeScript: function (string) {
-            var s = String(string);
-            var reg = /[\\"']/g;
-
-            s = s.replace(reg, function (r) {
-                return "\\" + r;
-            });
-
-            s = s.replace(/%/g, "\\x25");
-            s = s.replace(/\n/g, "\\n");
-            s = s.replace(/\r/g, "\\r");
-            s = s.replace(/\x01/g, "\\x01");
-
-            return s;
-        },
-
-        /**
-        * 用做过滤直接 Url 参数里的 比如 http://www.baidu.com/?a=XXX XXX就是要过滤的
-        * @return {String}
-        */
-        escapeQueryString: function (string) {
-            var s = String(string);
-            return escape(s).replace(/\+/g, "%2B");
-        },
-
-        /**
-        * 用做过滤直接放到<a href="javascript:alert('XXX')">中的XXX
-        * @return {String}
-        */
-        escapeHrefScript: function (string) {
-            var s = exports.escapeScript(string);
-            s = s.replace(/%/g, "%25"); //escMiniUrl
-            s = exports.escapeElementAttribute(s);
-            return s;
-
-        },
-
-        /**
-        * 用做过滤直接放到正则表达式中的
-        * @return {String}
-        */
-        escapeRegExp: function (string) {
-            var s = String(string);
-            var reg = /[\\\^\$\*\+\?\{\}\.\(\)\[\]]/g;
-            return s.replace(reg, function (a, b) {
-                return "\\" + a;
-            });
-        }
-    };
-
-
-});
-
-
-define('String', function (require, module, exports) {
-    var $ = require('$');
-    var coreString = require('core/String');
-    var browserString = require('browser/String');
-    module.exports = $.extend({}, coreString, browserString);
-
-});
-
-
-
-
-
-
-/**
 * Script 脚本工具
 * @namespace
 * @name Script
@@ -7285,6 +7750,7 @@ define('Url', function (require, module, exports) {
 
 //设置对外暴露的模块
 expose({
+    //core
     'Array': true,
     'Boolean': true,
     'Date': true,
@@ -7292,11 +7758,14 @@ expose({
     'Object': true,
     'String': true,
 
+    //excore
     'Emitter': true,
     'Mapper': true,
     'Module': true,
+    'Tree': true,
     'Url': true,
 
+    //browser
     'Cookie': true,
     'LocalStorage': true,
     'SessionStorage': true,
@@ -7306,7 +7775,22 @@ expose({
 
 
 
-global.MiniQuery = require('MiniQuery');
+
+
+(function (define) {
+
+    if (typeof define == 'function' && (define.amd || define.cmd)) { //amd|cmd
+        define(function (require) {
+            return require('MiniQuery');
+        });
+    }
+    else { //browser 普通方式
+        global.MiniQuery = require('MiniQuery');
+    }
+
+
+})(global.define);
+
 
 })(
     window,  // 在浏览器环境中，全局对象是 this

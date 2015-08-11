@@ -43,6 +43,7 @@ define('Tabs', function (require, module, exports) {
             'activedIndex': -1,
             'activedNode': null, 
             'activedClass': config.activedClass,
+            'pressedClass': config.pressedClass,
             'repeated': config.repeated,
 
             'eventName': config.eventName,
@@ -102,6 +103,8 @@ define('Tabs', function (require, module, exports) {
 
                 var eventName = meta.eventName;
                 var selector = meta.selector;
+                var pressedClass = meta.pressedClass;
+
                 var self = this;
 
                 var change = meta.change = function (event) {
@@ -109,7 +112,14 @@ define('Tabs', function (require, module, exports) {
                     self.active(index);
                 };
 
-                $(container).on(eventName, selector, change);
+                if (eventName == 'touch') { //特殊处理
+                    var $ = require('jquery-plugin/touch');
+                    $(container).touch(selector, change, pressedClass);
+                }
+                else {
+                    var $ = require('$');
+                    $(container).on(eventName, selector, change);
+                }
             }
 
 

@@ -10,6 +10,7 @@ var Module = (function () {
     var mod = new Module({
         seperator: '/',
         crossover: true,
+        repeated: false, //不允许重复定义 
     });
 
     return {
@@ -17,6 +18,7 @@ var Module = (function () {
         require: mod.require.bind(mod), //该方法仅用于 end.js 中
         expose: mod.expose.bind(mod),
         modules: mod.modules.bind(mod),
+        tree: mod.tree.bind(mod),
 
         /**
         * 绑定到指定模块的指定方法。

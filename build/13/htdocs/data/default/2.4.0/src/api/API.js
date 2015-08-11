@@ -15,6 +15,8 @@ define('API', function (require, module, exports) {
     var Fn = require('Fn');
     var mapper = require('Mapper');
 
+
+
     /**
     * API 构造器。
     * @param {string} name 后台接口的名称。 简短名称，且不包括后缀。
@@ -35,6 +37,7 @@ define('API', function (require, module, exports) {
         }
 
 
+
         //发起 ajax 请求所需要的配置对象。
         var ajax = {
             'name': name,
@@ -43,6 +46,8 @@ define('API', function (require, module, exports) {
 
             'url': config.url || '',
             'ext': config.ext || '',
+            'random': config.random,
+
             'successCode': successCode,
             'field': config.field,
             'proxy': proxy,
