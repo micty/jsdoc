@@ -19,8 +19,14 @@ define('Highlight', function (require, module, exports) {
             return '';
         }
         
+        //marked 库把 '<' 和 '>' 变成了 '&lt;' 和 '&gt;'，
+        //这会影响 hljs 的解析，这里变回去。
+        code = $.String.replaceAll(code, '&lt;', '<');
+        code = $.String.replaceAll(code, '&gt;', '>');
+
         try {
-            return HLJS.highlight(type, code).value;
+            var obj = HLJS.highlight(type, code);
+            return obj.value;
         }
         catch (ex) { //不支持某种语法高亮时，直接原样返回
             return code;
@@ -48,14 +54,8 @@ define('Highlight', function (require, module, exports) {
             var code = this;
             var type = code.getAttribute('data-language');
             var html = code.innerHTML;
-
-            //尝试把里面的 json 格式化
-            var json = JSON.parse(html);
-            if (json) {
-                html = JSON.stringify(json, 4);
-            }
-
             html = get(type, html); //高亮代码
+
             $(code).addClass('hljs').html(html);
 
         });

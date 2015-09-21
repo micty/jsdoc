@@ -17,7 +17,9 @@ define('/Sidebar', function (require, module, exports) {
     var Title = require(module, 'Title');
 
     var ul = document.getElementById('ul-sidebar');
-    var nav = document.getElementById('nav-sidebar');
+    var nav = $('#nav-sidebar');
+    var holder = $('#div-sidebar-placeholder');
+
 
     var emitter = new Emitter();
     var tabs = null;
@@ -109,33 +111,33 @@ define('/Sidebar', function (require, module, exports) {
 
     function show(json) {
 
-        var el = $(nav);
-        var holder = $('#div-sidebar-placeholder');
-
         var w = json.width;
-       
 
         if (w) {
             var value = w.value;
             var unit = w.unit;
 
-            el.css('width', value + unit);
+            nav.css('width', value + unit);
 
             value = unit == 'px' ? value + 10 : value + 1; //像素和百分比的补差不同
             holder.css('width', value + unit);
         }
         else {
-            el.css('width', '18%'); //必须设置回默认值，否则在两种方案中切换可能不正常
+            nav.css('width', '18%'); //必须设置回默认值，否则在两种方案中切换可能不正常
             holder.css('width', '19%');
         }
 
-        el.show();
+        nav.show();
+        holder.show();
 
     }
+
 
     function hide() {
-        $(nav).hide();
+        nav.hide();
+        holder.hide();
     }
+
 
     return {
         render: render,

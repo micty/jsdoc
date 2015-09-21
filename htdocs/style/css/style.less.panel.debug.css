@@ -117,6 +117,7 @@
   top: 140px;
   font-size: 0.85em;
   color: gray;
+  margin: 0px;
 }
 .panel .content .summary {
   font-family: "微软雅黑";
@@ -168,8 +169,8 @@
 }
 .panel .content p,
 .panel .content ul {
-  margin-top: 0;
-  /*margin-bottom: 16px;*/
+  margin-top: 12px;
+  margin-bottom: 12px;
 }
 .panel .content a {
   color: #4183c4;
@@ -187,7 +188,7 @@
 }
 .panel .content pre {
   margin: 0;
-  margin-left: 30px;
+  /*margin-left: 30px;*/
   padding: 0px 5px;
   /*background: #f7f7f7;*/
   -moz-border-radius: 3px;
@@ -202,6 +203,9 @@
   cursor: text;
   overflow-y: hidden;
   overflow-x: auto;
+}
+.panel .content pre.soure-line-numbers {
+  margin-left: 30px;
 }
 .panel .content table {
   width: 100%;

@@ -12,6 +12,12 @@ define('/Hash', function (require, module, exports) {
 
 
     var emitter = new Emitter();
+
+    //预留的 hash 事件名
+    var hash$event = {
+        '': 'empty',
+        'file': 'file',
+    };
     
 
     function get(name) {
@@ -60,22 +66,31 @@ define('/Hash', function (require, module, exports) {
         Url.hashchange(window, function (hash, old) {
 
             if (!hash) { //针对后退时，退到无 hash 的状态
-                emitter.fire('empty');
+                emitter.fire('file');
                 return;
             }
 
             hash = $.Object.parseQueryString(hash);
             old = $.Object.parseQueryString(old);
 
-            emitter.fire('change', [hash, old]);
+            var file = hash['file'];
+            if (file) {
+                emitter.fire('file', [file]);
+            }
+            else {
+                emitter.fire('jsdoc', [hash, old]);
+            }
 
-        }, true);
+
+        }, true); //最后一个参数 true 表示一进入页面只要有 hash 就立即触发
+
 
         //针对首次进入时，无 hash 的状态
         var hash = get(''); //获取字符串形式
         if (!hash) {
-            emitter.fire('empty');
+            emitter.fire('file');
         }
+       
     }
 
 

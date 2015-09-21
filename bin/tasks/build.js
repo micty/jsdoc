@@ -46,9 +46,9 @@ module.exports = function (grunt, level) {
 
             level >= 3 ? '!<%=dir.htdocs%>f/**/*.map' : null,
 
-            level >= 3 ? '!<%=dir.htdocs%>**/*.debug.css' : null,
-            level >= 3 ? '!<%=dir.htdocs%>**/*.css.map' : null,
-            level >= 3 ? '!<%=dir.htdocs%>**/*.debug.js' : null,
+            level >= 3 ? '!<%=dir.htdocs%>f/**/*.debug.css' : null,
+            level >= 3 ? '!<%=dir.htdocs%>f/**/*.css.map' : null,
+            level >= 3 ? '!<%=dir.htdocs%>f/**/*.debug.js' : null,
 
         ]
 

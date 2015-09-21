@@ -94,6 +94,7 @@
   color: #8B9CC2;
   width: 30px;
   line-height: 20px;
+  margin: 0px;
 }
 .demos > li .content .row-panel > li:first-child {
   margin-top: 5px;

@@ -1,20 +1,81 @@
 
 
 body.readme {
-    max-width: 1024px;
+    max-width: 848px;
     margin: auto;
     margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+body.source {
+
+    .header {
+        background: #f5f5f5;
+        height: 35px;
+        display: -webkit-box;
+        -webkit-box-align: center;
+        border-bottom: 1px solid #e5e5e5;
+
+        a {
+            margin-left: 18px;
+            color: #4078c0;
+            font-weight: bold;
+        }
+    }
+
+    .source-code {
+        background: none;
+
+        >span {
+            display: none;
+        }
+
+        >ul {
+            background: none;
+            border-right: solid 1px #eee;
+            width: 45px;
+        }
+
+        >pre {
+            margin-left: 45px;
+        }
+    }
+
+    .current-line {
+        width: 100%;
+        height: 20px;
+        border: solid 2px #EAEAF2;
+        display: block;
+        position: absolute;
+        left: 0px;
+        top: 37px;
+
+        background: none;
+        cursor: text;
+        pointer-events: none;
+        border-radius: 3px;
+        box-sizing: border-box;
+    }
 }
 
 .view-readme {
 
-    .loading {
-        display: -webkit-box;
-        -webkit-box-pack: center;
-        border: none;
-    }
-
     -webkit-box-align: center;
     -webkit-box-pack: center;
     width: 100%;
+
+    &.loading {
+        display: -webkit-box;
+        -webkit-box-pack: center;
+        border: none;
+        margin-top: 10px;
+    }
+
+    .header {
+        display: none;
+    }
+
+
+ 
 }
+

@@ -7,8 +7,8 @@ define('/MainPanel/Manual/Readme', function (require, module, exports) {
     var Path = require('Path');
     var JSON = require('JSON');
 
-    var Highlight = require('Highlight');
-    var marked = require('marked');
+    //var Highlight = require('Highlight');
+    var Markdown = require('Markdown');
 
 
     var div = document.getElementById('div-main-panel-readme');
@@ -34,29 +34,34 @@ define('/MainPanel/Manual/Readme', function (require, module, exports) {
             return;
         }
 
-        var html = marked(readme);
+
+        var md = new Markdown({ content: readme });
+        md.render(content);
+
+
+        //var html = marked(readme);
         
-        content.innerHTML = html;
+        //content.innerHTML = html;
 
-        $(content).find('code[data-language]').each(function () {
+        //$(content).find('code[data-language]').each(function () {
 
-            var code = this;
-            var type = code.getAttribute('data-language');
+        //    var code = this;
+        //    var type = code.getAttribute('data-language');
 
-            var html = code.innerHTML;
+        //    var html = code.innerHTML;
             
 
-            var json = JSON.parse(html);
-            if (json) {
-                html = JSON.stringify(json, 4);
-            }
+        //    var json = JSON.parse(html);
+        //    if (json) {
+        //        html = JSON.stringify(json, 4);
+        //    }
 
 
-            html = Highlight.get(type, html); //高亮代码
+        //    html = Highlight.get(type, html); //高亮代码
 
-            $(code).addClass('hljs').html(html);
+        //    $(code).addClass('hljs').html(html);
 
-        });
+        //});
 
     }
 

@@ -27,27 +27,16 @@ define('', function (require, module) {
         });
     });
 
-    
-    Readme.on({
-        //不存在 readme.md
-        'empty': function () {
-            Hash.set({
-                type: 'default',
-                version: '1.0.0',
-            });
-        },
-    });
-
 
     Hash.on({
-        //空 hash 时，显示 readme
-        'empty': function () {
-            Readme.render();
+
+        'file': function (url) {
+            Readme.render(url);
             Sidebar.hide();
             MainPanel.hide();
         },
 
-        'change': function (hash, old) {
+        'jsdoc': function (hash, old) {
 
             Readme.hide();
             Path.set(hash);
@@ -72,30 +61,6 @@ define('', function (require, module) {
 
 
     Hash.render();
-
-    var Tree = MiniQuery.require('Tree');
-    var tree = new Tree();
-
- 
-    tree.set('a', 'b', 'c', 123);
-    tree.set('a', 'b', 456);
-
-    var value = tree.get('a', 'b', 'c');
-    console.log(value);
-
-    var value = tree.get('a', 'b');
-    console.log(value);
-
-    tree.remove('a', 'b');
-    var value = tree.get('a', 'b');
-    console.log(value);
-
-    var value = tree.get('a', 'b', 'c');
-    console.log(value);
-
-    tree.removeAll('a', 'b');
-    var value = tree.get('a', 'b', 'c');
-    console.log(value);
 
 });
 

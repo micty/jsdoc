@@ -7,24 +7,29 @@
     <link rel="stylesheet" href="f/highlight/highlight.debug.css" />
 
     <!--grunt.css.begin-->
-    <link href="style/css/style.less.index.debug.css?e3" rel="stylesheet" />
-    <link href="style/css/style.less.demos.debug.css?e3" rel="stylesheet" />
-    <link href="style/css/style.less.list.debug.css?e3" rel="stylesheet" />
-    <link href="style/css/style.less.panel.debug.css?e3" rel="stylesheet" />
-    <link href="style/css/style.less.wrapper.debug.css?e3" rel="stylesheet" />
-    <link href="style/css/modules.main-panel.main.debug.css?e3" rel="stylesheet" />
-    <link href="style/css/modules.readme.readme.debug.css?e3" rel="stylesheet" />
-    <link href="style/css/modules.sidebar.sidebar.debug.css?e3" rel="stylesheet" />
+    <link href="style/css/style.less.index.debug.css?76" rel="stylesheet" />
+    <link href="style/css/style.less.demos.debug.css?76" rel="stylesheet" />
+    <link href="style/css/style.less.list.debug.css?76" rel="stylesheet" />
+    <link href="style/css/style.less.wrapper.debug.css?76" rel="stylesheet" />
+    <link href="style/css/style.less.panel.debug.css?76" rel="stylesheet" />
+    <link href="style/css/style.less.markdown.debug.css?76" rel="stylesheet" />
+    <link href="style/css/modules.main-panel.main.debug.css?76" rel="stylesheet" />
+    <link href="style/css/modules.readme.readme.debug.css?76" rel="stylesheet" />
+    <link href="style/css/modules.sidebar.sidebar.debug.css?76" rel="stylesheet" />
     <!--grunt.css.end-->
 
 </head>
 <body>
 
     <div class="wrapper">
-        <div id="div-view-readme" class="view-readme panel" >
-            <div id="div-readme-content" class="content markdown loading">
-                加载中...
+        <div id="div-view-readme" class="view-readme loading">
+            <div id="div-readme-header" class="header">
+                <!--
+                    <a href="{url}" target="_blank" title="{url}">{name}</a>
+                -->
             </div>
+            <mark id="mark-readme-current-line" class="current-line"></mark>
+            <div id="div-readme-content" class="content">加载中...</div>
         </div>
         <nav id="nav-sidebar" class="sidebar" style="display: none;">
             <div id="div-sidebar-title" class="banner" title="回到首页">
@@ -284,7 +289,7 @@
                                 </ul>
                                         
                                 
-<pre><code id="code-source" class="hljs"></code></pre>
+<pre class="soure-line-numbers"><code id="code-source" class="hljs"></code></pre>
     
                             </div>
                         </div>
@@ -303,7 +308,7 @@
                             <a class="" href="{path}/{name}/readme.md" target="_blank" title="在新窗口打开 readme.md 文件">打开</a>
                             -->
                         </div>
-                        <div id="div-main-panel-readme-content" class="content markdown">
+                        <div id="div-main-panel-readme-content" class="content">
                     
                         </div>
                     </div>
@@ -370,53 +375,59 @@
         
     </div>
 
-    <script src="f/jquery/jquery-1.11.1.debug.js?24"></script>
-    <script src="f/miniquery/miniquery.debug.js?24"></script>
-    <script src="f/highlight/highlight.debug.js?24"></script>
-    <script src="f/marked/marked.mod.debug.js?24"></script>
+    <script src="f/jquery/jquery-1.11.1.debug.js?E2"></script>
+    <script src="f/miniquery/miniquery.debug.js?E2"></script>
+    <script src="f/highlight/highlight.debug.js?E2"></script>
+    <script src="f/marked/marked.mod.debug.js?E2"></script>
+    <script src="f/resolve-url/resolve-url.debug.js?E2"></script>
 
-    <script src="config.js?24"></script>
+    <script src="config.js?E2"></script>
 
     <!--grunt.js.begin-->
-    <script src="lib/Highlight.js?f8"></script>
-    <script src="lib/JSON.js?f8"></script>
-    <script src="lib/Markdown.js?f8"></script>
-    <script src="lib/Path.js?f8"></script>
-    <script src="lib/StatusEmitter.js?f8"></script>
-    <script src="lib/Tabs.js?f8"></script>
-    <script src="lib/Template.js?f8"></script>
-    <script src="modules/Hash.js?f8"></script>
-    <script src="modules/main-panel/MainPanel/Auto/Data/Helper.js?f8"></script>
-    <script src="modules/main-panel/MainPanel/Auto/Data.js?f8"></script>
-    <script src="modules/main-panel/MainPanel/Auto/Method/Example.js?f8"></script>
-    <script src="modules/main-panel/MainPanel/Auto/Method/Params.js?f8"></script>
-    <script src="modules/main-panel/MainPanel/Auto/Method/Returns.js?f8"></script>
-    <script src="modules/main-panel/MainPanel/Auto/Method/Summary.js?f8"></script>
-    <script src="modules/main-panel/MainPanel/Auto/Method.js?f8"></script>
-    <script src="modules/main-panel/MainPanel/Auto/Overview/MethodList.js?f8"></script>
-    <script src="modules/main-panel/MainPanel/Auto/Overview/PropertyList.js?f8"></script>
-    <script src="modules/main-panel/MainPanel/Auto/Overview/Summary.js?f8"></script>
-    <script src="modules/main-panel/MainPanel/Auto/Overview.js?f8"></script>
-    <script src="modules/main-panel/MainPanel/Auto/Source/Code.js?f8"></script>
-    <script src="modules/main-panel/MainPanel/Auto/Source/Data.js?f8"></script>
-    <script src="modules/main-panel/MainPanel/Auto/Source/Header.js?f8"></script>
-    <script src="modules/main-panel/MainPanel/Auto/Source/Lines.js?f8"></script>
-    <script src="modules/main-panel/MainPanel/Auto/Source.js?f8"></script>
-    <script src="modules/main-panel/MainPanel/Auto.js?f8"></script>
-    <script src="modules/main-panel/MainPanel/Manual/Data.js?f8"></script>
-    <script src="modules/main-panel/MainPanel/Manual/Demos/Panels.js?f8"></script>
-    <script src="modules/main-panel/MainPanel/Manual/Demos/Tabs.js?f8"></script>
-    <script src="modules/main-panel/MainPanel/Manual/Demos.js?f8"></script>
-    <script src="modules/main-panel/MainPanel/Manual/Readme.js?f8"></script>
-    <script src="modules/main-panel/MainPanel/Manual.js?f8"></script>
-    <script src="modules/main-panel/MainPanel.js?f8"></script>
-    <script src="modules/readme/Readme.js?f8"></script>
-    <script src="modules/Scroller.js?f8"></script>
-    <script src="modules/sidebar/Sidebar/Data.js?f8"></script>
-    <script src="modules/sidebar/Sidebar/Scroller.js?f8"></script>
-    <script src="modules/sidebar/Sidebar/Title.js?f8"></script>
-    <script src="modules/sidebar/Sidebar.js?f8"></script>
-    <script src="index.js?f8"></script>
+    <script src="lib/Highlight.js?ef"></script>
+    <script src="lib/JSON.js?ef"></script>
+    <script src="lib/Markdown/Helper.js?ef"></script>
+    <script src="lib/Markdown.js?ef"></script>
+    <script src="lib/Path.js?ef"></script>
+    <script src="lib/Tabs.js?ef"></script>
+    <script src="lib/Template.js?ef"></script>
+    <script src="modules/Hash.js?ef"></script>
+    <script src="modules/main-panel/MainPanel/Auto/Data/Helper.js?ef"></script>
+    <script src="modules/main-panel/MainPanel/Auto/Data.js?ef"></script>
+    <script src="modules/main-panel/MainPanel/Auto/Method/Example.js?ef"></script>
+    <script src="modules/main-panel/MainPanel/Auto/Method/Params.js?ef"></script>
+    <script src="modules/main-panel/MainPanel/Auto/Method/Returns.js?ef"></script>
+    <script src="modules/main-panel/MainPanel/Auto/Method/Summary.js?ef"></script>
+    <script src="modules/main-panel/MainPanel/Auto/Method.js?ef"></script>
+    <script src="modules/main-panel/MainPanel/Auto/Overview/MethodList.js?ef"></script>
+    <script src="modules/main-panel/MainPanel/Auto/Overview/PropertyList.js?ef"></script>
+    <script src="modules/main-panel/MainPanel/Auto/Overview/Summary.js?ef"></script>
+    <script src="modules/main-panel/MainPanel/Auto/Overview.js?ef"></script>
+    <script src="modules/main-panel/MainPanel/Auto/Source/Code.js?ef"></script>
+    <script src="modules/main-panel/MainPanel/Auto/Source/Data.js?ef"></script>
+    <script src="modules/main-panel/MainPanel/Auto/Source/Header.js?ef"></script>
+    <script src="modules/main-panel/MainPanel/Auto/Source/Lines.js?ef"></script>
+    <script src="modules/main-panel/MainPanel/Auto/Source.js?ef"></script>
+    <script src="modules/main-panel/MainPanel/Auto.js?ef"></script>
+    <script src="modules/main-panel/MainPanel/Manual/Data.js?ef"></script>
+    <script src="modules/main-panel/MainPanel/Manual/Demos/Panels.js?ef"></script>
+    <script src="modules/main-panel/MainPanel/Manual/Demos/Tabs.js?ef"></script>
+    <script src="modules/main-panel/MainPanel/Manual/Demos.js?ef"></script>
+    <script src="modules/main-panel/MainPanel/Manual/Readme.js?ef"></script>
+    <script src="modules/main-panel/MainPanel/Manual.js?ef"></script>
+    <script src="modules/main-panel/MainPanel.js?ef"></script>
+    <script src="modules/readme/Readme/Source/Header.js?ef"></script>
+    <script src="modules/readme/Readme/Source/Mark.js?ef"></script>
+    <script src="modules/readme/Readme/Source.js?ef"></script>
+    <script src="modules/readme/Readme/Title.js?ef"></script>
+    <script src="modules/readme/Readme/Url.js?ef"></script>
+    <script src="modules/readme/Readme.js?ef"></script>
+    <script src="modules/Scroller.js?ef"></script>
+    <script src="modules/sidebar/Sidebar/Data.js?ef"></script>
+    <script src="modules/sidebar/Sidebar/Scroller.js?ef"></script>
+    <script src="modules/sidebar/Sidebar/Title.js?ef"></script>
+    <script src="modules/sidebar/Sidebar.js?ef"></script>
+    <script src="index.js?ef"></script>
     <!--grunt.js.end-->
 
 

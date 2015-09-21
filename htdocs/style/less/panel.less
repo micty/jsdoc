@@ -129,6 +129,8 @@
             }
         }
 
+        
+
         &:first-child {
             margin-top: 0 !important;
         }
@@ -143,6 +145,7 @@
             top: 140px;
             font-size: 0.85em;
             color: gray;
+            margin: 0px;
         }
 
         .summary {
@@ -203,8 +206,8 @@
         }
 
         p, ul {
-            margin-top: 0;
-            /*margin-bottom: 16px;*/
+            margin-top: 12px;
+            margin-bottom: 12px;
         }
 
         a {
@@ -228,7 +231,7 @@
 
         pre {
             margin: 0;
-            margin-left: 30px;
+            /*margin-left: 30px;*/
             padding: 0px 5px;
             /*background: #f7f7f7;*/
             -moz-border-radius: 3px;
@@ -244,6 +247,10 @@
                 overflow-y: hidden;
                 overflow-x: auto;
             }
+        }
+
+        pre.soure-line-numbers {
+            margin-left: 30px;
         }
 
         table {

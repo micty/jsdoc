@@ -51,13 +51,13 @@ h5,
 h6 {
   font-size: 100%;
 }
-address,
+/*address,
 cite,
 dfn,
 em,
 var {
-  font-style: normal;
-}
+    font-style: normal;
+}*/
 code,
 kbd,
 pre,
@@ -115,6 +115,7 @@ textarea {
   color: #8B9CC2;
   width: 30px;
   line-height: 20px;
+  margin-top: 0px !important;
   margin-bottom: 0px !important;
   padding: 4px 0px 0px 0;
   border-right: solid 1px #ddd;

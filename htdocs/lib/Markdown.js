@@ -11,56 +11,83 @@ define('Markdown', function (require, module, exports) {
     var marked = require('marked');
     var Highlight = require('Highlight');
 
+    var Helper = require(module, 'Helper');
 
 
-    function fill(el, content) {
+    var Mapper = MiniQuery.require('Mapper');
+    var Emitter = MiniQuery.require('Emitter');
 
-        var html = marked(content);
-        $(el).html(html);
-
-        Highlight.auto(el);
+    var mapper = new Mapper();
 
 
-        $(el).find('a').each(function () {
+    function Markdown(config) {
 
-            var a = this;
+        //config = config || {
+        //    url: '',
+        //    content: '',
+        //    container: null,
+        //};
 
-            //不要用 a.href，因为 a.href会在浏览器中给自动补充成完整的 url，而我们是要获取最原始的
-            var href = a.getAttribute('href');
-            var s = href.slice(0, 1);
+        if (typeof config == 'string') { //重载 Markdown(url)
+            config = { 'url': config };
+        }
 
-            if (s == '#' || s == '?') {
-                a.setAttribute('target', '_self');
+        var meta = {
+            'url': config.url,
+            'container': config.container,
+            'content': config.content,
+            'emitter': new Emitter(),
+
+        };
+
+        mapper.set(this, meta);
+
+    }
+
+
+
+    Markdown.prototype = {
+        constructor: Markdown,
+
+        /**
+        * 渲染本组件。
+        */
+        render: function (el) {
+
+            var meta = mapper.get(this);
+            var emitter = meta.emitter;
+            var container = el || meta.container;
+            var content = meta.content;
+            var url = meta.url;
+
+            if (content) { //直接指定了内容，则直接处理即可
+                Helper.fill(container, content, url);
+                emitter.fire('render', [content]);
+                return;
             }
-        });
-
-    }
 
 
-    function load(url, fn) {
+            //异步加载回来再处理
+            Helper.load(url, function (content) {
+                meta.content = content;
+                Helper.fill(container, content, url);
+                emitter.fire('render', [content]);
+            });
 
-        url = Url.randomQueryString(url);  //加上随机查询字符串，以确保拿到最新版本。
+        },
 
+        on: function (name, fn) {
 
-        $.ajax({
-            type: 'get',
-            url: url,
+            var meta = mapper.get(this);
+            var emitter = meta.emitter;
+            var args = [].slice.call(arguments, 0);
+            emitter.on.apply(emitter, args);
+        },
 
-            success: function (md) {
-                fn && fn(md);
-            },
-
-            error: function (xhr) {
-                fn && fn('');
-            },
-        });
-    }
-
-
-    return {
-        fill: fill,
-        load: load,
     };
 
+
+
+    return Markdown;
 
 });

@@ -27,6 +27,11 @@
         return marked;
     });
 
+    var resolveUrl = window.resolveUrl;
+    define('resolveUrl', function () {
+        return resolveUrl;
+    });
+
 
     window.define = define;
     window.require = Module.require;
