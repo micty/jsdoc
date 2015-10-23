@@ -1,4 +1,8 @@
 
 /.svn
+/htdocs/index.html
+/htdocs/style/css
+/build
+/bin/node_modules
 /htdocs-0
 

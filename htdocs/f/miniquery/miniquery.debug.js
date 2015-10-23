@@ -2,7 +2,7 @@
 * MiniQuery - MiniQuery JavaScript Library
 * for: default 
 * version: 3.4.3
-* build: 2015-08-11 17:48:43
+* build: 2015-10-22 11:03:25
 * files: 28(26)
 *    partial/default/begin.js
 *    compatible/Date.js
@@ -280,13 +280,20 @@ var Module = (function () {
                 return factory;
             }
 
+
             //factory 是个工厂函数
             var require = arguments.callee.bind(this); //引用自身，并且作为静态方法调用
             var exports = {};
+
             var mod = module.mod = { //传递一些额外的信息给 factory 函数，可能会用得到。
                 'id': id,
                 'exports': exports,
                 'parent': parentModule ? parentModule.mod : null,
+
+                //提供一个便捷方式，让原来的 require(module, id) 可以用 module.require(id)
+                'require': function (id) {
+                    return require(mod, id);
+                },
             };
 
 
@@ -4201,8 +4208,6 @@ define('Object', function (require, module, exports) {
                     obj = obj[key] = {};
                 }
 
-
-
             });
         },
 
@@ -5110,7 +5115,7 @@ define('Emitter/Tree', function (require, module, exports) {
 
         },
 
-     
+
 
         /**
         * 清空全部数据。
@@ -5168,7 +5173,7 @@ define('Emitter/Tree', function (require, module, exports) {
 
 
         getList: function (names) {
-    
+
             var meta = mapper.get(this);
             var name$node = meta.name$node;
 
@@ -5198,11 +5203,11 @@ define('Emitter/Tree', function (require, module, exports) {
         },
 
 
-      
+
 
     };
 
-    
+
     return Tree;
 
 
@@ -5871,20 +5876,24 @@ define('Module', function (require, module, exports) {
 */
 define('Tree', function (require, module, exports) {
 
-    var $ = require('$');
-
     var $Array = require('Array');
     var $String = require('String');
     var $Object = require('Object');
-    var Mapper = require('Mapper');
-
-    var mapper = new Mapper();
+    
+    var Mapper = null; //防止同目录下的互相加载
+    var mapper = null;
 
 
     /**
     * 构造器。
     */
     function Tree() {
+
+        if (!mapper) {
+            Mapper = require('Mapper');
+            mapper = new Mapper();
+        }
+
 
         var id = module.id + '-' + $String.random();
         Mapper.setGuid(this, id);
@@ -5899,7 +5908,7 @@ define('Tree', function (require, module, exports) {
     }
 
 
-
+    //获取指定节点下指定路径的节点
     function getNode(key$node, keys) {
 
         var lastIndex = keys.length - 1;
@@ -5930,8 +5939,8 @@ define('Tree', function (require, module, exports) {
         * @param {Array} keys 节点路径数组。
         * @param value 要设置的值。
         * @example
-            cache.set(['path', 'to'], 123);
-            cache.set('path', 'to', 123); //跟上面的等价
+            tree.set(['path', 'to'], 123);
+            tree.set('path', 'to', 123); //跟上面的等价
         */
         set: function (keys, value) {
 
@@ -5977,6 +5986,8 @@ define('Tree', function (require, module, exports) {
         /**
         * 获取指定路径的节点上的值。
         * @return 返回该节点上的值。 如果不存在该节点，则返回 undefined。
+        * @example
+            tree.get('path', 'to'); //获取路径为 'path' -> 'to' 的节点上存储的值。
         */
         get: function (keys) {
 
@@ -5994,7 +6005,7 @@ define('Tree', function (require, module, exports) {
 
 
         /**
-        * 清空全部数据。
+        * 清空全部节点及数据。
         */
         clear: function () {
             var meta = mapper.get(this);
@@ -6058,8 +6069,10 @@ define('Tree', function (require, module, exports) {
         },
 
         /**
-        * 获取节点总数。
-        * @return {number} 返回节点的总数目。
+        * 获取整棵树节点的总数。
+        * @return {number} 返回整棵树的节点总数目。
+        * @example
+            tree.count(); //返回 12
         */
         count: function () {
             var meta = mapper.get(this);
@@ -6912,10 +6925,6 @@ define('LocalStorage', function (require, module, exports) {
         */
         set: function (key, value) {
 
-            if (key in all && all[key] === value) { //已存在
-                return;
-            }
-
             all[key] = value;
 
             var json = JSON.stringify(all);
@@ -7028,10 +7037,6 @@ define('SessionStorage', function (require, module, exports) {
         * @param value 要进行设置的值，可以是任何类型。
         */
         set: function (key, value) {
-
-            if (key in all && all[key] === value) { //已存在
-                return;
-            }
 
             all[key] = value;
 
