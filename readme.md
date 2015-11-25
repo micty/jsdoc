@@ -43,7 +43,6 @@ JsDoc 文档展示平台，是一个用于展示 Markdown 格式文档和 JsDoc 
 - 给 `.md` 文件类型添加相应的 MEMI 类型：`text/plain`。
 - 把在外部写好的 `.md` 文件拷到 `/data` 目录。
 - 起始文件在 `/data/readme.md`，可以修改它，并在里面加链接以跳到其它 `.md` 文件。
--
 
 
 
