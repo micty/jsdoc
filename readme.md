@@ -9,6 +9,9 @@ JsDoc 文档展示平台，是一个用于展示 Markdown 格式文档和 JsDoc 
 如果你对用 JsDoc-ToolKit 从 JS 文件中抽取注释成文档的过程不熟悉，没有关系，你可以只使用前半部分，
 即你可以把它当成一个**用于展示 Markdown 格式文档的 Web 站点**。
 
+###示例
+[KISP框架](http://mob.cmcloud.cn/lib-cmd/kisp/htdocs/index.html)
+
 
 ###优势与特点
 - **重点是在展示 Markdown 文档，而不是提供可视化编辑**。
