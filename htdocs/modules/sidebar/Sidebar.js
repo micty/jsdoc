@@ -74,6 +74,7 @@ define('/Sidebar', function (require, module, exports) {
                 current: null,
                 event: 'click',
                 activedClass: 'on',
+                repeated: true,
 
                 change: function (index, oldIndex) { //这里的，如果当前项是高亮，再次进入时不会触发
                     var item = list[index];

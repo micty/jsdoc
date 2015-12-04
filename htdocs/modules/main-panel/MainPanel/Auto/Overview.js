@@ -33,15 +33,22 @@ define('/MainPanel/Auto/Overview', function (require, module, exports) {
             return;
         }
 
-        MethodList.on('click', 'name', function (item, index) {
+        MethodList.on('name', function (item, index) {
             hide();
-            emitter.fire('click', 'method', [item, index]);
+            emitter.fire('method', [item, index]);
         });
 
-        Summary.on('click', 'source', function (name, fileName) {
+        PropertyList.on('name', function (item, index) {
             hide();
-            emitter.fire('click', 'source', [name, fileName]);
+            emitter.fire('property', [item, index]);
         });
+
+        Summary.on('source', function (item) {
+            hide();
+            emitter.fire('source', [item]);
+        });
+
+
 
         hasBind = true;
     }

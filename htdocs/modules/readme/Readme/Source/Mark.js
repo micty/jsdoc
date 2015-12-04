@@ -28,7 +28,7 @@ define('/Readme/Source/Mark', function (require, module, exports) {
             var y = event.offsetY;
             var no = getLineNo(y) + 1;
 
-            mark.style.top = (no * 20 - 1) + 18 + 'px';
+            mark.style.top = (no * 20 - 1) + 17 + 'px';
         });
 
 

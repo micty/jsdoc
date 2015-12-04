@@ -188,7 +188,6 @@
 }
 .panel .content pre {
   margin: 0;
-  /*margin-left: 30px;*/
   padding: 0px 5px;
   /*background: #f7f7f7;*/
   -moz-border-radius: 3px;
@@ -196,6 +195,9 @@
   border-radius: 3px;
   /*-ms-word-break: break-word;*/
   /*word-break: break-word;*/
+}
+.panel .content pre.demo {
+  margin-left: 30px;
 }
 .panel .content pre code {
   color: #000;

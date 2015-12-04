@@ -42,6 +42,8 @@ define('/Hash', function (require, module, exports) {
         }
 
         Url.setHash(window, hash);
+
+        console.dir(hash);
         
     }
 

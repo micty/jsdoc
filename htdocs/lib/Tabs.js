@@ -44,6 +44,7 @@ define('Tabs', function (require, exports, module) {
             eventName: eventName,
             activedIndex: -1,
             emitter: emitter,
+            repeated: config.repeated,
         };
 
         mapper.set(this, meta);
@@ -105,11 +106,15 @@ define('Tabs', function (require, exports, module) {
         active: function (index, fireEvent) {
 
             var meta = mapper.get(this);
-            var activedIndex = meta.activedIndex;
 
-            if (index == activedIndex && fireEvent) { //安静模式时，即使重新激活当前已激活的项，也要允许。
+            var activedIndex = meta.activedIndex;
+            var isSame = index == activedIndex;
+
+            //当前项已激活，并且配置指定了不允许激活重复的项
+            if (isSame && !meta.repeated) {
                 return;
             }
+
 
             this.reset();
 

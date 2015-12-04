@@ -6,9 +6,9 @@ define('/MainPanel/Auto/Data/Helper', function (require, module, exports) {
     var MiniQuery = require('MiniQuery');
 
 
-    function normalize(list) {
+    function normalize(list, needArray, typeName) {
 
-        var name$item = {};
+        var alias$item = {};
 
 
         //把类排在前面
@@ -30,9 +30,6 @@ define('/MainPanel/Auto/Data/Helper', function (require, module, exports) {
 
         $.Array.each(list, function (item, index) {
 
-
-
-
             //先整体排序
             item.methods.sort(function (x, y) {
                 return x.name < y.name ? -1 :
@@ -53,7 +50,11 @@ define('/MainPanel/Auto/Data/Helper', function (require, module, exports) {
                 else {
                     methods.push(item);
                 }
-            })
+            });
+
+            item.methods = normalize(item.methods, true);
+            item.properties = normalize(item.properties, true, '属性');
+
 
             var isClass = item.isa.toLowerCase() == 'constructor';
 
@@ -64,6 +65,10 @@ define('/MainPanel/Auto/Data/Helper', function (require, module, exports) {
 
             if (item.isNamespace) {
                 typeDesc += '命名空间';
+            }
+
+            if (typeName) {
+                typeDesc += typeName;
             }
 
 
@@ -80,21 +85,21 @@ define('/MainPanel/Auto/Data/Helper', function (require, module, exports) {
                 }),
 
                 'isClass': isClass,
-                'srcFileName': item.srcFile,
+                //'srcFileName': item.srcFile,
                 'typeDesc': typeDesc,
             });
 
-            name$item[item.alias] = obj;
+            alias$item[item.alias] = obj;
         });
 
-        $.Object.each(name$item, function (key, item) {
+        $.Object.each(alias$item, function (key, item) {
 
             var supers = item.supers;
             var superClass = item.superClass;
 
             while (superClass) {
                 supers.push(superClass);
-                superClass = name$item[superClass].superClass;
+                superClass = alias$item[superClass].superClass;
             }
 
             supers.reverse();
@@ -102,12 +107,20 @@ define('/MainPanel/Auto/Data/Helper', function (require, module, exports) {
 
             superClass = item.superClass;
             if (superClass) {
-                name$item[superClass].derives.push(item.alias);
+                alias$item[superClass].derives.push(item.alias);
             }
         });
 
+        //返回 map 形式
+        if (!needArray) {
+            return alias$item;
+        }
 
-        return name$item;
+        //返回数组形式
+        return $.Array.keep(list, function (item, index) {
+            var alias = item.alias;
+            return alias$item[alias];
+        });
     }
 
 

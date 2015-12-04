@@ -3,11 +3,15 @@ define('/MainPanel/Auto/Method/Summary', function (require, module, exports) {
 
     var $ = require('$');
     var MiniQuery = require('MiniQuery');
-
     var Template = require('Template');
 
+    var Emitter = MiniQuery.require('Emitter');
+    var emitter = new Emitter();
+
     var div = document.getElementById('div-method-summary');
-    
+    var hasBind = false;
+    var current = null;
+
     var samples = $.String.getTemplates(div.innerHTML, [
       {
           name: 'root',
@@ -24,8 +28,24 @@ define('/MainPanel/Auto/Method/Summary', function (require, module, exports) {
     ]);
 
 
+
+    function bindEvents() {
+        if (hasBind) {
+            return;
+        }
+
+        hasBind = true;
+
+        $(div).delegate('[data-cmd="source"]', 'click', function () {
+            emitter.fire('source', [current]);
+        });
+
+    }
+
     function render(data) {
 
+        bindEvents();
+        current = data;
 
         var params = data.params;
         var count = params.length;
@@ -36,6 +56,7 @@ define('/MainPanel/Auto/Method/Summary', function (require, module, exports) {
             'name': data.name,
             'typeDesc': data.typeDesc,
             'desc': $.String.escapeHtml(data.desc),
+            'srcFile': data.srcFile,
 
             'params': $.Array.keep(params, function (item, index) {
 
@@ -57,6 +78,8 @@ define('/MainPanel/Auto/Method/Summary', function (require, module, exports) {
 
     return {
         render: render,
+        on: emitter.on.bind(emitter),
+
     };
 
 });

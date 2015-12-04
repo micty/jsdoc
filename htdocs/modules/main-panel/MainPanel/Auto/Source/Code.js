@@ -34,7 +34,7 @@ define('/MainPanel/Auto/Source/Code', function (require, module, exports) {
 
             var y = event.offsetY;
             var no = getLineNo(y) + 1;
-            mark.style.top = (no * 20 - 1) + 'px';
+            mark.style.top = (no * 20 - 2) + 'px';
         });
 
 

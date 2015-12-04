@@ -11,8 +11,7 @@ define('/MainPanel/Auto/Overview/Summary', function (require, module, exports) {
     var div = document.getElementById('div-' + module.id + '-content');
   
     var hasBind = false;
-
-    var current = {};
+    var current = null;
 
 
     function bindEvents() {
@@ -23,8 +22,9 @@ define('/MainPanel/Auto/Overview/Summary', function (require, module, exports) {
         hasBind = true;
 
         $(div).delegate('[data-cmd="source"]', 'click', function () {
+            //debugger;
 
-            emitter.fire('click', 'source', [current.name, current.srcFileName]);
+            emitter.fire('source', [current]);
         });
 
     }
@@ -32,10 +32,10 @@ define('/MainPanel/Auto/Overview/Summary', function (require, module, exports) {
     function render(data) {
        
         current = {
-            'name': data.name,
+            'name': data.alias,
             'typeDesc': data.typeDesc,
             'desc': data.desc,
-            'srcFileName': data.srcFileName,
+            'srcFile': data.srcFile,
         };
 
         Template.fill(div, current);

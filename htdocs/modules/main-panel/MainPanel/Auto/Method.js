@@ -13,8 +13,26 @@ define('/MainPanel/Auto/Method', function (require, module, exports) {
 
     var view = document.getElementById('view-Method');
     var emitter = new Emitter();
+    var hasBind = false;
+
+    function bindEvents() {
+        if (hasBind) {
+            return;
+        }
+
+        hasBind = true;
+
+
+        Summary.on('source', function (item) {
+            hide();
+            emitter.fire('source', [item]);
+        });
+
+    }
 
     function render(data) {
+
+        bindEvents();
 
         Summary.render(data);
         Params.render(data);

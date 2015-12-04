@@ -11,10 +11,10 @@ define('', function (require, module) {
     var Readme = require(module, 'Readme');
 
 
-    MainPanel.on('view', function (type, name) {
+    MainPanel.on('view', function (type, path) {
         Hash.set('view', {
             'type': type,
-            'name': name,
+            'path': path,
         });
     });
    
@@ -37,6 +37,7 @@ define('', function (require, module) {
         },
 
         'jsdoc': function (hash, old) {
+
 
             Readme.hide();
             Path.set(hash);

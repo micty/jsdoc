@@ -14,39 +14,45 @@ define('/MainPanel/Auto', function (require, module, exports) {
     var emitter = new Emitter();
     var view = document.getElementById('view-Auto');
     var hasBind = false;
+    var path = [];
 
 
     function render(name, view) {
 
         bindEvents();
+        show();
 
-        Data.load(function (json) {
-       
-            var data = json[name];
 
-            if (view) {
-                var type = view.type;
-                if (type == 'source') {
-                    var fileName = data.srcFileName;
-                    Source.render(fileName);
-                    emitter.fire('view', 'source', [name]);
-                }
-                else if (type == 'method') {
-                    var item = $.Array.findItem(data.methods, function (item, index) {
-                        return item.name == view.name;
-                    });
+        //查看源代码的，单独处理。
+        if (view && view.type == 'source') {
+            Source.render(view.path);
+            toView('source', view.path);
+            return;
+        }
 
-                    Method.render(item);
-                    emitter.fire('view', 'method', [item.name]);
-                }
-            }
-            else {
+
+        path = view ? $.Array.parse(view.path) : [name];
+
+
+        Data.get(path, function (data) {
+
+            //顶级的
+            if (!view) {
                 Overview.render(data);
                 emitter.fire('render');
-
+                return;
             }
 
-            show();
+            //二级或以上的
+            var type = view.type;
+            if (type == 'method') {
+                Method.render(data);
+            }
+            else if (type == 'property') {
+                Overview.render(data);
+            }
+
+            toView(type, path);
 
         });
     }
@@ -60,33 +66,25 @@ define('/MainPanel/Auto', function (require, module, exports) {
     }
 
 
+    //跳到指定的视图
+    function toView(type, path) {
+
+        if (path instanceof Array) {
+            path = $.Array.toObject(path);
+        }
+
+        emitter.fire('view', [type, path]);
+    }
+
+
+
     function bindEvents() {
 
         if (hasBind) {
             return;
         }
 
-
-        Overview.on('click', {
-            'method': function (item, index) {
-                Method.render(item);
-                emitter.fire('view', 'method', [item.name]);
-            },
-
-            'source': function (name, fileName) {
-                Source.render(fileName);
-                emitter.fire('view', 'source', [name]);
-
-            }
-        });
-
-        Method.on({
-            'show': function () {
-                Overview.hide();
-                Source.hide();
-            },
-            'hide': function () { },
-        });
+        hasBind = true;
 
 
         Overview.on({
@@ -94,29 +92,53 @@ define('/MainPanel/Auto', function (require, module, exports) {
                 Source.hide();
                 Method.hide();
             },
-            'hide': function () { },
+            'method': function (item, index) {
+                Method.render(item);
+                path.push('methods');
+                path.push(index);
+                toView('method', path);
+            },
+
+            'property': function (item, index) {
+                path.push('properties');
+                path.push(index);
+                toView('property', path);
+            },
+
+            'source': function (item) {
+                var path = item.srcFile;
+                Source.render(path);
+                toView('source', path);
+            },
+        });
+
+
+        Method.on({
+            'render':  function () {
+                emitter.fire('render');
+            },
+            'show': function () {
+                Overview.hide();
+                Source.hide();
+            },
+            'source': function (item) {
+                var path = item.srcFile;
+                Source.render(path);
+                toView('source', path);
+            },
         });
 
         Source.on({
+            'render': function () {
+                emitter.fire('render');
+            },
             'show': function () {
                 Overview.hide();
                 Method.hide();
             },
-            'hide': function () { },
-        });
-
-        Source.on('render', function () {
-            emitter.fire('render');
-
-        });
-
-        Method.on('render', function () {
-            emitter.fire('render');
-
         });
 
 
-        hasBind = true;
     }
 
 

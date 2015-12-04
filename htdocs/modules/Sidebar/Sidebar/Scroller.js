@@ -15,6 +15,7 @@ define('/Sidebar/Scroller', function (require, module, exports) {
     var lastIndex = 0;      //最后一项菜单项的索引值
     var currentIndex = -1;   //当前激活的菜单项的索引值
 
+
     var y = 0;              //当前的 y 值。
     var maxY = 0;           //所允许向上移动的最大高度
     var hasBind = false;

@@ -85,7 +85,7 @@ define('/MainPanel/Auto/Overview/PropertyList', function (require, module, expor
             var index = a.getAttribute('data-index');
             var item = list[index];
 
-            emitter.fire('click', 'name', [item, index]);
+            emitter.fire('name', [item, index]);
         });
 
         hasBind = true;

@@ -49,10 +49,6 @@ define('/MainPanel', function (require, module, exports) {
             Manual.hide();
         }
 
-        
-
-        
-
     }
 
 
@@ -75,16 +71,9 @@ define('/MainPanel', function (require, module, exports) {
         });
 
 
-        Auto.on('view', {
-            'source': function (name) {
-                Manual.hide();
-                emitter.fire('view', ['source', name]);
-            },
-            'method': function (name) {
-                Manual.hide();
-                emitter.fire('view', ['method', name]);
-
-            },
+        Auto.on('view', function (type, path) {
+            Manual.hide();
+            emitter.fire('view', [type, path]);
         });
 
 

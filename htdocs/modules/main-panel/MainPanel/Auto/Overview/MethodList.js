@@ -85,7 +85,7 @@ define('/MainPanel/Auto/Overview/MethodList', function (require, module, exports
             var index = a.getAttribute('data-index');
             var item = list[index];
             
-            emitter.fire('click', 'name', [item, index]);
+            emitter.fire('name', [item, index]);
         });
 
         hasBind = true;
