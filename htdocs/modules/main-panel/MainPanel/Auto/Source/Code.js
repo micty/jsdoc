@@ -12,8 +12,11 @@ define('/MainPanel/Auto/Source/Code', function (require, module, exports) {
     function render(data) {
 
         bindEvents();
+
         //高亮代码
         Highlight.fill(code, data);
+
+        comment(true);
     }
 
 
@@ -41,8 +44,13 @@ define('/MainPanel/Auto/Source/Code', function (require, module, exports) {
         
     }
 
+    function comment(needShow) {
+        $(code).toggleClass('no-comments', !needShow);
+    }
+
     return {
         render: render,
+        comment: comment,
     };
 
 });

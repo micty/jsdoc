@@ -1,0 +1,86 @@
+
+.panel-fixed-menus {
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+    background-color: rgba(0, 0, 0, 0.1);
+    border-radius: 6px;
+    color: #fff;
+    font-size: 12px;
+    font-family: 'Helvetica Neue', Arial, 'Hiragino Sans GB', STHeiti, 'Microsoft YaHei', 'WenQuanYi Micro Hei', SimSun, Song, sans-serif;
+
+    &:hover {
+        background-color: rgba(0, 0, 0, 0.75);
+        transition: background linear 0.6s;
+
+    }
+
+    li {
+        width: 38px;
+        height: 36px;
+        line-height: 36px;
+        cursor: pointer;
+        text-align: center;
+        /*border-bottom: 1px solid rgba(0, 0, 0, 0.03);*/
+
+        &:last-child {
+            border-bottom: none;
+        }
+    }
+
+    .top {
+
+        .describe {
+            display: none;
+        }
+
+        .arrow {
+            display: inline-block;
+            width: 14px;
+            height: 14px;
+            border-width: 2px 2px 0 0;
+            margin-top: 15px;
+            border-color: #fff;
+            border-style: solid;
+            transform: rotate(-45deg);
+            -webkit-transform: rotate(-45deg);
+        }
+
+        &:hover {
+            .arrow {
+                display: none;
+            }
+
+            .describe {
+                display: inline-block;
+            }
+        }
+    }
+
+
+    .home {
+        background: url('../img/home.png') no-repeat;
+    }
+
+    .menu {
+        background: url('../img/menu.png') no-repeat;
+    }
+
+    .home,
+    .menu {
+        background-position: 50%;
+        background-size: 25px;
+
+        .describe {
+            display: none;
+        }
+
+        &:hover {
+            background: none;
+
+            .describe {
+                display: inline-block;
+            }
+        }
+    }
+}

@@ -35,6 +35,13 @@ define('/MainPanel/Auto/Source', function (require, module, exports) {
         }
 
         hasBind = true;
+
+        Header.on({
+            'comment': function (needShow) {
+                Code.comment(needShow);
+            },
+        });
+        
     }
 
 

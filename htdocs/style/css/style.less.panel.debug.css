@@ -71,6 +71,7 @@
   -webkit-border-bottom-left-radius: 3px;
   border-bottom-left-radius: 3px;
   padding: 15px 15px;
+  overflow: hidden;
 }
 .panel .content.method-summary .syntax {
   font-size: 1.15em;
@@ -208,6 +209,10 @@
 }
 .panel .content pre.soure-line-numbers {
   margin-left: 30px;
+  /*隐藏 js 中的注释*/
+}
+.panel .content pre.soure-line-numbers .no-comments .hljs-comment {
+  display: none;
 }
 .panel .content table {
   width: 100%;

@@ -4,15 +4,17 @@ define('/Readme', function (require, module, exports) {
     var $ = require('$');
     var MiniQuery = require('MiniQuery');
     var Markdown = require('Markdown');
+    var Emitter = MiniQuery.require('Emitter');
 
     var Source = require(module, 'Source');
     var Title = require(module, 'Title');
     var Url = require(module, 'Url');
 
+    var emitter = new Emitter();
     var view = document.getElementById('div-view-readme');
     var content = document.getElementById('div-readme-content');
     var currentUrl = ''; //当前显示的 readme 的 url
-
+    var isDetailVisible = true;
 
    
 
@@ -46,6 +48,7 @@ define('/Readme', function (require, module, exports) {
             show(info);
 
             Source.render(info);
+
 
         });
 
@@ -81,6 +84,8 @@ define('/Readme', function (require, module, exports) {
 
     function show(info) {
 
+        isDetailVisible = true;
+
         Title.set(content, info);
 
         if (info.isMarkdown) {
@@ -95,7 +100,8 @@ define('/Readme', function (require, module, exports) {
         //这里跟 MainPanel 有冲突，不能用 show()，
         //否则 jQuery 会计算出 display: -webkit-box 而导致样式混乱。
         //重现方法：页面一进来就先显示 MainPanel，再回到首页
-        $(view).css('display', 'block'); 
+        $(view).css('display', 'block');
+        emitter.fire('render');
     }
 
     function hide() {
@@ -104,10 +110,24 @@ define('/Readme', function (require, module, exports) {
     }
 
 
+
+
+    function menus() {
+
+        $(content).find('>*:not(h1,h2,h3,h4,h5,h6)').toggle(!isDetailVisible);
+        isDetailVisible = !isDetailVisible;
+
+       
+    }
+
+
+
     return {
         render: render,
         show: show,
         hide: hide,
+        on: emitter.on.bind(emitter),
+        menus: menus,
     };
 
 });

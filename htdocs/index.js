@@ -9,15 +9,35 @@ define('', function (require, module) {
     var MainPanel = require(module, 'MainPanel');
     var Hash = require(module, 'Hash');
     var Readme = require(module, 'Readme');
+    var FixedMenus = require(module, 'FixedMenus');
 
 
-    MainPanel.on('view', function (type, path) {
-        Hash.set('view', {
-            'type': type,
-            'path': path,
-        });
+
+
+    MainPanel.on({
+        'view': function (type, path) {
+            Hash.set('view', {
+                'type': type,
+                'path': path,
+            });
+        },
+        'render': function () {
+            FixedMenus.render(false);
+        },
     });
-   
+
+    Readme.on({
+        'render': function () {
+            FixedMenus.render(true);
+        },
+    });
+
+
+    FixedMenus.on({
+        'menus': function () {
+            Readme.menus();
+        },
+    });
 
     //主动点击菜单项时会触发
     Sidebar.on('active', function (item, oldItem) {

@@ -3,6 +3,7 @@ define('/MainPanel/Auto/Source/Data', function (require, module, exports) {
 
     var $ = require('$');
     var MiniQuery = require('MiniQuery');
+    var Url = MiniQuery.require('Url');
 
     var url$file = {};
 
@@ -17,6 +18,8 @@ define('/MainPanel/Auto/Source/Data', function (require, module, exports) {
         }
 
         var path = 'data/' + url;
+        path = Url.randomQueryString(path);
+
 
         //这里要作为文本去获取，因为 jQuery 会自动执行 js 代码，这不是我们想要的行为
         $.get(path, function (file) {
