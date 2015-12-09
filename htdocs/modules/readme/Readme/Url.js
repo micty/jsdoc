@@ -38,9 +38,19 @@ define('/Readme/Url', function (require, module, exports) {
 
 
     function resolve(file) {
-        file = file || 'readme.md';
-        var url = Path.resolve(file);
-        return url;
+
+        if (!file) {
+            return Path.resolve('readme.md');
+        }
+
+
+        var urls = file.split(',');
+
+        urls = $.Array.keep(urls, function (url, index) {
+            return Path.resolve(url);
+        });
+
+        return urls.join(',');
     }
 
 
@@ -50,9 +60,9 @@ define('/Readme/Url', function (require, module, exports) {
 
         if (index < 0) {
             return {
-                'url': url,
-                'name': url,
-                'ext': '',
+                //'url': url,
+                //'name': url,
+                //'ext': '',
                 'isMarkdown': false,
             };
         }
@@ -67,9 +77,9 @@ define('/Readme/Url', function (require, module, exports) {
             ext == 'markdown';
 
         return {
-            'url': url,
-            'name': name,
-            'ext': ext,
+            //'url': url,
+            //'name': name,
+            //'ext': ext,
             'isMarkdown': isMarkdown,
         };
     }

@@ -12,6 +12,7 @@ define('Markdown', function (require, module, exports) {
     var Highlight = require('Highlight');
 
     var Helper = require(module, 'Helper');
+    var Loader = require(module, 'Loader');
 
 
     var Mapper = MiniQuery.require('Mapper');
@@ -68,7 +69,7 @@ define('Markdown', function (require, module, exports) {
 
 
             //异步加载回来再处理
-            Helper.load(url, function (content) {
+            Loader.load(url, function (content) {
                 meta.content = content;
                 Helper.fill(container, content, url);
                 emitter.fire('render', [content]);

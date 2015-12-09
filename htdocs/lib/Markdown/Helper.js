@@ -76,17 +76,31 @@ define('Markdown/Helper', function (require, module, exports) {
                 a.setAttribute('target', '_self');
             }
 
-            //把 './' 或 '../' 开头的 href 转成相对于 data/ 目录的路径
-            var file = Url.getQueryString(href, 'file');
-            if (file) {
-                file = Path.relative(baseUrl, file);
-                href = Url.addQueryString('', 'file', file);
+            href = getHref(href, baseUrl);
+            if (href) {
                 a.setAttribute('href', href);
             }
 
-           
-
         });
+
+    }
+
+
+    //把 './' 或 '../' 开头的 href 转成相对于 data/ 目录的路径
+    function getHref(href, baseUrl) {
+   
+        var file = Url.getQueryString(href, 'file');
+        if (!file) {
+            return;
+        }
+
+        var a = file.split(',');
+        a = $.Array.keep(a, function (item, index) {
+            return Path.relative(baseUrl, item);
+        });
+
+        file = a.join(',');
+        return Url.addQueryString('', 'file', file);
 
     }
 
@@ -113,69 +127,11 @@ define('Markdown/Helper', function (require, module, exports) {
         return lines.length * 20;
     }
 
-
-
-
-    function load(url, fn) {
-
-        var md = url$md[url];
-        if (md) {
-            fn && fn(md);
-            return;
-        }
-
-       
-
-        $.ajax({
-            type: 'get',
-            dataType: 'text', //作纯文本返回
-
-            url: Url.randomQueryString(url),  //加上随机查询字符串，以确保拿到最新版本。
-
-            success: function (md) {
-
-                md = format(url, md);
-
-                url$md[url] = md; //缓存起来
-                fn && fn(md);
-            },
-
-            error: function (xhr) {
-                fn && fn('');
-            },
-        });
-    }
-
-   
-    function format(url, md) {
-
-        var index = url.lastIndexOf('.');
-        if (index < 0) {
-            return md;
-        }
-
-        var ext = url.slice(index + 1);
-        ext = ext.toLowerCase();
-
-        if (!ext || ext == 'md' || ext == 'txt' || ext== 'markdown') {
-            return md;
-        }
-
-
-        md = '``` ' + ext + '\r\n' +
-                md +
-            '\r\n```';
-
-        return md;
-
-    }
-   
-
+  
 
 
     return {
         fill: fill,
-        load: load,
     };
 
 

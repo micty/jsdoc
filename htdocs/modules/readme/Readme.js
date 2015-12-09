@@ -20,7 +20,6 @@ define('/Readme', function (require, module, exports) {
 
     function render(url) {
 
-        
         url = Url.resolve(url);
         var info = Url.getInfo(url);
 
@@ -111,7 +110,7 @@ define('/Readme', function (require, module, exports) {
 
 
 
-
+    //显示大纲
     function menus() {
 
         $(content).find('>*:not(h1,h2,h3,h4,h5,h6)').toggle(!isDetailVisible);

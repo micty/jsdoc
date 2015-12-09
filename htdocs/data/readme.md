@@ -25,6 +25,8 @@ KISP 框架
 - [将配置数据从代码中分离出来](?file=docs/Config-and-Code.md)
 - [将HTML模板从代码中分离出来](?file=docs/HTML-and-Code.md)
 
+[合并显示](?file=docs/CMD.md,docs/API.md,specification/js/index.md,docs/WeChat.md,docs/Config-and-Code.md)
+
 ### default - 3.0.7
 
 - [KISP 接口文档 3.0.7](?type=default&version=3.0.7)
