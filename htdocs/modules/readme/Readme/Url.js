@@ -60,9 +60,9 @@ define('/Readme/Url', function (require, module, exports) {
 
         if (index < 0) {
             return {
-                //'url': url,
-                //'name': url,
-                //'ext': '',
+                'url': url,
+                'name': url,
+                'ext': '',
                 'isMarkdown': false,
             };
         }
@@ -77,9 +77,9 @@ define('/Readme/Url', function (require, module, exports) {
             ext == 'markdown';
 
         return {
-            //'url': url,
-            //'name': name,
-            //'ext': ext,
+            'url': url,
+            'name': name,
+            'ext': ext,
             'isMarkdown': isMarkdown,
         };
     }

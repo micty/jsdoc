@@ -16,7 +16,7 @@
   width: 46px;
 }
 .list td.name {
-  font-family: 'Fixedsys Excelsior 3.01' Fixedsys;
+  font-family: 'Fixedsys Excelsior 3.01', Fixedsys;
 }
 .list td.desc {
   width: 75%;
@@ -24,7 +24,7 @@
 .list td.desc pre {
   margin-left: 0px;
   background: none;
-  font-family: 'Fixedsys Excelsior 3.01' Fixedsys;
+  font-family: 'Fixedsys Excelsior 3.01', Fixedsys;
 }
 .list a:link,
 .list a:hover,

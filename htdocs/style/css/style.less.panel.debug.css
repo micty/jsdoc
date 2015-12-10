@@ -185,7 +185,7 @@
   padding: 3px 4px 3px 4px;
   color: #c7254e;
   background-color: #f9f2f4;
-  font-family: 'Fixedsys Excelsior 3.01' Fixedsys;
+  font-family: 'Fixedsys Excelsior 3.01', Fixedsys;
 }
 .panel .content pre {
   margin: 0;
@@ -216,7 +216,7 @@
 }
 .panel .content table {
   width: 100%;
-  font-family: 'Fixedsys Excelsior 3.01' Fixedsys;
+  font-family: 'Fixedsys Excelsior 3.01', Fixedsys;
 }
 .panel .content table th,
 .panel .content table td {
@@ -228,12 +228,12 @@
   padding: 3px 4px 3px 4px;
   color: #c7254e;
   background-color: #f9f2f4;
-  font-family: 'Fixedsys Excelsior 3.01' Fixedsys;
+  font-family: 'Fixedsys Excelsior 3.01', Fixedsys;
 }
 .panel .content table.params .type {
   width: 10%;
   color: blue;
-  font-family: 'Fixedsys Excelsior 3.01' Fixedsys;
+  font-family: 'Fixedsys Excelsior 3.01', Fixedsys;
 }
 .panel .content table.params .default {
   width: 10%;

@@ -12,7 +12,6 @@ define('/Readme/Title', function (require, module, exports) {
         var suffix = ' - JsDoc 文档展示平台';
 
 
-
         if (info.isMarkdown) { //显示的是具体的文件
             title = view.firstElementChild.innerText;
         }
