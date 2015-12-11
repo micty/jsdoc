@@ -1,9 +1,8 @@
 /**
 * Mask 模块的默认配置
-* @namespace
-* @name defaults.Mask
+* @name Mask.defaults
 */
-define('defaults.Mask', /**@lends defaults.Mask*/ {
+define('Mask.defaults', /**@lends Mask.defaults*/ {
     
     /**
     * 生成的 id 的前缀。
@@ -20,13 +19,42 @@ define('defaults.Mask', /**@lends defaults.Mask*/ {
     * 可取值为: true|false|"hide"|"remove"，默认为 false，即不易消失。
     */
     volatile: false,
+
+    /**
+    * 组件添加到的容器。
+    * 默认为 document.body。
+    */
     container: document.body,
+
+    /**
+    * 把组件添加到容器的方式，是否使用追加的方式。
+    * 默认用 prepend 的方式。
+    */
     append: false,
 
+    /**
+    * 组件的 css 样式 z-index 值。
+    */
     'top': 0,
+
+    /**
+    * 组件的 css 样式 bottom 值。
+    */
     'bottom': 0,
+
+    /**
+    * 组件的 css 样式 opacity 值。
+    */
     'opacity': 0.5,
+
+    /**
+    * 组件的 css 样式 background 值。
+    */
     'background': '#000',
+
+    /**
+    * 组件的 css 样式 z-index 值。
+    */
     'z-index': 1024,
 });
 

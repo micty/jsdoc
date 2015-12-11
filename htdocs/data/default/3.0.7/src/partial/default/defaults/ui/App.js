@@ -1,9 +1,8 @@
 /**
 * App 模块的默认配置
-* @namespace
-* @name defaults.App
+* @name App.defaults
 */
-define('defaults.App', /**@lends defaults.App*/ {
+define('App.defaults', /**@lends App.defaults*/ {
     mask: {
         opacity: 0,
         duration: 500,

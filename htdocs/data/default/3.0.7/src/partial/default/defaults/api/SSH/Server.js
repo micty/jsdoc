@@ -1,9 +1,8 @@
 /**
 * SSH/Server 模块的默认配置
-* @namespace
-* @name defaults.SSH/Server
+* @name SSH/Server.defaults
 */
-define('defaults.SSH/Server', /**@lends defaults.SSH/Server*/ {
+define('SSH/Server.defaults', /**@lends SSH/Server.defaults*/ {
     ext: '',
     successCode: 200,
     field: {

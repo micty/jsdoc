@@ -1,9 +1,8 @@
 /**
 * Toast 模块的默认配置
-* @namespace
-* @name defaults.Toast
+* @name Toast.defaults
 */
-define('defaults.Toast', /**@lends defaults.Toast*/ {
+define('Toast.defaults', /**@lends Toast.defaults*/ {
     
     /**
     * 生成的 id 的前缀。
@@ -14,9 +13,22 @@ define('defaults.Toast', /**@lends defaults.Toast*/ {
     * 生成的 id 的随机后缀的长度。
     */
     suffix: 4,
+
+    /**
+    * 提示文本。
+    */
     text: '',
 
+    /**
+    * 组件添加到的容器。
+    * 默认为 document.body。
+    */
     container: document.body,
+
+    /**
+    * 把组件添加到容器的方式，是否使用追加的方式。
+    * 默认用 prepend 的方式。
+    */
     append: false,
 
     /**
@@ -24,11 +36,28 @@ define('defaults.Toast', /**@lends defaults.Toast*/ {
     */
     mask: false,
 
+    /**
+    * 组件用到的 html 模板。
+    * 业务层不需要关注该字段。
+    */
     sample: 'font-awesome',
+
+    /**
+    * 组件用到的 css 类名。
+    */
     cssClass: '',
 
+    /**
+    * 用到的 font-awsome 的图标。
+    */
     icon: 'check',
-    duration: 0, // 0 表示一直显示。
+
+    /**
+    * 显示的持续时间(毫秒)。
+    * 0 表示一直显示。
+    */
+    duration: 0,
+
     //默认样式
 });
 

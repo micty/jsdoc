@@ -1,9 +1,8 @@
 /**
 * ImageReader 模块的默认配置
-* @namespace
-* @name defaults.ImageReader
+* @name ImageReader.defaults
 */
-define('defaults.ImageReader', /**@lends defaults.ImageReader*/ {
+define('ImageReader.defaults', /**@lends ImageReader.defaults*/ {
     loading: '读取中...',
 });
 

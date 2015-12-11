@@ -1,9 +1,8 @@
 /**
 * Dialog 模块的默认配置
-* @namespace
-* @name defaults.Dialog
+* @name Dialog.defaults
 */
-define('defaults.Dialog', /**@lends defaults.Dialog*/ {
+define('Dialog.defaults', /**@lends Dialog.defaults*/ {
 
     /**
     * 生成的 id 的前缀。
@@ -28,10 +27,12 @@ define('defaults.Dialog', /**@lends defaults.Dialog*/ {
     /**
     * 针对滚动器的配置。
     */
-    scroller: {
+    scroller: { },
 
-    },
-
+    /**
+    * 点击按钮后是否自动关闭组件。
+    * 可取值为: true|false，默认为 true，即自动关闭。
+    */
     autoClosed: true,
 
     /**
@@ -39,15 +40,54 @@ define('defaults.Dialog', /**@lends defaults.Dialog*/ {
     * 可取值为: true|false，默认为不易消失。
     */
     volatile: false,
+
+    /**
+    * 组件的标题文本。
+    */
     title: '',
+
+    /**
+    * 组件的内容文本。
+    */
     text: '',
+
+    /**
+    * 组件的 css 样式 z-index 值。
+    */
     'z-index': 1024,
 
+    /**
+    * 组件用到的 html 模板。
+    * 默认为 'iOS'。 业务层不需要关注该字段。
+    */
     sample: 'iOS',
+
+    /**
+    * 组件用到的 css 类名。
+    */
     cssClass: '',
+
+    /**
+    * 点击按钮时需要用到的事件名。
+    * 针对移动端的是虚拟事件 'touch'。
+    */
     eventName: 'touch',
+
+    /**
+    * 组件宽度。
+    * 可以指定为百分比的字符串，或指定具体的数值（单位为像素），
+    */
     width: '80%',
+
+    /**
+    * 组件高度。
+    * 可以指定为百分比的字符串，或指定具体的数值（单位为像素），
+    */
     height: '50%',
+
+    /**
+    * 按钮数组。
+    */
     buttons: [],
 
 

@@ -1,9 +1,8 @@
 /**
 * SSH/Server/Config 模块的默认配置
-* @namespace
-* @name defaults.SSH/Server/Config
+* @name SSH/Server/Config.defaults
 */
-define('defaults.SSH/Server/Config', /**@lends defaults.SSH/Server/Config*/ {
+define('SSH/Server/Config.defaults', /**@lends SSH/Server/Config.defaults*/ {
 
     url: 'http://mob.cmcloud.cn/kisplus/kisplusconfig.aspx?callback=?',
     //cache: 'session', // false|'memory'|'session'|'local'

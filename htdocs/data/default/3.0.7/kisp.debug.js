@@ -2,7 +2,7 @@
 * KISP - KISP JavaScript Library
 * name: default 
 * version: 3.0.7
-* build: 2015-12-03 16:34:28
+* build: 2015-12-07 13:51:57
 * files: 119(117)
 *    partial/default/begin.js
 *    core/Module.js
@@ -776,7 +776,7 @@ define('Defaults', function (require, module, exports) {
             cfg = new Config();
         }
 
-        var obj = require('defaults.' + name);
+        var obj = require(name + '.defaults');
         cfg.set(name, obj);
 
         name$used[name] = true;
@@ -2080,7 +2080,7 @@ define('API', function (require, module, exports) {
         var successCode = config.successCode;
 
         var proxy = config.proxy;
-        if (typeof proxy == 'object') { // proxy: { ... }，批量的情况
+        if (proxy && typeof proxy == 'object') { // proxy: { ... }，批量的情况
             proxy = proxy[name];        //找到属于当前 API 的这个
         }
 
@@ -2096,8 +2096,8 @@ define('API', function (require, module, exports) {
             'data': config.data,
             'query': config.query,
 
-            'url': config.url || '',
-            'ext': config.ext || '',
+            'url': config.url,
+            'ext': config.ext,
             'random': config.random,
 
             'successCode': successCode,
@@ -2498,7 +2498,7 @@ define('SSH', function (require, module, exports) {
         var successCode = config.successCode;
 
         var proxy = config.proxy;
-        if (typeof proxy == 'object') { // proxy: { ... }
+        if (proxy && typeof proxy == 'object') { // proxy: { ... }
             proxy = proxy[name];
         }
 
@@ -2516,6 +2516,7 @@ define('SSH', function (require, module, exports) {
 
             //可选的
             'appid',
+            'netid',
             'pubacckey',
             'timestamp',
             'nonce',
@@ -2611,6 +2612,7 @@ define('SSH', function (require, module, exports) {
             Server.get({
                 'eid': ajax.eid,
                 'appid': ajax.appid,
+                'netid': ajax.netid,
 
             }, function (server, json, xhr) { //成功
 
@@ -2685,6 +2687,7 @@ define('SSH/Ajax', function (require, module, exports) {
             'Ver': config['version'],
             'FromTag': config['fromTag'],
             'AppID': config['appid'],
+            'NetID': config['netid'],
 
             'IsNewJson': 'Y',
             'IsEncrypt': 'N',
@@ -2798,11 +2801,6 @@ define('SSH/Server', function (require, module, exports) {
 
     function ajax(config, server, fnSuccess, fnFail, fnError) {
 
-        config = config || {
-            eid: '',
-            appid: '',
-        };
-
         server = server || {
             url: '',
             secret: '',
@@ -2829,8 +2827,9 @@ define('SSH/Server', function (require, module, exports) {
 
         api.get({
             'EID': eid,
-            'AppID': config['appid'] || '',
-            'AccKey': server['key'] || '',
+            'AppID': config['appid'],
+            'NetID': config['netid'],
+            'AccKey': server['key'],
             'Timestamp': timestamp,
             'State': random,
             'Sign': sign,
@@ -2884,10 +2883,6 @@ define('SSH/Server', function (require, module, exports) {
 
     function get(config, fnSuccess, fnFail, fnError) {
 
-        config = config || {
-            eid: '',
-            appid: '',
-        };
 
         if (!fnSuccess) {
             return;
@@ -3094,7 +3089,7 @@ define('SSH.API', function (require, module, exports) {
         var successCode = config.successCode;
 
         var proxy = config.proxy;
-        if (typeof proxy == 'object') { // proxy: { ... }
+        if (proxy && typeof proxy == 'object') { // proxy: { ... }
             proxy = proxy[name];
         }
 
@@ -3102,7 +3097,6 @@ define('SSH.API', function (require, module, exports) {
         if (proxy === true) { 
             proxy = name + '.js';
         }
-
 
         //过滤出属于 SSH 的配置成员
         //这里使用过滤 + 复制的方式进行成员选取。
@@ -3114,6 +3108,7 @@ define('SSH.API', function (require, module, exports) {
 
             //可选的
             'appid',
+            'netid',
             'pubacckey',
             'timestamp',
             'nonce',
@@ -3127,8 +3122,8 @@ define('SSH.API', function (require, module, exports) {
         var ajax = {
             'name': name,
             'successCode': successCode,
-            'field': config['field'],
-            'data': config['data'] || {},
+            'field': config.field,
+            'data': config.data,
 
             'ssh': $.Object.extend(ssh, config.ssh), //再合并针对 ssh 的
 
@@ -3202,11 +3197,9 @@ define('SSH.API', function (require, module, exports) {
         },
 
         /**
-        * 发起网络 POST 请求。
+        * 发起网络 post 请求。
         * 请求完成后会最先触发相应的事件。
         * @param {Object} [data] POST 请求的数据对象。
-        * @param {Object} [query] 查询字符串的数据对象。
-        *   该数据会给序列化成查询字符串，并且通过 form-data 发送出去。
         * @return {SSHAPI} 返回当前 SSHAPI 的实例 this，因此进一步可用于链式调用。
         */
         post: function (data) {
@@ -3216,7 +3209,7 @@ define('SSH.API', function (require, module, exports) {
             var ajax = meta.ajax;
 
             var obj = $.Object.extend({}, ajax, {
-                'data': data || ajax.data,
+                'data': data || ajax.data || {},
             });
 
             emitter.fire('request', ['post', obj.data]);
@@ -10191,26 +10184,74 @@ define('jquery-plugin/touch', function (require, module,  exports) {
 
 /**
 * API 模块的默认配置
-* @namespace
-* @name defaults.API
+* @name API.defaults
 */
-define('defaults.API', /**@lends defaults.API*/ {
+define('API.defaults', /**@lends API.defaults*/ {
+    /**
+    * 成功的状态码。 
+    * 只有状态码为该值是才表示成功，其它的均表示失败。
+    */
     successCode: 200,
+
+    /**
+    * 字段映射。
+    */
     field: {
+        /**
+        * 状态码。
+        */
         code: 'code',
+        /**
+        * 消息。
+        */
         msg: 'msg',
+        /**
+        * 主体数据。
+        */
         data: 'data',
     },
 
     /**
-    * 随机延迟时间，更真实模块实际网络
+    * 代理配置。
     */
-    delay: false, //格式为 { min: 500, max: 2000 }
+    proxy: null,
+
+    /**
+    * 随机延迟时间，更真实模块实际网络。
+    * 可指定为 false，或如 { min: 500, max: 2000 } 的格式。
+    */
+    delay: false,
 
     /**
     * 在 url 中增加一个随机 key，以解决缓存问题。
+    * 当指定为 false 时，则禁用。
     */
     random: true,
+
+    /**
+    * API 接口 Url 的主体部分，即 url 的 prefix 部分。
+    */
+    url: '',
+
+    /**
+    * API 接口 Url 的后缀部分。
+    * 针对那些如 '.do'、'.aspx' 等有后缀名的接口比较实用。
+    */
+    ext: '',
+
+    /**
+    * 要发送的数据。 可选的。
+    * 当发送方式为 get 时，该数据将会给序列化成查询字符串并附加到 url 查询参数中。
+    * 当发送方式为 post 时，会用在表单中。
+    */
+    data: null,
+
+    /**
+    * 要发送的查询参数，仅当发送方式为 post 时有效 (可选的)。
+    * 当发送方式为 post 时，该数据将会给序列化成查询字符串并附加到 url 查询参数中。
+    */
+    query: null,
+
 
     /**
     * 把请求时的 data 中的第一级子对象进行序列化的方法。
@@ -10229,14 +10270,27 @@ define('defaults.API', /**@lends defaults.API*/ {
 
 /**
 * Proxy 模块的默认配置
-* @namespace
-* @name defaults.Proxy
+* @name Proxy.defaults
 */
-define('defaults.Proxy', /**@lends defaults.Proxy*/ {
-    
-    base: '', //起始目录
+define('Proxy.defaults', /**@lends Proxy.defaults*/ {
+    /**
+    * 加载代理响应文件的起始位置(或目录)。
+    */
+    base: '',
+
+    /**
+    * 为模拟真实网络环境而随机延迟的时间。
+    * 格式为 { min: 500, max: 3000 }。
+    * 当指定为 false 时，则禁用延迟。
+    */
     delay: {
+        /**
+        * 随机延迟的最小毫秒数。
+        */
         min: 500,
+        /**
+        * 随机延迟的最大毫秒数。
+        */
         max: 3000
     },
 });
@@ -10244,80 +10298,217 @@ define('defaults.Proxy', /**@lends defaults.Proxy*/ {
 
 /**
 * SSH.API 模块的默认配置
-* @namespace
-* @name defaults.SSH.API
+* @name SSH.API.defaults
 */
-define('defaults.SSH.API', /**@lends defaults.SSH.API*/ {
+define('SSH.API.defaults', /**@lends SSH.API.defaults*/ {
     
     //解析 SSH 返回的 json 中的字段
+
+    /**
+    * 成功的状态码。 
+    * 只有状态码为该值是才表示成功，其它的均表示失败。
+    */
     successCode: 200,
+
+    /**
+    * 字段映射。
+    */
     field: {
+        /**
+        * 状态码。
+        */
         code: 'Result',
+        /**
+        * 消息。
+        */
         msg: 'ErrMsg',
+        /**
+        * 主体数据。
+        */
         data: 'Data',
     },
 
     // SSH 需要用到的。
     //下面这些字段在使用时会优先级会高于 SSH 节点中的
-    proxy: {},
+
+    /**
+    * 代理配置。
+    */
+    proxy: null,
+
+    /**
+    * 接口名称中的前缀部分。
+    * 主要针对一个轻应用中有公共前缀部分的批量接口，设置了公共前缀部分，后续的调用只用后部分简短名称即可。
+    */
+    prefix: '',
 
     //必选的
+
+    /**
+    * 企业号。 必选。
+    */
     eid: '',
+
+    /**
+    * openid。 必选。
+    */
     openid: '',
 
     //可选的
+
+    /**
+    * appid。 可选的。
+    */
     appid: '',
+
+    /**
+    * netid。 可选的。
+    */
+    netid: '',
+
+    /**
+    * pubacckey。 可选的。
+    */
     pubacckey: '',
+
+    /**
+    * timestamp。 可选的。
+    */
     timestamp: '',
+
+    /**
+    * nonce。 可选的。
+    */
     nonce: '',
+
+    /**
+    * pubaccid。 可选的。
+    */
     pubaccid: '',
 
+    /**
+    * 要发送的数据。 可选的。
+    */
     data: null,
 
+    /**
+    * 当 http 协议层发送错误时的默认错误消息文本。
+    */
     msg: '网络繁忙，请稍候再试',
 });
 
 
 /**
 * SSH 模块的默认配置
-* @namespace
-* @name defaults.SSH
+* @name SSH.defaults
 */
-define('defaults.SSH', /**@lends defaults.SSH*/ {
+define('SSH.defaults', /**@lends SSH.defaults*/ {
+
+    /**
+    * API 接口 Url 的后缀部分。
+    * 针对那些如 '.do'、'.aspx' 等有后缀名的接口比较实用。
+    * 这里固定为空字符串，业务层不需要关注该字段。
+    */
     ext: '',
+
+    /**
+    * 成功的状态码。 
+    * 只有状态码为该值是才表示成功，其它的均表示失败。
+    */
     successCode: 200,
+
+    /**
+    * 字段映射。
+    */
     field: {
+        /**
+        * 状态码。
+        */
         code: 'Result',
+        /**
+        * 消息。
+        */
         msg: 'ErrMsg',
+        /**
+        * 主体数据。
+        */
         data: 'DataJson',
     },
 
-    proxy: {},
+    /**
+    * 代理配置。
+    */
+    proxy: null,
+
+    /**
+    * 接口名称中的前缀部分。
+    * 主要针对一个轻应用中有公共前缀部分的批量接口，设置了公共前缀部分，后续的调用只用后部分简短名称即可。
+    */
+    prefix: '',
 
     //必选的
+
+    /**
+    * 企业号。 必选。
+    */
     eid: '',
+
+    /**
+    * openid。 必选。
+    */
     openid: '',
 
     //可选的
+
+    /**
+    * appid。 可选的。
+    */
     appid: '',
+
+    /**
+    * netid。 可选的。
+    */
+    netid: '',
+
+    /**
+    * pubacckey。 可选的。
+    */
     pubacckey: '',
+
+    /**
+    * timestamp。 可选的。
+    */
     timestamp: '',
+
+    /**
+    * nonce。 可选的。
+    */
     nonce: '',
+
+    /**
+    * pubaccid。 可选的。
+    */
     pubaccid: '',
 
+    /**
+    * 要发送的数据。 可选的。
+    */
     data: null,
 
-    console: true, //为了便于查看 CustData 而打印到控制台。
+    /**
+    * 是否用 console 把 CustData 打印出来。
+    * 由于 CustData 给编码了成字符串，为了便于查看原始对象结构而打印到控制台。
+    */
+    console: true,
 
 });
 
 
 /**
 * SSH/Server 模块的默认配置
-* @namespace
-* @name defaults.SSH/Server
+* @name SSH/Server.defaults
 */
-define('defaults.SSH/Server', /**@lends defaults.SSH/Server*/ {
+define('SSH/Server.defaults', /**@lends SSH/Server.defaults*/ {
     ext: '',
     successCode: 200,
     field: {
@@ -10336,10 +10527,9 @@ define('defaults.SSH/Server', /**@lends defaults.SSH/Server*/ {
 
 /**
 * SSH/Server/Config 模块的默认配置
-* @namespace
-* @name defaults.SSH/Server/Config
+* @name SSH/Server/Config.defaults
 */
-define('defaults.SSH/Server/Config', /**@lends defaults.SSH/Server/Config*/ {
+define('SSH/Server/Config.defaults', /**@lends SSH/Server/Config.defaults*/ {
 
     url: 'http://mob.cmcloud.cn/kisplus/kisplusconfig.aspx?callback=?',
     //cache: 'session', // false|'memory'|'session'|'local'
@@ -10359,10 +10549,9 @@ define('defaults.SSH/Server/Config', /**@lends defaults.SSH/Server/Config*/ {
 
 /**
 * DOM 模块的默认配置
-* @namespace
-* @name defaults.DOM
+* @name DOM.defaults
 */
-define('defaults.DOM', /**@lends defaults.DOM*/ {
+define('DOM.defaults', /**@lends DOM.defaults*/ {
     
     prefix: '',
     suffix: '',
@@ -10372,20 +10561,18 @@ define('defaults.DOM', /**@lends defaults.DOM*/ {
 
 /**
 * LocalStorage 模块的默认配置
-* @namespace
-* @name defaults.LocalStorage
+* @name LocalStorage.defaults
 */
-define('defaults.LocalStorage', /**@lends defaults.LocalStorage*/ {
+define('LocalStorage.defaults', /**@lends LocalStorage.defaults*/ {
     name: '',
 });
 
 
 /**
 * Module 模块的默认配置
-* @namespace
-* @name defaults.Module
+* @name Module.defaults
 */
-define('defaults.Module', /**@lends defaults.Module*/ {
+define('Module.defaults', /**@lends Module.defaults*/ {
     seperator: '/',     //私有模块的分隔符
     crossover: false,   //不允许跨级调用
     repeated: false,    //不允许重复定义同名的模块
@@ -10394,10 +10581,9 @@ define('defaults.Module', /**@lends defaults.Module*/ {
 
 /**
 * SessionStorage 模块的默认配置
-* @namespace
-* @name defaults.SessionStorage
+* @name SessionStorage.defaults
 */
-define('defaults.SessionStorage', /**@lends defaults.SessionStorage*/ {
+define('SessionStorage.defaults', /**@lends SessionStorage.defaults*/ {
     name: '',
 });
 
@@ -10405,10 +10591,9 @@ define('defaults.SessionStorage', /**@lends defaults.SessionStorage*/ {
 /**
 * Url 模块的默认配置。
 * 字符串中的 {~} 表示站头的根地址；{@} 表示使用的文件版本 debug 或 min。
-* @namespace
-* @name defaults.Url
+* @name Url.defaults
 */
-define('defaults.Url', /**@lends defaults.Url*/ {
+define('Url.defaults', /**@lends Url.defaults*/ {
 
     //注意：这里取当前页的路径作为根地址，只适用于当前页面在根目录的情况。
     root: location.origin + location.pathname.split('/').slice(0, -1).join('/') + '/',
@@ -10423,10 +10608,9 @@ define('defaults.Url', /**@lends defaults.Url*/ {
 
 /**
 * CloudHome.API 模块的默认配置
-* @namespace
-* @name defaults.CloudHome.API
+* @name CloudHome.API.defaults
 */
-define('defaults.CloudHome.API', /**@lends defaults.CloudHome.API*/ {
+define('CloudHome.API.defaults', /**@lends CloudHome.API.defaults*/ {
     
     field: {
         success: 'success',
@@ -10441,20 +10625,18 @@ define('defaults.CloudHome.API', /**@lends defaults.CloudHome.API*/ {
 
 /**
 * ImageReader 模块的默认配置
-* @namespace
-* @name defaults.ImageReader
+* @name ImageReader.defaults
 */
-define('defaults.ImageReader', /**@lends defaults.ImageReader*/ {
+define('ImageReader.defaults', /**@lends ImageReader.defaults*/ {
     loading: '读取中...',
 });
 
 
 /**
 * WeChat 模块的默认配置
-* @namespace
-* @name defaults.WeChat
+* @name WeChat.defaults
 */
-define('defaults.WeChat', /**@lends defaults.WeChat*/ {
+define('WeChat.defaults', /**@lends WeChat.defaults*/ {
     
     debug: false,
     appid: '',
@@ -10487,10 +10669,9 @@ define('defaults.WeChat', /**@lends defaults.WeChat*/ {
 
 /**
 * WeChat/Signature 模块的默认配置
-* @namespace
-* @name defaults.WeChat/Signature
+* @name WeChat/Signature.defaults
 */
-define('defaults.WeChat/Signature', /**@lends defaults.WeChat/Signature*/ {
+define('WeChat/Signature.defaults', /**@lends WeChat/Signature.defaults*/ {
     name: 'Jsapi_Signature',
     url: 'http://mob.cmcloud.cn/servercloud/weixin/',
 });
@@ -10498,10 +10679,9 @@ define('defaults.WeChat/Signature', /**@lends defaults.WeChat/Signature*/ {
 
 /**
 * Alert 模块的默认配置
-* @namespace
-* @name defaults.Alert
+* @name Alert.defaults
 */
-define('defaults.Alert', /**@lends defaults.Alert*/ {
+define('Alert.defaults', /**@lends Alert.defaults*/ {
     'button': '确定',
     'volatile': false,
     'mask': true,
@@ -10514,10 +10694,9 @@ define('defaults.Alert', /**@lends defaults.Alert*/ {
 
 /**
 * App 模块的默认配置
-* @namespace
-* @name defaults.App
+* @name App.defaults
 */
-define('defaults.App', /**@lends defaults.App*/ {
+define('App.defaults', /**@lends App.defaults*/ {
     mask: {
         opacity: 0,
         duration: 500,
@@ -10531,10 +10710,9 @@ define('defaults.App', /**@lends defaults.App*/ {
 
 /**
 * Dialog 模块的默认配置
-* @namespace
-* @name defaults.Dialog
+* @name Dialog.defaults
 */
-define('defaults.Dialog', /**@lends defaults.Dialog*/ {
+define('Dialog.defaults', /**@lends Dialog.defaults*/ {
 
     /**
     * 生成的 id 的前缀。
@@ -10559,10 +10737,12 @@ define('defaults.Dialog', /**@lends defaults.Dialog*/ {
     /**
     * 针对滚动器的配置。
     */
-    scroller: {
+    scroller: { },
 
-    },
-
+    /**
+    * 点击按钮后是否自动关闭组件。
+    * 可取值为: true|false，默认为 true，即自动关闭。
+    */
     autoClosed: true,
 
     /**
@@ -10570,15 +10750,54 @@ define('defaults.Dialog', /**@lends defaults.Dialog*/ {
     * 可取值为: true|false，默认为不易消失。
     */
     volatile: false,
+
+    /**
+    * 组件的标题文本。
+    */
     title: '',
+
+    /**
+    * 组件的内容文本。
+    */
     text: '',
+
+    /**
+    * 组件的 css 样式 z-index 值。
+    */
     'z-index': 1024,
 
+    /**
+    * 组件用到的 html 模板。
+    * 默认为 'iOS'。 业务层不需要关注该字段。
+    */
     sample: 'iOS',
+
+    /**
+    * 组件用到的 css 类名。
+    */
     cssClass: '',
+
+    /**
+    * 点击按钮时需要用到的事件名。
+    * 针对移动端的是虚拟事件 'touch'。
+    */
     eventName: 'touch',
+
+    /**
+    * 组件宽度。
+    * 可以指定为百分比的字符串，或指定具体的数值（单位为像素），
+    */
     width: '80%',
+
+    /**
+    * 组件高度。
+    * 可以指定为百分比的字符串，或指定具体的数值（单位为像素），
+    */
     height: '50%',
+
+    /**
+    * 按钮数组。
+    */
     buttons: [],
 
 
@@ -10587,16 +10806,24 @@ define('defaults.Dialog', /**@lends defaults.Dialog*/ {
 
 /**
 * ImageViewer 模块的默认配置
-* @namespace
-* @name defaults.ImageViewer
+* @name ImageViewer.defaults
 */
-define('defaults.ImageViewer', /**@lends defaults.ImageViewer*/ {
+define('ImageViewer.defaults', /**@lends ImageViewer.defaults*/ {
     width: '100%',
     height: '100%',
     background: 'rgba(0, 0, 0, 0.4)',
     border: 'none',
     'border-radius': 0,
+
+    /**
+    * 组件用到的 css 类名。
+    */
     cssClass: 'main-fullscreen',
+
+    /**
+    * 点击时需要用到的事件名。
+    * 针对移动端的是虚拟事件 'touch'。
+    */
     eventName: 'touch',
 
     /**
@@ -10610,6 +10837,9 @@ define('defaults.ImageViewer', /**@lends defaults.ImageViewer*/ {
     suffix: 4,
     sample: '<img id="{id}" style="max-width: 100%; max-height: 100%;" src="{src}" />',
 
+    /**
+    * 针对滚动器的配置。
+    */
     scroller: {
         scrollbars: false,  //隐藏滚动条
     },
@@ -10619,10 +10849,9 @@ define('defaults.ImageViewer', /**@lends defaults.ImageViewer*/ {
 
 /**
 * Loading 模块的默认配置
-* @namespace
-* @name defaults.Loading
+* @name Loading.defaults
 */
-define('defaults.Loading', /**@lends defaults.Loading*/ {
+define('Loading.defaults', /**@lends Loading.defaults*/ {
     
     /**
     * 生成的 id 的前缀。
@@ -10634,6 +10863,9 @@ define('defaults.Loading', /**@lends defaults.Loading*/ {
     */
     suffix: 4,
 
+    /**
+    * 加载中时要显示的文本。
+    */
     text: '处理中...',
 
     /**
@@ -10641,10 +10873,27 @@ define('defaults.Loading', /**@lends defaults.Loading*/ {
     */
     mask: false,
 
-
+    /**
+    * 组件用到的 html 模板。
+    * 默认为 'iOS'。 业务层不需要关注该字段。
+    */
     sample: 'iOS',
+
+    /**
+    * 组件用到的 css 类名。
+    */
     cssClass: '',
+
+    /**
+    * 组件添加到的容器。
+    * 默认为 document.body。
+    */
     container: document.body,
+
+    /**
+    * 把组件添加到容器的方式，是否使用追加的方式。
+    * 默认用 prepend 的方式。
+    */
     append: false,
 
     //默认样式
@@ -10658,16 +10907,19 @@ define('defaults.Loading', /**@lends defaults.Loading*/ {
     'right': 'initial',
     'top': '50%',
     'width': 120,
+
+    /**
+    * 组件的 css 样式 z-index 值。
+    */
     'z-index': 1024,
 });
 
 
 /**
 * Mask 模块的默认配置
-* @namespace
-* @name defaults.Mask
+* @name Mask.defaults
 */
-define('defaults.Mask', /**@lends defaults.Mask*/ {
+define('Mask.defaults', /**@lends Mask.defaults*/ {
     
     /**
     * 生成的 id 的前缀。
@@ -10684,23 +10936,51 @@ define('defaults.Mask', /**@lends defaults.Mask*/ {
     * 可取值为: true|false|"hide"|"remove"，默认为 false，即不易消失。
     */
     volatile: false,
+
+    /**
+    * 组件添加到的容器。
+    * 默认为 document.body。
+    */
     container: document.body,
+
+    /**
+    * 把组件添加到容器的方式，是否使用追加的方式。
+    * 默认用 prepend 的方式。
+    */
     append: false,
 
+    /**
+    * 组件的 css 样式 z-index 值。
+    */
     'top': 0,
+
+    /**
+    * 组件的 css 样式 bottom 值。
+    */
     'bottom': 0,
+
+    /**
+    * 组件的 css 样式 opacity 值。
+    */
     'opacity': 0.5,
+
+    /**
+    * 组件的 css 样式 background 值。
+    */
     'background': '#000',
+
+    /**
+    * 组件的 css 样式 z-index 值。
+    */
     'z-index': 1024,
 });
 
 
 /**
 * NoData 模块的默认配置
-* @namespace
-* @name defaults.NoData
+* @name NoData.defaults
 */
-define('defaults.NoData', /**@lends defaults.NoData*/ {
+define('NoData.defaults', /**@lends NoData.defaults*/ {
     
     /**
     * 生成的 id 的前缀。
@@ -10714,13 +10994,29 @@ define('defaults.NoData', /**@lends defaults.NoData*/ {
 
     text: '暂无数据',
 
-
+    /**
+    * 组件用到的 css 类名。
+    */
     cssClass: '',
+
+    /**
+    * 组件添加到的容器。
+    * 默认为 document.body。
+    */
     container: document.body,
+
+    /**
+    * 把组件添加到容器的方式，是否使用追加的方式。
+    * 默认用 prepend 的方式。
+    */
     append: false,
 
-
+    /**
+    * 是否可滚动。
+    * 当可滚动时，会创建相应的 scroller。
+    */
     scrollable: true,
+
     pulldown: null,
 
     ////默认样式
@@ -10732,10 +11028,9 @@ define('defaults.NoData', /**@lends defaults.NoData*/ {
 
 /**
 * NumberPad 模块的默认配置
-* @namespace
-* @name defaults.NumberPad
+* @name NumberPad.defaults
 */
-define('defaults.NumberPad', /**@lends defaults.NumberPad*/ {
+define('NumberPad.defaults', /**@lends NumberPad.defaults*/ {
     /**
     * 生成的 id 的前缀。
     */
@@ -10746,13 +11041,37 @@ define('defaults.NumberPad', /**@lends defaults.NumberPad*/ {
     */
     suffix: 4,
 
+    /**
+    * 组件用到的 css 类名。
+    */
     cssClass: '',
+
+    /**
+    * 组件添加到的容器。
+    * 默认为 document.body。
+    */
     container: document.body,
+
+    /**
+    * 把组件添加到容器的方式，是否使用追加的方式。
+    * 默认用 prepend 的方式。
+    */
     append: false,
 
+    /**
+    * 允许的最多小数位数。
+    */
     decimal: 4, //允许的最多小数位数
-    int: 12,    //允许的最多整数位数
 
+    /**
+    * 允许的最多整数位数。
+    */
+    int: 12,
+
+    /**
+    * mask 层的配置。
+    * 当指定为一个小数时，则表示 mask 层的不透明度 opacity。
+    */
     mask: 0.5,
 
     /**
@@ -10761,20 +11080,38 @@ define('defaults.NumberPad', /**@lends defaults.NumberPad*/ {
     */
     volatile: true,
 
+    /**
+    * 显示的提示文本。
+    */
     text: '',
+
+    /**
+    * 初始值。
+    */
     value: '',
-    speed: 'fast', // jQuery 中的显示/隐藏的动画速度
+
+    /**
+    * jQuery 中的显示/隐藏的动画速度。
+    */
+    speed: 'fast',
 
 });
 
 
 /**
 * Panel 模块的默认配置
-* @namespace
-* @name defaults.Panel
+* @name Panel.defaults
 */
-define('defaults.Panel', /**@lends defaults.Panel*/ {
+define('Panel.defaults', /**@lends Panel.defaults*/ {
+
+    /**
+    * 是否在组件 render 后自动调用 show() 方法以进行显示。
+    */
     showAfterRender: true,
+
+    /**
+    * 组件用到的 css 类名。
+    */
     cssClass: '',
 
 });
@@ -10782,14 +11119,32 @@ define('defaults.Panel', /**@lends defaults.Panel*/ {
 
 /**
 * Scroller 模块的默认配置
-* @namespace
-* @name defaults.Scroller
+* @name Scroller.defaults
 */
-define('defaults.Scroller', /**@lends defaults.Scroller*/ {
+define('Scroller.defaults', /**@lends Scroller.defaults*/ {
+
+    /**
+    * 是否显示滚动条。 
+    * 取值为 true|false。
+    */
     scrollbars: true,           //
+
+    /**
+    * shrinkScrollbars。
+    */
     shrinkScrollbars: 'scale',  //
+
+    /**
+    * preventDefault。
+    * 取值为 true|false。
+    */
     preventDefault: false,      //默认为 true
-    probeType: 2,               //设置了此值，scroll 事件才会触发，可取的值为 1，2，3
+
+    /**
+    * probeType。
+    * 设置了此值，scroll 事件才会触发，可取的值为 1，2，3
+    */
+    probeType: 2,
 
     //支持的样式
     //'top': 0,
@@ -10799,7 +11154,7 @@ define('defaults.Scroller', /**@lends defaults.Scroller*/ {
     //'width': '100%',
 
     /**
-    * 是否启用。 
+    * 是否启用滚动器。 
     * 如果设置为 false，则在创建实例后会自动调用 scroller.disable(); 
     * 后续必须手动调用 scroller.enable() 以启用。
     */
@@ -10810,19 +11165,57 @@ define('defaults.Scroller', /**@lends defaults.Scroller*/ {
 
 /**
 * Tabs 模块的默认配置
-* @namespace
-* @name defaults.Tabs
+* @name Tabs.defaults
 */
-define('defaults.Tabs', /**@lends defaults.Tabs*/ {
+define('Tabs.defaults', /**@lends Tabs.defaults*/ {
     
+    /**
+    * 创建实例后首先给激的项。
+    */
     current: null,
-    eventName: 'touch', //当指定为 'touch' 时，会调用 $(container).touch()进行绑定。 
-    pressedClass: '',   //仅当 eventName = 'touch' 时有效。
+
+    /**
+    * 要监听的事件名。
+    * 当指定为 'touch' 时，会调用 $(container).touch()进行绑定。 
+    */
+    eventName: 'touch',
+
+    /**
+    * 压下去时的样式的 css 类名。
+    * 当 eventName = 'touch' 时有效。
+    */
+    pressedClass: '',
+
+    /**
+    * 项目给激活时的样式的 css 类名。
+    */
     activedClass: '',
-    selector: '>*', //取直接子节点
-    repeated: false, //是否允许重复激活相同的项。
+
+    /**
+    * 取得项目列表所需要用到的 jQuery 选择器。
+    * 默认取直接子节点。
+    */
+    selector: '>*',
+
+    /**
+    * 是否允许重复激活相同的项。
+    * 当指定为 true 时，方响应已给激活的项目的重新点击。
+    */
+    repeated: false,
+
+    /**
+    * 字段映射。
+    */
     field: {
+        /**
+        * 从 DOM 元素中取得项目列表中指定项的 index 的自定义字段名。 
+        */
         index: 'data-index',
+
+        /**
+        * 当触发 change 事件时，需要同时触发对应的 item 上指定的事件名。
+        * 例如当指定为 'name' 时，则在触发 change 事件时，会同时 item['name'] 对应的事件。 
+        */
         event: '',
     },
 });
@@ -10830,20 +11223,44 @@ define('defaults.Tabs', /**@lends defaults.Tabs*/ {
 
 /**
 * Template 模块的默认配置
-* @namespace
-* @name defaults.Template
+* @name Template.defaults
 */
-define('defaults.Template', /**@lends defaults.Template*/ {
+define('Template.defaults', /**@lends Template.defaults*/ {
+
+    /**
+    * 模板最外层的标记。
+    */
     root: {
+        /**
+        * 模板最外层的起始标记。
+        */
         begin: '<!--',
+
+        /**
+        * 模板最外层的结束标记。
+        */
         end: '-->',
     },
 
+    /**
+    * 子模板的标记。
+    */
     item: {
+        /**
+        * 子模板的起始标记。
+        */
         begin: '#--{name}.begin--#',
+
+        /**
+        * 子模板的结束标记。
+        */
         end: '#--{name}.end--#',
     },
 
+    /**
+    * 生成子模板的随机占位串的长度。
+    * 业务层不需要关注该属性。
+    */
     outer: 64,
 
 });
@@ -10851,10 +11268,9 @@ define('defaults.Template', /**@lends defaults.Template*/ {
 
 /**
 * Toast 模块的默认配置
-* @namespace
-* @name defaults.Toast
+* @name Toast.defaults
 */
-define('defaults.Toast', /**@lends defaults.Toast*/ {
+define('Toast.defaults', /**@lends Toast.defaults*/ {
     
     /**
     * 生成的 id 的前缀。
@@ -10865,9 +11281,22 @@ define('defaults.Toast', /**@lends defaults.Toast*/ {
     * 生成的 id 的随机后缀的长度。
     */
     suffix: 4,
+
+    /**
+    * 提示文本。
+    */
     text: '',
 
+    /**
+    * 组件添加到的容器。
+    * 默认为 document.body。
+    */
     container: document.body,
+
+    /**
+    * 把组件添加到容器的方式，是否使用追加的方式。
+    * 默认用 prepend 的方式。
+    */
     append: false,
 
     /**
@@ -10875,21 +11304,37 @@ define('defaults.Toast', /**@lends defaults.Toast*/ {
     */
     mask: false,
 
+    /**
+    * 组件用到的 html 模板。
+    * 业务层不需要关注该字段。
+    */
     sample: 'font-awesome',
+
+    /**
+    * 组件用到的 css 类名。
+    */
     cssClass: '',
 
+    /**
+    * 用到的 font-awsome 的图标。
+    */
     icon: 'check',
-    duration: 0, // 0 表示一直显示。
+
+    /**
+    * 显示的持续时间(毫秒)。
+    * 0 表示一直显示。
+    */
+    duration: 0,
+
     //默认样式
 });
 
 
 /**
 * View 模块的默认配置
-* @namespace
-* @name defaults.View
+* @name View.defaults
 */
-define('defaults.View', /**@lends defaults.View*/ {
+define('View.defaults', /**@lends View.defaults*/ {
     background: false, //禁用背景色。
 });
 

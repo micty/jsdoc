@@ -1,9 +1,8 @@
 /**
 * SessionStorage 模块的默认配置
-* @namespace
-* @name defaults.SessionStorage
+* @name SessionStorage.defaults
 */
-define('defaults.SessionStorage', /**@lends defaults.SessionStorage*/ {
+define('SessionStorage.defaults', /**@lends SessionStorage.defaults*/ {
     name: '',
 });
 

@@ -1,9 +1,8 @@
 /**
 * LocalStorage 模块的默认配置
-* @namespace
-* @name defaults.LocalStorage
+* @name LocalStorage.defaults
 */
-define('defaults.LocalStorage', /**@lends defaults.LocalStorage*/ {
+define('LocalStorage.defaults', /**@lends LocalStorage.defaults*/ {
     name: '',
 });
 

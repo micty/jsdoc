@@ -10,6 +10,7 @@ define('WeChat', function (require, module, exports) {
     var Config = require('Config');
 
     var Emitter = MiniQuery.require('Emitter');
+    var Url = MiniQuery.require('Url');
 
     var emitter = new Emitter();
     var status = '';    // wx 的状态: ready 或 error
@@ -25,9 +26,10 @@ define('WeChat', function (require, module, exports) {
         */
         init: function (config) {
 
-            var JsApiList = require(module, 'JsApiList');
-            var Lib = require(module, 'Lib');
-            var Signature = require(module, 'Signature');
+            var JsApiList = module.require('JsApiList');
+            var Lib = module.require('Lib');
+            var Signature = module.require('Signature');
+
 
             config = current = Config.clone(module.id, config);
 
@@ -120,18 +122,54 @@ define('WeChat', function (require, module, exports) {
         },
 
         /**
-        * 获取跳转到登录授权页面的 url。
+        * 获取跳转到登录授权页面的 url，常用于在云之家分享到微信时需要打开的链接。
+        * 已重载：
+        *   getLoginUrl(eid, url, query);
+        *   getLoginUrl(eid, url);
+        *   getLoginUrl(url, query);
+        *   getLoginUrl(url);
+        * @param {string} [eid] 企业号。 
+            如果不指定，则从参数 query 中取得，否则需要先调用 init() 方法以传入 eid。
+        * @param {string} url 需要跳转到的目标 url。 
+        * @param {Object} [query] 需要附加到目标 url 中的查询参数。 
+        * @return {string} 返回一个完整的可用于在微信端打开并跳到目标页页的链接地址。
         */
-        getLoginUrl: function (eid, url) {
+        getLoginUrl: function (eid, url, query) {
 
-            //重载 getLoginUrl(url)
-            if (arguments.length == 1) {
-                if (!current) {
-                    throw new Error('当不指定参数 eid 时，请先调用 init() 方法以传入 eid 字段。');
-                }
-                url = eid;
-                eid = current.eid;
+            //重载其它三种情况，参数修正从后面开始
+            switch (arguments.length) {
+                case 1: //重载 getLoginUrl(url)
+                    if (!current) {
+                        throw new Error('当调用方式为 getLoginUrl(url) 时，请先调用 init() 方法以传入 eid 字段。');
+                    }
+
+                    query = null;
+                    url = eid;
+                    eid = current.eid;
+                    break;
+
+                case 2:
+                    if (typeof url == 'object') {    //重载 getLoginUrl(url, query);
+                        query = url;
+                        url = eid;
+                        eid = query.eid || current.eid;
+
+                        if (!eid) {
+                            throw new Error('当调用方式为 getLoginUrl(url, query) 时，请在参数 query 中指定 eid 字段，或先调用 init() 方法以传入 eid 字段。');
+                        }
+                    }
+                    else { //重载 getLoginUrl(eid, url);
+                        query = null;
+                    }
+                    break;
+
             }
+
+
+            if (query) {
+                url = Url.addQueryString(url, query);
+            }
+
 
             var defaults = Config.get(module.id);
             var login = defaults.login;
@@ -141,7 +179,7 @@ define('WeChat', function (require, module, exports) {
                 'from_url': url,
             });
 
-            var Url = MiniQuery.require('Url');
+            
             url = Url.addQueryString(login.url, data);
             return url;
 
@@ -156,12 +194,17 @@ define('WeChat', function (require, module, exports) {
         *   'QZone': 分享到 QQ 空间;
         *   'Timeline': 分享到朋友圈;
         *   'Weibo': 分享到微博;
-        * @param {Object} data 配置数据对象。
+        * @param {Object} data 配置数据对象。 其中：
+        * @param {string} data.title 要显示的标题。
+        * @param {string} data.desc 要显示的描述内容。
+        * @param {string} data.url (或 data.link)需要跳转到的目标页面 url。
+        * @param {string} data.icon (或 data.imgUrl)要显示的图标。 支持 base64 格式。
         */
         share: function (type, data) {
             exports.on('ready', function (wx) {
 
-                var url = exports.getLoginUrl(data.link || data.url); //多名称方式
+                var url = data.link || data.url; //多名称方式
+                url = exports.getLoginUrl(url); 
 
                 data = $.Object.extend({}, data, {
                     'link': url,

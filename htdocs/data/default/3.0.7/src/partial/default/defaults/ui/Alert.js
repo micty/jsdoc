@@ -1,10 +1,8 @@
 /**
 * Alert 模块的默认配置
-* @namespace
-* @name defaults.Alert
-
+* @name Alert.defaults
 */
-define('defaults.Alert', /**@lends defaults.Alert*/ {
+define('Alert.defaults', /**@lends Alert.defaults*/ {
     'button': '确定',
     'volatile': false,
     'mask': true,

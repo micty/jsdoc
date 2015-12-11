@@ -23,7 +23,7 @@ define('Defaults', function (require, module, exports) {
             cfg = new Config();
         }
 
-        var obj = require('defaults.' + name);
+        var obj = require(name + '.defaults');
         cfg.set(name, obj);
 
         name$used[name] = true;

@@ -1,9 +1,8 @@
 /**
 * Loading 模块的默认配置
-* @namespace
-* @name defaults.Loading
+* @name Loading.defaults
 */
-define('defaults.Loading', /**@lends defaults.Loading*/ {
+define('Loading.defaults', /**@lends Loading.defaults*/ {
     
     /**
     * 生成的 id 的前缀。
@@ -15,6 +14,9 @@ define('defaults.Loading', /**@lends defaults.Loading*/ {
     */
     suffix: 4,
 
+    /**
+    * 加载中时要显示的文本。
+    */
     text: '处理中...',
 
     /**
@@ -22,10 +24,27 @@ define('defaults.Loading', /**@lends defaults.Loading*/ {
     */
     mask: false,
 
-
+    /**
+    * 组件用到的 html 模板。
+    * 默认为 'iOS'。 业务层不需要关注该字段。
+    */
     sample: 'iOS',
+
+    /**
+    * 组件用到的 css 类名。
+    */
     cssClass: '',
+
+    /**
+    * 组件添加到的容器。
+    * 默认为 document.body。
+    */
     container: document.body,
+
+    /**
+    * 把组件添加到容器的方式，是否使用追加的方式。
+    * 默认用 prepend 的方式。
+    */
     append: false,
 
     //默认样式
@@ -39,6 +58,10 @@ define('defaults.Loading', /**@lends defaults.Loading*/ {
     'right': 'initial',
     'top': '50%',
     'width': 120,
+
+    /**
+    * 组件的 css 样式 z-index 值。
+    */
     'z-index': 1024,
 });
 

@@ -109,7 +109,12 @@ define('defaults', /**@lends defaults*/ {
         //'bottom': 0,
         //'width': '100%',
 
-        autoRefresh: true, //滚动区域内容发生 resize 时，自动刷新
+        /**
+        * 是否启用。 
+        * 如果设置为 false，则在创建实例后会自动调用 scroller.disable(); 
+        * 后续必须手动调用 scroller.enable() 以启用。
+        */
+        enabled: true,      
     },
 
 
@@ -134,7 +139,6 @@ define('defaults', /**@lends defaults*/ {
             data: 'Data',
         },
 
-        //cache: 'session', // false|'memory'|'session'|'local'
         /**
         * 是否启用缓存。
         * 可取的值为 false|true|'session'|'local'
@@ -165,6 +169,8 @@ define('defaults', /**@lends defaults*/ {
         pubaccid: '',
 
         data: null,
+
+        console: true, //为了便于查看 CustData 而打印到控制台。
 
     },
 
@@ -232,6 +238,13 @@ define('defaults', /**@lends defaults*/ {
         */
         scrollable: true,
 
+        /**
+        * 针对滚动器的配置。
+        */
+        scroller: {
+            probeType: 1,   //禁用 scoll 事件，提高性能
+        },
+
         autoClosed: true,
 
         /**
@@ -245,10 +258,13 @@ define('defaults', /**@lends defaults*/ {
 
         sample: 'iOS',
         cssClass: '',
-        eventName: 'click',
+        eventName: 'touch',
         width: '80%',
         height: '50%',
         buttons: [],
+        
+
+        
     },
 
     /**
@@ -276,7 +292,7 @@ define('defaults', /**@lends defaults*/ {
         sample: 'iOS',
         cssClass: '',
         container: document.body,
-        prepend: true,
+        append: false,
 
         //默认样式
         'background': 'rgba(0, 0, 0, 0.7)',
@@ -290,6 +306,15 @@ define('defaults', /**@lends defaults*/ {
         'top': '50%',
         'width': 120,
         'z-index': 1024,
+    },
+
+    'Alert': {
+        'button': '确定',
+        'volatile': false,
+        'mask': true,
+        'autoClosed': true,
+        'width': '80%',
+        'z-index': 99999,
     },
 
     /**
@@ -312,6 +337,7 @@ define('defaults', /**@lends defaults*/ {
         */
         volatile: false,
         container: document.body,
+        append: false,
 
         'top': 0,
         'bottom': 0,
@@ -347,6 +373,9 @@ define('defaults', /**@lends defaults*/ {
         */
         suffix: 4,
         text: '',
+
+        container: document.body,
+        append: false,
 
         /**
         * 是否启用 mask 层。
@@ -385,7 +414,9 @@ define('defaults', /**@lends defaults*/ {
 
         cssClass: '',
         container: document.body,
-        prepend: true,
+        append: false,
+
+
         scrollable: true,
         pulldown: null,
 
@@ -393,6 +424,39 @@ define('defaults', /**@lends defaults*/ {
         //'bottom': 0,
         //'top': 0,
         //'z-index': 1024,
+    },
+
+
+    'NumberPad': {
+        /**
+        * 生成的 id 的前缀。
+        */
+        prefix: 'KISP-NumberPad-',
+
+        /**
+        * 生成的 id 的随机后缀的长度。
+        */
+        suffix: 4,
+
+        cssClass: '',
+        container: document.body,
+        append: false,
+
+        decimal: 4, //允许的最多小数位数
+        int: 12,    //允许的最多整数位数
+
+        mask: 0.5,
+
+        /**
+        * 指定是否易消失，即点击 mask 层就是否隐藏/移除。
+        * 可取值为: true|false，默认为易消失。
+        */
+        volatile: true,
+
+        text: '',
+        value: '',
+        speed: 'fast', // jQuery 中的显示/隐藏的动画速度
+
     },
 
     'Seajs': {
@@ -437,7 +501,55 @@ define('defaults', /**@lends defaults*/ {
         retryAfterExpired: true, //签名过期时需要重试
     },
 
-   
+
+    'ImageReader': {
+
+        loading: '读取中...',
+    },
+
+    'LocalStorage': {
+        name: '',
+    },
+    'SessionStorage': {
+        name: '',
+    },
+
+    'App': {
+        mask: {
+            opacity: 0,
+            duration: 500,
+            'z-index': 99999,
+        },
+
+        type: 'simple', //只做最基础的初始化，向后兼容
+     
+    },
+
+    'ImageViewer': {
+        width: '100%',
+        height: '100%',
+        background: 'rgba(0, 0, 0, 0.4)',
+        border: 'none',
+        'border-radius': 0,
+        cssClass: 'main-fullscreen',
+        eventName: 'touch',
+
+        /**
+        * 生成的 id 的前缀。
+        */
+        prefix: 'KISP-ImageViewer-',
+
+        /**
+        * 给 img 元素生成的 id 的随机后缀的长度。
+        */
+        suffix: 4,
+        sample: '<img id="{id}" style="max-width: 100%; max-height: 100%;" src="{src}" />',
+
+        scroller: {
+            scrollbars: false,  //隐藏滚动条
+            probeType: 1,       //禁用 scoll 事件，提高性能
+        },
+    },
 
 });
 

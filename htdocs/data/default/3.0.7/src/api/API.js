@@ -4,7 +4,6 @@
 * @class
 * @name API
 * @see defaults.API
-* @see test
 */
 define('API', function (require, module, exports) {
 
@@ -34,7 +33,7 @@ define('API', function (require, module, exports) {
         var successCode = config.successCode;
 
         var proxy = config.proxy;
-        if (typeof proxy == 'object') { // proxy: { ... }，批量的情况
+        if (proxy && typeof proxy == 'object') { // proxy: { ... }，批量的情况
             proxy = proxy[name];        //找到属于当前 API 的这个
         }
 
@@ -50,8 +49,8 @@ define('API', function (require, module, exports) {
             'data': config.data,
             'query': config.query,
 
-            'url': config.url || '',
-            'ext': config.ext || '',
+            'url': config.url,
+            'ext': config.ext,
             'random': config.random,
 
             'successCode': successCode,

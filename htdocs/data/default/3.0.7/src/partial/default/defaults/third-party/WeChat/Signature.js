@@ -1,9 +1,8 @@
 /**
 * WeChat/Signature 模块的默认配置
-* @namespace
-* @name defaults.WeChat/Signature
+* @name WeChat/Signature.defaults
 */
-define('defaults.WeChat/Signature', /**@lends defaults.WeChat/Signature*/ {
+define('WeChat/Signature.defaults', /**@lends WeChat/Signature.defaults*/ {
     name: 'Jsapi_Signature',
     url: 'http://mob.cmcloud.cn/servercloud/weixin/',
 });

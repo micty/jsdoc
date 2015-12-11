@@ -21,6 +21,14 @@ define('Panel', function (require, module, exports) {
     function Panel(container, config) {
 
         Mapper.setGuid(this);
+
+        //重载 { el: container, ... }
+        if ($.Object.isPlain(container)) {
+            config = container;
+            container = config['el'];
+            delete config['el'];
+        }
+
         config = Config.clone(module.id, config);
 
 
@@ -33,6 +41,7 @@ define('Panel', function (require, module, exports) {
             'showAfterRender': config.showAfterRender,
             'cssClass': config.cssClass,
             'visible': false,
+            'byRender': false, //记录 show 事件是否由 render() 触发的。
         };
 
         mapper.set(this, meta);
@@ -66,7 +75,11 @@ define('Panel', function (require, module, exports) {
             container.show.apply(container, args);
 
             meta.visible = true;
-            emitter.fire('show');
+
+            var byRender = meta.byRender;
+            meta.byRender = false; //重置
+
+            emitter.fire('show', [byRender]);
 
         },
 
@@ -152,10 +165,10 @@ define('Panel', function (require, module, exports) {
             $(container).addClass(cssClass);
 
             emitter.fire('render', args);
-
             meta.rendered = true;
 
             if (meta.showAfterRender) {
+                meta.byRender = true;
                 this.show();
             }
 
@@ -170,6 +183,17 @@ define('Panel', function (require, module, exports) {
             var emitter = meta.emitter;
             var args = [].slice.call(arguments);
             emitter.fire('refresh', args);
+
+        },
+
+        /**
+        * 重置，会触发 reset 事件。
+        */
+        reset: function () {
+            var meta = mapper.get(this);
+            var emitter = meta.emitter;
+            var args = [].slice.call(arguments);
+            emitter.fire('reset', args);
 
         },
 

@@ -1,9 +1,8 @@
 /**
 * CloudHome.API 模块的默认配置
-* @namespace
-* @name defaults.CloudHome.API
+* @name CloudHome.API.defaults
 */
-define('defaults.CloudHome.API', /**@lends defaults.CloudHome.API*/ {
+define('CloudHome.API.defaults', /**@lends CloudHome.API.defaults*/ {
     
     field: {
         success: 'success',

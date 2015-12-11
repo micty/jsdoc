@@ -1,9 +1,8 @@
 /**
 * View 模块的默认配置
-* @namespace
-* @name defaults.View
+* @name View.defaults
 */
-define('defaults.View', /**@lends defaults.View*/ {
+define('View.defaults', /**@lends View.defaults*/ {
     background: false, //禁用背景色。
 });
 

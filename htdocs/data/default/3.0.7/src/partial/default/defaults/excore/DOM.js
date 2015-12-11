@@ -1,9 +1,8 @@
 /**
 * DOM 模块的默认配置
-* @namespace
-* @name defaults.DOM
+* @name DOM.defaults
 */
-define('defaults.DOM', /**@lends defaults.DOM*/ {
+define('DOM.defaults', /**@lends DOM.defaults*/ {
     
     prefix: '',
     suffix: '',

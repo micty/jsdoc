@@ -1,9 +1,8 @@
 /**
 * WeChat 模块的默认配置
-* @namespace
-* @name defaults.WeChat
+* @name WeChat.defaults
 */
-define('defaults.WeChat', /**@lends defaults.WeChat*/ {
+define('WeChat.defaults', /**@lends WeChat.defaults*/ {
     
     debug: false,
     appid: '',
