@@ -15,6 +15,9 @@
   font-family: 'Helvetica Neue', Arial, 'Hiragino Sans GB', STHeiti, 'Microsoft YaHei', 'WenQuanYi Micro Hei', SimSun, Song, sans-serif;
   font-size: 16px;
 }
+.Markdown table thead {
+  background: #F0F0F0;
+}
 .Markdown table th,
 .Markdown table td {
   border: 1px solid #dddddd;

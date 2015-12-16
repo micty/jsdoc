@@ -58,6 +58,9 @@ JsDoc 文档展示平台，是一个用于展示 Markdown 格式文档和 JsDoc 
 
 ###更新记录
 
+2015-12-16
+- 给 markdown 里的 `thead` 增加背景色，以使表头行更突出。
+
 2015-12-11
 - 优化 blockquote 的样式。
 
