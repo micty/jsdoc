@@ -7,7 +7,7 @@ define('/MainPanel/Auto/Data', function (require, module, exports) {
     var JSON = require('JSON');
     var Path = require('Path');
 
-    var Helper = require(module, 'Helper');
+    var Helper = module.require('Helper');
 
 
     //加载数据。

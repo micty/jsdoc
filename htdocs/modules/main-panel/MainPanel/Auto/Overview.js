@@ -6,9 +6,9 @@ define('/MainPanel/Auto/Overview', function (require, module, exports) {
 
     var Emitter = MiniQuery.require('Emitter');
 
-    var Summary = require(module, 'Summary');
-    var MethodList = require(module, 'MethodList');
-    var PropertyList = require(module, 'PropertyList');
+    var Summary = module.require('Summary');
+    var MethodList = module.require('MethodList');
+    var PropertyList = module.require('PropertyList');
     
     var view = document.getElementById('view-Overview');
     var emitter = new Emitter();

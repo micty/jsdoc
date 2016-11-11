@@ -6,10 +6,10 @@ define('/MainPanel/Auto', function (require, module, exports) {
 
     var Emitter = MiniQuery.require('Emitter');
     
-    var Data = require(module, 'Data');
-    var Overview = require(module, 'Overview');
-    var Method = require(module, 'Method');
-    var Source = require(module, 'Source');
+    var Data = module.require('Data');
+    var Overview = module.require('Overview');
+    var Method = module.require('Method');
+    var Source = module.require('Source');
 
     var emitter = new Emitter();
     var view = document.getElementById('view-Auto');

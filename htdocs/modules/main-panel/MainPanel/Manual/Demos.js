@@ -4,8 +4,8 @@ define('/MainPanel/Manual/Demos', function (require, module, exports) {
     var $ = require('$');
     var MiniQuery = require('MiniQuery');
     var KERP = require('KERP');
-    var Tabs = require(module, 'Tabs');
-    var Panels = require(module, 'Panels');
+    var Tabs = module.require('Tabs');
+    var Panels = module.require('Panels');
 
     var panel = document.getElementById('panel-demos');
     var ul = document.getElementById('ul-demos');

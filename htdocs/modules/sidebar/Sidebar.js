@@ -12,9 +12,9 @@ define('/Sidebar', function (require, module, exports) {
     var Tabs = require('Tabs');
     var Tree = MiniQuery.require('Tree');
 
-    var Data = require(module, 'Data');
-    var Scroller = require(module, 'Scroller');
-    var Title = require(module, 'Title');
+    var Data = module.require('Data');
+    var Scroller = module.require('Scroller');
+    var Title = module.require('Title');
 
     var ul = document.getElementById('ul-sidebar');
     var nav = $('#nav-sidebar');
@@ -154,4 +154,3 @@ define('/Sidebar', function (require, module, exports) {
 
 
 
-    

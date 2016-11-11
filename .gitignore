@@ -1,9 +1,16 @@
 
 /.svn
-/htdocs/index.html
-/htdocs/style/css
-/build
+
+/bin/config
 /bin/node_modules
-/htdocs-0
-/htdocs-1
+/bin/build.js
+/bin/open.js
+/bin/qr.js
+/bin/watch.js
+
+/build
+
+/htdocs/style/css
+/htdocs/index.html
+
 

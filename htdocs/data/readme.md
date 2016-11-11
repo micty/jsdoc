@@ -14,6 +14,7 @@ KISP 框架
 
 
 
+
 ###专题介绍
 - [JavaScript 开发规范](?file=specification/js/index.md)
 - [HTML 页面开发规范](?file=specification/refactor/index.md)
@@ -27,6 +28,7 @@ KISP 框架
 - [将 HTML 模板从代码中分离出来](?file=docs/HTML-and-Code.md)
 - [Web 客户端存储](?file=docs/Storage.md)
 - [同源策略](?file=article/Same-origin-policy.md)
+- [ES6教程](?file=es6/readme.md)
 
 
 ### default - 3.0.7

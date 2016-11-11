@@ -1,16 +1,14 @@
 ﻿
-
-define('', function (require, module) {
+defineJS.run(function (require, module) {
 
     var $ = require('$');
     var Path = require('Path');
 
-    var Sidebar = require(module, 'Sidebar');
-    var MainPanel = require(module, 'MainPanel');
-    var Hash = require(module, 'Hash');
-    var Readme = require(module, 'Readme');
-    var FixedMenus = require(module, 'FixedMenus');
-
+    var Sidebar = module.require('Sidebar');
+    var MainPanel = module.require('MainPanel');
+    var Hash = module.require('Hash');
+    var Readme = module.require('Readme');
+    var FixedMenus = module.require('FixedMenus');
 
 
 
@@ -84,7 +82,3 @@ define('', function (require, module) {
     Hash.render();
 
 });
-
-
-
-require('');

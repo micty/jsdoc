@@ -10,8 +10,8 @@ define('/MainPanel', function (require, module, exports) {
 
     var Emitter = MiniQuery.require('Emitter');
 
-    var Manual = require(module, 'Manual');
-    var Auto = require(module, 'Auto');
+    var Manual = module.require('Manual');
+    var Auto = module.require('Auto');
 
     var emitter = new Emitter();
     var hasBind = false;

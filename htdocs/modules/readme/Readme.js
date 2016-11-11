@@ -6,9 +6,9 @@ define('/Readme', function (require, module, exports) {
     var Markdown = require('Markdown');
     var Emitter = MiniQuery.require('Emitter');
 
-    var Source = require(module, 'Source');
-    var Title = require(module, 'Title');
-    var Url = require(module, 'Url');
+    var Source = module.require('Source');
+    var Title = module.require('Title');
+    var Url = module.require('Url');
 
     var emitter = new Emitter();
     var view = document.getElementById('div-view-readme');

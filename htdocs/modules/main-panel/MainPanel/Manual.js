@@ -6,9 +6,9 @@ define('/MainPanel/Manual', function (require, module, exports) {
     
     var Emitter = MiniQuery.require('Emitter');
 
-    var Data = require(module, 'Data');
-    var Readme = require(module, 'Readme');
-    var Demos = require(module, 'Demos');
+    var Data = module.require('Data');
+    var Readme = module.require('Readme');
+    var Demos = module.require('Demos');
 
     var emitter = new Emitter();
     var view = document.getElementById('view-Manual');

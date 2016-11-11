@@ -6,10 +6,10 @@ define('/MainPanel/Auto/Method', function (require, module, exports) {
 
     var Emitter = MiniQuery.require('Emitter');
 
-    var Summary = require(module, 'Summary');
-    var Params = require(module, 'Params');
-    var Returns = require(module, 'Returns');
-    var Example = require(module, 'Example');
+    var Summary = module.require('Summary');
+    var Params = module.require('Params');
+    var Returns = module.require('Returns');
+    var Example = module.require('Example');
 
     var view = document.getElementById('view-Method');
     var emitter = new Emitter();

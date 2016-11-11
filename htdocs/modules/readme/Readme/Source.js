@@ -4,8 +4,8 @@ define('/Readme/Source', function (require, module, exports) {
     var $ = require('$');
     var MiniQuery = require('MiniQuery');
 
-    var Header = require(module, 'Header');
-    var Mark = require(module, 'Mark');
+    var Header = module.require('Header');
+    var Mark = module.require('Mark');
 
 
 

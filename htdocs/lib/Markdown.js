@@ -11,8 +11,8 @@ define('Markdown', function (require, module, exports) {
     var marked = require('marked');
     var Highlight = require('Highlight');
 
-    var Helper = require(module, 'Helper');
-    var Loader = require(module, 'Loader');
+    var Helper = module.require('Helper');
+    var Loader = module.require('Loader');
 
 
     var Mapper = MiniQuery.require('Mapper');
